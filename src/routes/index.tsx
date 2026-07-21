@@ -23,12 +23,12 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Longevidade Aplicada",
+        content: "Longevidade Aplicada — Um protocolo para envelhecer com estratégia",
       },
       {
         property: "og:description",
         content:
-          "Envelhecer é inevitável. Envelhecer sem estratégia, não. Um protocolo premium baseado em evidências.",
+          "Um protocolo baseado em ciência para preservar energia, força, clareza mental e autonomia — para quem quer viver bem hoje e continuar vivendo melhor amanhã.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
