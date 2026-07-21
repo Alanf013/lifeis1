@@ -203,7 +203,7 @@ function Index() {
           <div className="lg:col-span-5">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1544005316-04ce1f2cf7ff?auto=format&fit=crop&w=1200&q=80"
+                src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1200&q=80"
                 alt="Retrato editorial de adulto saudável em luz natural"
                 className="w-full aspect-[4/5] object-cover rounded-sm shadow-[var(--shadow-elegant)]"
                 loading="eager"
