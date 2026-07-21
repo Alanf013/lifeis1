@@ -62,7 +62,9 @@
   --color-sage: var(--sage);
   --color-sage-deep: var(--sage-deep);
   --color-deep-blue: var(--deep-blue);
+  --color-ivory: var(--ivory);
   --font-sans: var(--font-display);
+  --font-serif: var(--font-serif);
 }
 
 :root {
