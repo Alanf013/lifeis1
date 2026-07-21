@@ -46,7 +46,6 @@ function Index() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  return (
   const serif = "font-[family-name:var(--font-serif)]";
 
   const pillars = [
