@@ -7,38 +7,28 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Moon,
-  Apple,
-  Activity,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-  ShieldCheck,
-  Clock,
-} from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
         title:
-          "Longevidade Científica — Biologia aplicada para viver mais e melhor",
+          "Longevidade Aplicada — Um protocolo para envelhecer com estratégia",
       },
       {
         name: "description",
         content:
-          "Recupere sua energia, limpe sua mente e adicione anos à sua vida com protocolos baseados em ciência. Sono, alimentação e movimento para os 30+.",
+          "Um protocolo baseado em ciência para preservar energia, força, clareza mental e autonomia — para quem quer viver bem hoje e continuar vivendo melhor amanhã.",
       },
       {
         property: "og:title",
-        content: "Longevidade Científica — Biologia aplicada",
+        content: "Longevidade Aplicada",
       },
       {
         property: "og:description",
         content:
-          "Protocolos baseados em ciência para energia, foco e vitalidade após os 30. Nada de modismos.",
+          "Envelhecer é inevitável. Envelhecer sem estratégia, não. Um protocolo premium baseado em evidências.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -56,492 +46,549 @@ function Index() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    form.reset();
-    alert("Obrigado! Seu material foi enviado para o e-mail informado.");
-  };
+  return (
+  const serif = "font-[family-name:var(--font-serif)]";
+
+  const pillars = [
+    { n: "01", t: "Força", d: "Preservar músculo, mobilidade e autonomia." },
+    { n: "02", t: "Metabolismo", d: "Manter energia, composição corporal e saúde metabólica." },
+    { n: "03", t: "Cognição", d: "Proteger foco, clareza mental e capacidade de aprender." },
+    { n: "04", t: "Recuperação", d: "Sono, estresse e a capacidade do corpo de se recuperar." },
+  ];
+
+  const evidence = [
+    {
+      t: "Sarcopenia após os 30",
+      d: "A partir da terceira década, adultos sedentários perdem em média 3–8% de massa muscular por década. Treinamento de força reverte parte significativa desse declínio.",
+      f: "Journal of Applied Physiology · Volpi et al.",
+    },
+    {
+      t: "Inflammaging",
+      d: "Inflamação sistêmica de baixo grau é hoje reconhecida como um dos principais mecanismos do envelhecimento fisiológico e das doenças crônicas associadas.",
+      f: "Nature Reviews Endocrinology · Franceschin & Campisi",
+    },
+    {
+      t: "Sono e função cognitiva",
+      d: "Sono profundo consistente está associado à melhor clareança de resíduos metabólicos cerebrais e à preservação da memória ao longo da vida adulta.",
+      f: "Science · Xie et al.",
+    },
+    {
+      t: "Força de preensão e mortalidade",
+      d: "Força muscular é preditor independente de mortalidade por todas as causas, mais consistente do que pressão arterial em coortes de meia-idade.",
+      f: "The Lancet · PURE Study",
+    },
+  ];
+
+  const process = [
+    { n: "01", t: "Avaliar", d: "Um mapa completo de biomarcadores, composição corporal, sono, força e histórico." },
+    { n: "02", t: "Entender", d: "Interpretação dos dados no contexto da sua vida — não médias populacionais." },
+    { n: "03", t: "Ajustar", d: "Um protocolo individual e progressivo, construído sobre o que já funciona para você." },
+    { n: "04", t: "Evoluir", d: "Reavaliações periódicas para calibrar o protocolo à medida que o corpo responde." },
+  ];
+
+  const outcomes = [
+    "Mais energia consistente ao longo do dia",
+    "Sono mais profundo e recuperador",
+    "Mais força e mobilidade nos gestos do cotidiano",
+    "Melhor controle metabólico e composição corporal",
+    "Clareza mental sustentada",
+    "Mais confiança e autonomia para os próximos anos",
+  ];
+
+  const testimonials = [
+    {
+      n: "Marina R.",
+      age: "47",
+      role: "Arquiteta",
+      before: "Cansada às 15h todos os dias, dormindo mal há anos.",
+      quote:
+        "Não foi uma revolução, foi uma recalibragem. Nove meses depois, tenho mais energia com metade do esforço — e voltei a confiar no meu corpo.",
+    },
+    {
+      n: "Carlos P.",
+      age: "52",
+      role: "Executivo",
+      before: "Exames alterados, peso oscilante, sensação de estar envelhecendo rápido.",
+      quote:
+        "Aprendi a ler meu próprio corpo. Perdi gordura visceral, ganhei força e, pela primeira vez em anos, meus exames mostram uma trajetória.",
+    },
+    {
+      n: "Renata M.",
+      age: "39",
+      role: "Advogada",
+      before: "Rotina intensa, treinos aleatórios, névoa mental à tarde.",
+      quote:
+        "Parei de acumular hábitos aleatórios. Passei a ter uma estratégia — sono, comida e movimento se conversam. A diferença é sentir clareza todos os dias.",
+    },
+  ];
+
+  const faqs = [
+    { q: "Isso é para quem já tem problemas de saúde?", a: "O protocolo é voltado a adultos saudáveis que querem envelhecer melhor. Se você tem uma condição diagnosticada, trabalhamos em coordenação com seu médico, sem substituí-lo." },
+    { q: "Preciso mudar toda a minha rotina?", a: "Não. Mudanças são progressivas e priorizadas por retorno. A maior parte do trabalho começa com ajustes pequenos e sustentáveis, não com reformas radicais." },
+    { q: "Preciso tomar suplementos?", a: "Suplementação, quando indicada, aparece depois da comida real e do sono. Ela é orientada por exames — nunca é a primeira alavanca do protocolo." },
+    { q: "Quanto tempo leva para perceber mudanças?", a: "Energia, sono e clareza costumam responder nas primeiras semanas. Biomarcadores e composição corporal evoluem em uma escala de meses, não de dias." },
+    { q: "Isso substitui acompanhamento médico?", a: "Não. O protocolo é um trabalho de longevidade aplicada — complementar ao cuidado médico. Continue com seu médico e traga os dados; nós conversamos com eles." },
+    { q: "Como sei se esse protocolo é adequado para mim?", a: "A conversa inicial existe justamente para isso. Se não fizer sentido para o seu momento, dizemos com clareza — e indicamos o próximo passo mais honesto." },
+  ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans antialiased">
-      {/* Sticky Header */}
+    <div className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-deep-blue selection:text-primary-foreground">
+      {/* Header */}
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-background/85 backdrop-blur-md border-b border-border shadow-sm"
+            ? "bg-background/85 backdrop-blur-xl border-b border-border/70"
             : "bg-transparent"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-2 font-semibold tracking-tight">
-            <div className="h-8 w-8 rounded-full bg-deep-blue flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-sage" />
-            </div>
-            <span className="text-deep-blue">Longevidade Aplicada</span>
+        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+          <a href="#top" className="flex items-baseline gap-2">
+            <span className={`${serif} text-xl tracking-tight text-deep-blue`}>Longevidade Aplicada</span>
+            <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground hidden sm:inline">
+              est. protocolo
+            </span>
           </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#pilares" className="hover:text-deep-blue transition-colors">
-              Pilares
-            </a>
-            <a href="#ciencia" className="hover:text-deep-blue transition-colors">
-              Ciência
-            </a>
-            <a href="#faq" className="hover:text-deep-blue transition-colors">
-              FAQ
-            </a>
+          <nav className="hidden md:flex items-center gap-10 text-sm text-muted-foreground">
+            <a href="#problema" className="hover:text-deep-blue transition-colors">O contexto</a>
+            <a href="#pilares" className="hover:text-deep-blue transition-colors">Pilares</a>
+            <a href="#ciencia" className="hover:text-deep-blue transition-colors">Ciência</a>
+            <a href="#protocolo" className="hover:text-deep-blue transition-colors">Protocolo</a>
+            <a href="#faq" className="hover:text-deep-blue transition-colors">FAQ</a>
           </nav>
           <a
-            href="#oferta"
-            className="inline-flex items-center gap-2 rounded-full bg-deep-blue text-primary-foreground px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-all"
+            href="#cta"
+            className="inline-flex items-center gap-2 rounded-full border border-deep-blue/20 bg-deep-blue text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-deep-blue/90 transition-all"
           >
-            Avaliação
-            <ArrowRight className="h-4 w-4" />
+            Conhecer o protocolo
+            <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
       </header>
 
       {/* Hero */}
-      <section id="top" className="relative pt-32 pb-24 overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img
-            src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=2000&q=80"
-            alt=""
-            className="w-full h-full object-cover opacity-15"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
-        </div>
-        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-sage/40 bg-sage/10 px-4 py-1.5 text-xs font-medium text-sage-deep mb-6">
-              <span className="h-1.5 w-1.5 rounded-full bg-sage-deep animate-pulse" />
-              Ciência aplicada à vitalidade
+      <section id="top" className="relative pt-40 pb-24 md:pt-48 md:pb-32">
+        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-12 gap-14 items-end">
+          <div className="lg:col-span-7">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-8">
+              <span className="inline-block h-px w-8 align-middle bg-sage-deep mr-3" />
+              Longevidade aplicada · Vol. 01
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-deep-blue leading-[1.05]">
-              Longevidade não é sorte.
-              <span className="block text-sage-deep italic font-light">
-                É biologia aplicada.
-              </span>
+            <h1 className={`${serif} text-[3.2rem] md:text-[4.5rem] lg:text-[5.2rem] leading-[0.98] tracking-[-0.02em] text-deep-blue font-normal`}>
+              Envelhecer é inevitável.
+              <span className="block italic text-deep-blue/80">Envelhecer sem estratégia, não.</span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Recupere sua energia, limpe sua mente e adicione anos à sua vida com
-              protocolos baseados em ciência — não em modismos.
+            <p className="mt-8 text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+              Um protocolo baseado em ciência para preservar energia, força, clareza mental e autonomia — construído para quem quer viver bem hoje e continuar vivendo melhor amanhã.
             </p>
 
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 bg-card rounded-2xl p-2 border border-border shadow-[var(--shadow-soft)] flex flex-col sm:flex-row gap-2 max-w-xl"
-            >
-              <Input
-                required
-                name="name"
-                placeholder="Seu nome"
-                className="border-0 shadow-none focus-visible:ring-0 h-12"
-              />
-              <Input
-                required
-                type="email"
-                name="email"
-                placeholder="Seu melhor e-mail"
-                className="border-0 shadow-none focus-visible:ring-0 h-12"
-              />
-              <Button
-                type="submit"
-                className="h-12 px-6 rounded-xl bg-deep-blue hover:bg-deep-blue/90 text-primary-foreground font-medium whitespace-nowrap"
+            <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <a
+                href="#cta"
+                className="group inline-flex items-center gap-2 rounded-full bg-deep-blue text-primary-foreground px-7 py-4 text-sm font-medium hover:bg-deep-blue/90 transition-all"
               >
-                Baixar o Guia
-              </Button>
-            </form>
-            <p className="mt-3 text-xs text-muted-foreground flex items-center gap-2">
-              <ShieldCheck className="h-3.5 w-3.5 text-sage-deep" />
-              Guia gratuito. Sem spam. Cancele quando quiser.
+                Conhecer meu protocolo
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="#protocolo"
+                className="inline-flex items-center gap-2 rounded-full border border-deep-blue/20 text-deep-blue px-7 py-4 text-sm font-medium hover:bg-deep-blue/5 transition-all"
+              >
+                Entender como funciona
+              </a>
+            </div>
+            <p className="mt-6 text-xs text-muted-foreground tracking-wide">
+              Baseado em evidências científicas · Sem promessas milagrosas
             </p>
           </div>
 
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-sage/30 to-transparent rounded-3xl blur-2xl" />
-            <img
-              src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80"
-              alt="Pessoa em movimento funcional na natureza"
-              className="relative rounded-3xl shadow-[var(--shadow-elegant)] w-full aspect-[4/5] object-cover"
-              loading="eager"
-            />
-            <div className="absolute -bottom-6 -left-6 bg-card rounded-2xl p-4 shadow-[var(--shadow-elegant)] border border-border max-w-[220px]">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-sage/20 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-sage-deep" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-deep-blue">+12 anos</div>
-                  <div className="text-xs text-muted-foreground">
-                    de vitalidade média
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dor / Identificação */}
-      <section className="py-24 bg-deep-blue text-primary-foreground">
-        <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="text-xs uppercase tracking-widest text-sage mb-4">
-              O diagnóstico honesto
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1]">
-              Você não está velho.
-              <span className="block text-sage font-light italic">
-                Está desregulado.
-              </span>
-            </h2>
-            <p className="mt-6 text-lg text-primary-foreground/70 leading-relaxed">
-              Cansaço crônico, névoa mental e inflamação não são normais aos 40. São
-              sinais de que seu relógio biológico está fora de sincronia — e a boa
-              notícia é que ele pode ser recalibrado.
-            </p>
-            <ul className="mt-8 space-y-3">
-              {[
-                "Fadiga que café não resolve",
-                "Sono que não repara",
-                "Dores articulares 'da idade'",
-                "Foco que desaparece à tarde",
-              ].map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-3 text-primary-foreground/85"
-                >
-                  <CheckCircle2 className="h-5 w-5 text-sage flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="lg:col-span-5">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1590650153855-d9e808231d41?auto=format&fit=crop&w=800&q=80"
-                alt="Antes: cansaço"
-                className="rounded-2xl w-full aspect-[3/4] object-cover grayscale"
+                src="https://images.unsplash.com/photo-1544005316-04ce1f2cf7ff?auto=format&fit=crop&w=1200&q=80"
+                alt="Retrato editorial de adulto saudável em luz natural"
+                className="w-full aspect-[4/5] object-cover rounded-sm shadow-[var(--shadow-elegant)]"
+                loading="eager"
               />
-              <div className="absolute bottom-3 left-3 bg-background/90 text-deep-blue text-xs font-medium rounded-full px-3 py-1">
-                Antes
-              </div>
-            </div>
-            <div className="relative mt-8">
-              <img
-                src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80"
-                alt="Depois: vitalidade"
-                className="rounded-2xl w-full aspect-[3/4] object-cover"
-              />
-              <div className="absolute bottom-3 left-3 bg-sage text-deep-blue text-xs font-medium rounded-full px-3 py-1">
-                Depois
+              <div className="absolute -bottom-8 -left-8 hidden md:block bg-background border border-border/70 px-6 py-5 max-w-[260px]">
+                <div className="text-[10px] uppercase tracking-[0.25em] text-sage-deep">Nota do protocolo</div>
+                <p className={`${serif} text-lg text-deep-blue mt-2 leading-snug`}>
+                  &ldquo;Longevidade não é sobre viver mais. É sobre chegar melhor.&rdquo;
+                </p>
               </div>
             </div>
           </div>
         </div>
+
+        {/* footer meta strip */}
+        <div className="max-w-6xl mx-auto px-6 mt-24 md:mt-32 border-t border-border pt-8 grid sm:grid-cols-3 gap-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <div>Baseado em evidências</div>
+          <div className="sm:text-center">Protocolo individual</div>
+          <div className="sm:text-right">Acompanhamento contínuo</div>
+        </div>
       </section>
 
-      {/* 3 Pilares */}
-      <section id="pilares" className="py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <div className="text-xs uppercase tracking-widest text-sage-deep mb-3">
-              Os 3 pilares
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-deep-blue">
-              A ciência da longevidade cabe em três palavras.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Não são sete. Não são vinte. Três alavancas biológicas — quando
-              ajustadas juntas, mudam tudo.
-            </p>
+      {/* Problema */}
+      <section id="problema" className="py-28 md:py-36 bg-secondary/40">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">O contexto</div>
+          <h2 className={`${serif} text-4xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-deep-blue max-w-3xl`}>
+            Seu corpo começou a mudar antes de você perceber.
+          </h2>
+          <p className="mt-8 text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            A partir dos 30, mudanças graduais em massa muscular, metabolismo, sono, recuperação, composição corporal e função cognitiva acontecem em silêncio. Nada disso aparece de um dia para o outro — e é exatamente por isso que passa despercebido.
+          </p>
+
+          <div className="mt-16 grid md:grid-cols-3 gap-px bg-border/70 border border-border/70">
+            {[
+              { t: "Massa muscular", d: "Declínio médio de 3–8% por década em adultos sedentários." },
+              { t: "Sono profundo", d: "Fragmentação silenciosa reduz reparo cognitivo e hormonal." },
+              { t: "Metabolismo", d: "Sensibilidade à insulina cai bem antes de qualquer diagnóstico." },
+              { t: "Recuperação", d: "O corpo passa a levar mais tempo para voltar ao normal." },
+              { t: "Cognição", d: "Foco e memória de trabalho começam a exigir mais esforço." },
+              { t: "Composição", d: "Menos músculo, mais gordura visceral — com o mesmo peso na balança." },
+            ].map((i) => (
+              <div key={i.t} className="bg-background p-8">
+                <div className={`${serif} text-xl text-deep-blue`}>{i.t}</div>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{i.d}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-14 grid md:grid-cols-3 gap-6">
+          <p className={`${serif} mt-16 text-2xl md:text-3xl leading-snug text-deep-blue max-w-3xl`}>
+            O problema não é ter 30, 40 ou 50 anos.
+            <span className="block text-deep-blue/70 italic">
+              O problema é chegar aos próximos 10 anos exatamente igual ao que você está fazendo hoje.
+            </span>
+          </p>
+        </div>
+      </section>
+
+      {/* Posicionamento + Pilares */}
+      <section id="pilares" className="py-28 md:py-36">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid lg:grid-cols-12 gap-14 items-end">
+            <div className="lg:col-span-7">
+              <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Posicionamento</div>
+              <h2 className={`${serif} text-4xl md:text-6xl leading-[1.03] tracking-[-0.02em] text-deep-blue`}>
+                Você não precisa viver mais.
+                <span className="block italic text-deep-blue/75">Precisa viver melhor por mais tempo.</span>
+              </h2>
+            </div>
+            <div className="lg:col-span-5">
+              <p className="text-muted-foreground leading-relaxed">
+                Longevidade não é uma corrida contra o tempo. É uma estratégia de vida — construída sobre quatro pilares que se sustentam mutuamente. Trabalhados juntos, eles moldam a diferença entre suportar os próximos anos e habitá-los com liberdade.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pillars.map((p, idx) => (
+              <article
+                key={p.n}
+                className="group relative bg-card border border-border/70 p-8 hover:border-deep-blue/30 transition-colors"
+              >
+                <img
+                  src={[
+                    "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1531353826977-0941b4779a1c?auto=format&fit=crop&w=800&q=80",
+                  ][idx]}
+                  alt=""
+                  className="w-full aspect-[4/3] object-cover mb-6 grayscale group-hover:grayscale-0 transition-all duration-700"
+                  loading="lazy"
+                />
+                <div className="text-[11px] uppercase tracking-[0.25em] text-sage-deep">{p.n}</div>
+                <h3 className={`${serif} mt-2 text-2xl text-deep-blue`}>{p.t}</h3>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{p.d}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3 pilares expandidos */}
+      <section className="py-28 md:py-36 bg-deep-blue text-primary-foreground">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-sage mb-6">Onde o trabalho começa</div>
+            <h2 className={`${serif} text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em]`}>
+              Três alavancas que sustentam
+              <span className="block italic opacity-80">todo o resto.</span>
+            </h2>
+          </div>
+
+          <div className="mt-16 grid md:grid-cols-3 gap-px bg-primary-foreground/10 border border-primary-foreground/10">
             {[
               {
-                icon: Moon,
-                title: "Sono",
-                subtitle: "O reparo celular que você ignora",
-                text: "Cada hora de sono profundo repara DNA, elimina beta-amiloide e recalibra hormônios. Sem sono, nada funciona.",
-                img: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1000&q=80",
+                k: "Força",
+                l: "Seu corpo precisa continuar sendo capaz.",
+                what: "Treino de força progressivo, mobilidade e potência.",
+                why: "Depois dos 30, músculo é o órgão que mais protege sua trajetória — de metabolismo a cognição.",
+                r: "Mais autonomia, menos dor, corpo que responde.",
               },
               {
-                icon: Apple,
-                title: "Alimentação",
-                subtitle: "Combustível anti-inflamatório",
-                text: "Alimentos integrais e densos em nutrientes reduzem inflamação sistêmica — a raiz silenciosa do envelhecimento acelerado.",
-                img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1000&q=80",
+                k: "Metabolismo",
+                l: "Energia não deveria ser um luxo.",
+                what: "Alimentação estruturada em torno de proteína, fibra e horários reais.",
+                why: "Sensibilidade à insulina, gordura visceral e inflamação silenciosa moldam como você acorda todos os dias.",
+                r: "Energia estável, composição melhor, exames que fazem sentido.",
               },
               {
-                icon: Activity,
-                title: "Movimento",
-                subtitle: "Exercício como medicina, não punição",
-                text: "Força, mobilidade e caminhada em zona 2 — o coquetel que ativa autofagia e preserva massa muscular.",
-                img: "https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=1000&q=80",
+                k: "Cognição",
+                l: "Seu melhor desempenho também acontece na mente.",
+                what: "Sono, gestão de estresse e prática cognitiva intencional.",
+                why: "O cérebro dos 40 e 50 pode ser mais claro e mais consistente — se for cuidado como se cuida do corpo.",
+                r: "Foco sustentado, memória confiável, humor mais estável.",
               },
             ].map((p) => (
-              <div
-                key={p.title}
-                className="group relative overflow-hidden rounded-3xl bg-card border border-border shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-elegant)] hover:-translate-y-1 transition-all duration-500"
-              >
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={p.img}
-                    alt={p.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-7">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-10 w-10 rounded-xl bg-sage/15 flex items-center justify-center">
-                      <p.icon className="h-5 w-5 text-sage-deep" />
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                        Pilar
-                      </div>
-                      <div className="font-semibold text-deep-blue">{p.title}</div>
-                    </div>
+              <div key={p.k} className="bg-deep-blue p-10">
+                <div className="text-[11px] uppercase tracking-[0.25em] text-sage">{p.k}</div>
+                <h3 className={`${serif} mt-4 text-3xl leading-tight`}>{p.l}</h3>
+                <dl className="mt-8 space-y-5 text-sm">
+                  <div>
+                    <dt className="uppercase tracking-[0.2em] text-[10px] text-primary-foreground/50">O que trabalhamos</dt>
+                    <dd className="mt-2 text-primary-foreground/85 leading-relaxed">{p.what}</dd>
                   </div>
-                  <h3 className="text-xl font-semibold text-deep-blue leading-snug">
-                    {p.subtitle}
-                  </h3>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                    {p.text}
-                  </p>
-                </div>
+                  <div>
+                    <dt className="uppercase tracking-[0.2em] text-[10px] text-primary-foreground/50">Por que importa</dt>
+                    <dd className="mt-2 text-primary-foreground/85 leading-relaxed">{p.why}</dd>
+                  </div>
+                  <div>
+                    <dt className="uppercase tracking-[0.2em] text-[10px] text-primary-foreground/50">Resultado prático</dt>
+                    <dd className="mt-2 text-primary-foreground/85 leading-relaxed">{p.r}</dd>
+                  </div>
+                </dl>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Ciência / Prova Social */}
-      <section id="ciencia" className="py-24 bg-secondary/20">
+      {/* Ciência */}
+      <section id="ciencia" className="py-28 md:py-36 bg-ivory">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div>
-              <div className="text-xs uppercase tracking-widest text-sage-deep mb-3">
-                O que a ciência diz
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-deep-blue leading-[1.1]">
-                Evidência, não promessa.
+          <div className="grid lg:grid-cols-12 gap-14 items-start">
+            <div className="lg:col-span-5 lg:sticky lg:top-28">
+              <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Evidência</div>
+              <h2 className={`${serif} text-4xl md:text-6xl leading-[1.03] tracking-[-0.02em] text-deep-blue`}>
+                Menos opinião.
+                <span className="block italic text-deep-blue/75">Mais evidência.</span>
               </h2>
-              <div className="mt-8 space-y-6">
-                {[
-                  {
-                    n: "01",
-                    t: "Ciclo circadiano",
-                    d: "Estudos publicados em Cell Metabolism (2019) mostram que alinhar alimentação à luz solar reduz marcadores inflamatórios em até 30%.",
-                  },
-                  {
-                    n: "02",
-                    t: "Inflamação crônica",
-                    d: "A 'inflammaging' — inflamação silenciosa de baixo grau — é hoje considerada o denominador comum das doenças da idade adulta.",
-                  },
-                  {
-                    n: "03",
-                    t: "Autofagia",
-                    d: "Jejum intermitente e treino de força ativam a limpeza celular, mecanismo premiado com o Nobel de Medicina em 2016.",
-                  },
-                ].map((s) => (
-                  <div key={s.n} className="flex gap-5 border-l-2 border-sage pl-5">
-                    <div>
-                      <div className="text-xs font-mono text-sage-deep">{s.n}</div>
-                      <div className="font-semibold text-deep-blue mt-1">{s.t}</div>
-                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                        {s.d}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-8 text-muted-foreground leading-relaxed max-w-md">
+                Não prometemos parar o tempo. Usamos o que a ciência já sabe sobre envelhecimento saudável para ajudar você a chegar melhor aos próximos anos.
+              </p>
             </div>
 
-            <div className="space-y-5">
-              {[
-                {
-                  n: "Marina R., 47",
-                  q: "Em 90 dias voltei a ter a energia dos meus 30. Sem dieta maluca. Só ajustes de sono e alimentação com base em ciência.",
-                  img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
-                },
-                {
-                  n: "Carlos P., 52",
-                  q: "A névoa mental sumiu na terceira semana. Meu médico ficou impressionado com os exames do último trimestre.",
-                  img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-                },
-                {
-                  n: "Renata M., 39",
-                  q: "Parei de contar calorias e comecei a contar nutrientes. Mudei mais em 2 meses do que em 5 anos de academia.",
-                  img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
-                },
-              ].map((t) => (
-                <figure
-                  key={t.n}
-                  className="bg-card rounded-2xl p-6 border border-border shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <blockquote className="text-deep-blue leading-relaxed">
-                    &ldquo;{t.q}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-4 flex items-center gap-3">
-                    <img
-                      src={t.img}
-                      alt={t.n}
-                      className="h-10 w-10 rounded-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="text-sm font-medium text-deep-blue">{t.n}</div>
-                  </figcaption>
-                </figure>
-              ))}
+            <div className="lg:col-span-7">
+              <div className="border-t border-border/70">
+                {evidence.map((e, i) => (
+                  <article key={e.t} className="border-b border-border/70 py-8 grid md:grid-cols-[80px_1fr] gap-6">
+                    <div className="text-xs font-mono text-sage-deep tracking-widest">
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <div>
+                      <h3 className={`${serif} text-2xl text-deep-blue leading-tight`}>{e.t}</h3>
+                      <p className="mt-3 text-muted-foreground leading-relaxed">{e.d}</p>
+                      <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-sage-deep">
+                        Fonte · {e.f}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Oferta */}
-      <section id="oferta" className="py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="relative overflow-hidden rounded-[2rem] bg-deep-blue text-primary-foreground p-10 md:p-16 shadow-[var(--shadow-elegant)]">
-            <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-sage/20 blur-3xl" />
-            <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-sage/10 blur-3xl" />
+      {/* Protocolo */}
+      <section id="protocolo" className="py-28 md:py-36">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Metodologia</div>
+            <h2 className={`${serif} text-4xl md:text-6xl leading-[1.03] tracking-[-0.02em] text-deep-blue`}>
+              Um protocolo para os próximos anos da sua vida.
+            </h2>
+            <p className="mt-8 text-muted-foreground leading-relaxed">
+              Quatro etapas construídas para trabalhar com o seu corpo — não contra o seu tempo.
+            </p>
+          </div>
 
-            <div className="relative grid md:grid-cols-5 gap-10 items-center">
-              <div className="md:col-span-3">
-                <div className="inline-flex items-center gap-2 rounded-full bg-sage/15 border border-sage/30 px-3 py-1 text-xs text-sage mb-6">
-                  <Clock className="h-3.5 w-3.5" />
-                  Vagas limitadas este mês
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.05]">
-                  Pare de guessing.
-                  <span className="block text-sage font-light italic">
-                    Comece a viver.
-                  </span>
-                </h2>
-                <p className="mt-5 text-primary-foreground/70 max-w-md leading-relaxed">
-                  <strong className="text-primary-foreground">
-                    Protocolo de Longevidade Integrada
-                  </strong>{" "}
-                  — 12 semanas de acompanhamento personalizado com exames, plano
-                  nutricional e ajustes de sono e treino.
-                </p>
-
-                <ul className="mt-6 space-y-2.5 text-sm text-primary-foreground/85">
-                  {[
-                    "Diagnóstico completo com painel de biomarcadores",
-                    "Protocolo individual de sono, nutrição e movimento",
-                    "Reavaliação quinzenal 1:1 comigo",
-                    "Grupo privado de mentoria vitalícia",
-                  ].map((i) => (
-                    <li key={i} className="flex gap-2.5">
-                      <CheckCircle2 className="h-5 w-5 text-sage flex-shrink-0 mt-0.5" />
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <form
-                onSubmit={handleSubmit}
-                className="md:col-span-2 bg-background text-foreground rounded-2xl p-6 space-y-3"
-              >
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-sage-deep">
-                    Avaliação gratuita
+          <ol className="mt-20 relative">
+            <span className="hidden md:block absolute left-0 right-0 top-8 h-px bg-border" />
+            <div className="grid md:grid-cols-4 gap-10 md:gap-6 relative">
+              {process.map((s) => (
+                <li key={s.n} className="relative">
+                  <div className="flex items-center gap-4">
+                    <span className="h-4 w-4 rounded-full bg-background border-2 border-deep-blue" />
+                    <span className="text-xs font-mono tracking-widest text-sage-deep">{s.n}</span>
                   </div>
-                  <div className="text-lg font-semibold text-deep-blue mt-1">
-                    Reserve sua vaga
-                  </div>
-                </div>
-                <Input required name="name" placeholder="Nome completo" className="h-11" />
-                <Input
-                  required
-                  type="email"
-                  name="email"
-                  placeholder="Seu melhor e-mail"
-                  className="h-11"
-                />
-                <Button
-                  type="submit"
-                  className="w-full h-12 rounded-xl bg-sage-deep hover:bg-sage-deep/90 text-primary-foreground font-medium"
-                >
-                  Garantir minha avaliação
-                </Button>
-                <p className="text-[11px] text-muted-foreground text-center">
-                  Retorno em até 24h úteis · 100% confidencial
-                </p>
-              </form>
+                  <h3 className={`${serif} mt-6 text-3xl text-deep-blue`}>{s.t}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+                </li>
+              ))}
             </div>
+          </ol>
+        </div>
+      </section>
+
+      {/* Resultados */}
+      <section className="py-28 md:py-36 bg-secondary/40">
+        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-12 gap-14 items-center">
+          <div className="lg:col-span-6">
+            <img
+              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1200&q=80"
+              alt="Adulto caminhando ao ar livre em luz natural"
+              className="w-full aspect-[4/5] object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div className="lg:col-span-6">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Resultados</div>
+            <h2 className={`${serif} text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue`}>
+              O que muda quando você começa
+              <span className="block italic text-deep-blue/75">a cuidar do que realmente importa.</span>
+            </h2>
+            <ul className="mt-10 divide-y divide-border border-t border-b border-border">
+              {outcomes.map((o) => (
+                <li key={o} className="py-4 flex items-start gap-4">
+                  <span className="mt-2 h-1 w-6 bg-sage-deep flex-shrink-0" />
+                  <span className="text-deep-blue">{o}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-xs text-muted-foreground">
+              Resultados variam entre indivíduos. Nada aqui substitui avaliação médica.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Prova social */}
+      <section className="py-28 md:py-36">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Quem já vive esse protocolo</div>
+            <h2 className={`${serif} text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue`}>
+              Pessoas reais, trajetórias reais.
+            </h2>
+          </div>
+
+          <div className="mt-16 grid md:grid-cols-3 gap-10">
+            {testimonials.map((t) => (
+              <figure key={t.n} className="border-t border-deep-blue pt-8">
+                <div className="text-[11px] uppercase tracking-[0.25em] text-sage-deep">Antes</div>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{t.before}</p>
+                <blockquote className={`${serif} mt-8 text-xl text-deep-blue leading-snug`}>
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-8 text-sm">
+                  <div className="font-medium text-deep-blue">{t.n}, {t.age}</div>
+                  <div className="text-muted-foreground">{t.role}</div>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-24 bg-secondary/20">
-        <div className="max-w-3xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <div className="text-xs uppercase tracking-widest text-sage-deep mb-3">
-              Perguntas honestas
+      <section id="faq" className="py-28 md:py-36 bg-ivory">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="grid lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-4">
+              <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Perguntas</div>
+              <h2 className={`${serif} text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue`}>
+                O que costumam perguntar antes de começar.
+              </h2>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-deep-blue">
-              O que costumam me perguntar.
-            </h2>
+            <div className="lg:col-span-8">
+              <Accordion type="single" collapsible className="border-t border-border">
+                {faqs.map((f, i) => (
+                  <AccordionItem
+                    key={i}
+                    value={`item-${i}`}
+                    className="border-b border-border"
+                  >
+                    <AccordionTrigger className={`${serif} text-left text-lg text-deep-blue hover:no-underline py-6`}>
+                      {f.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pr-4">
+                      {f.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <Accordion type="single" collapsible className="space-y-3">
-            {[
-              {
-                q: "Preciso mudar tudo de uma vez?",
-                a: "Não. O protocolo é progressivo — começamos por sono (a alavanca de maior retorno), depois alimentação, depois movimento. Nada de mudanças radicais no dia 1.",
-              },
-              {
-                q: "Isso funciona se eu tenho pouca disponibilidade?",
-                a: "Sim. Os protocolos são desenhados para adultos com agenda cheia. A maioria das intervenções custa menos de 20 minutos/dia bem colocados.",
-              },
-              {
-                q: "Preciso de suplementos caros?",
-                a: "Não. Suplementação, quando necessária, é orientada por exames e é a última alavanca — nunca a primeira. Comida real vem primeiro.",
-              },
-              {
-                q: "Em quanto tempo vejo resultados?",
-                a: "Energia e clareza mental melhoram nas primeiras 2 semanas. Biomarcadores inflamatórios costumam ceder entre 60 e 90 dias.",
-              },
-              {
-                q: "É seguro se eu já tenho alguma condição?",
-                a: "Sim, o protocolo é individual e integrado ao seu histórico médico. Trabalhamos junto com o seu médico quando necessário.",
-              },
-            ].map((f, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="bg-card border border-border rounded-2xl px-6 shadow-sm"
-              >
-                <AccordionTrigger className="text-left text-deep-blue font-medium hover:no-underline py-5">
-                  {f.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
-                  {f.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+      {/* CTA final */}
+      <section id="cta" className="py-28 md:py-36 bg-deep-blue text-primary-foreground">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-sage mb-8">Próximo passo</div>
+          <h2 className={`${serif} text-4xl md:text-6xl leading-[1.03] tracking-[-0.02em]`}>
+            Os próximos 10 anos vão passar
+            <span className="block italic opacity-80">de qualquer maneira.</span>
+            <span className="block mt-2">A questão é como você quer chegar até lá.</span>
+          </h2>
+          <p className="mt-8 text-lg text-primary-foreground/75 max-w-2xl mx-auto leading-relaxed">
+            Comece agora a construir uma versão mais forte, lúcida e energética do seu futuro.
+          </p>
+          <div className="mt-12">
+            <Button
+              asChild
+              className="h-14 px-10 rounded-full bg-background text-deep-blue hover:bg-background/90 text-base font-medium"
+            >
+              <a href="mailto:contato@longevidadeaplicada.com">
+                Começar minha avaliação
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
+          <p className="mt-8 text-xs uppercase tracking-[0.25em] text-primary-foreground/50">
+            Sem promessas milagrosas · Sem atalhos · Apenas estratégia baseada em ciência
+          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-10">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-full bg-deep-blue flex items-center justify-center">
-              <Sparkles className="h-3.5 w-3.5 text-sage" />
-            </div>
-            <span className="text-deep-blue font-medium">Longevidade Aplicada</span>
+      <footer className="border-t border-border py-16 bg-background">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-10">
+          <div className="md:col-span-5">
+            <div className={`${serif} text-2xl text-deep-blue`}>Longevidade Aplicada</div>
+            <p className="mt-4 text-sm text-muted-foreground max-w-sm leading-relaxed">
+              Um protocolo baseado em evidências para envelhecer com estratégia — energia, força, clareza e autonomia por mais tempo.
+            </p>
           </div>
-          <p>© {new Date().getFullYear()} — Biologia aplicada à vida real.</p>
+          <div className="md:col-span-2">
+            <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Método</div>
+            <ul className="space-y-2 text-sm text-deep-blue">
+              <li><a href="#problema" className="hover:opacity-70 transition">Sobre</a></li>
+              <li><a href="#protocolo" className="hover:opacity-70 transition">Como funciona</a></li>
+              <li><a href="#ciencia" className="hover:opacity-70 transition">Ciência</a></li>
+              <li><a href="#faq" className="hover:opacity-70 transition">FAQ</a></li>
+            </ul>
+          </div>
+          <div className="md:col-span-2">
+            <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Contato</div>
+            <ul className="space-y-2 text-sm text-deep-blue">
+              <li><a href="mailto:contato@longevidadeaplicada.com" className="hover:opacity-70 transition">E-mail</a></li>
+              <li><a href="#cta" className="hover:opacity-70 transition">Avaliação</a></li>
+            </ul>
+          </div>
+          <div className="md:col-span-3">
+            <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Legal</div>
+            <ul className="space-y-2 text-sm text-deep-blue">
+              <li><a href="#" className="hover:opacity-70 transition">Termos</a></li>
+              <li><a href="#" className="hover:opacity-70 transition">Privacidade</a></li>
+            </ul>
+            <p className="mt-8 text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Longevidade Aplicada.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
