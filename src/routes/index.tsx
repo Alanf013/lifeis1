@@ -142,7 +142,6 @@ function Index() {
           <nav className="hidden md:flex items-center gap-10 text-sm text-muted-foreground">
             <a href="#pilares" className="hover:text-deep-blue transition-colors">Pilares</a>
             <a href="#ciencia" className="hover:text-deep-blue transition-colors">Ciência</a>
-            <a href="#protocolo" className="hover:text-deep-blue transition-colors">Protocolo</a>
             <a href="#faq" className="hover:text-deep-blue transition-colors">FAQ</a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
