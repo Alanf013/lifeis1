@@ -201,39 +201,7 @@ function Index() {
         </div>
       </section>
 
-      {/* Pilares */}
-      <section id="pilares" className="texture-noise py-16 md:py-28 bg-secondary/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Pilares</div>
-            <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue text-balance`}>
-              Seis pilares.
-              <span className="block italic text-deep-blue/75">Uma estratégia.</span>
-            </h2>
-          </div>
-
-          <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {pillars.map((p) => {
-              const Icon = p.Icon;
-              return (
-                <article
-                  key={p.n}
-                  className="group relative bg-card border border-border/70 p-6 sm:p-7 hover:border-deep-blue/30 transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <span className={`${serif} text-4xl sm:text-5xl leading-none text-deep-blue/90 font-normal`}>
-                      {p.n}
-                    </span>
-                    <Icon className="h-6 w-6 text-sage-deep shrink-0" strokeWidth={1.5} />
-                  </div>
-                  <h3 className={`${serif} mt-6 text-xl sm:text-2xl text-deep-blue`}>{p.t}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.d}</p>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <PillarsSection />
 
       {/* Ciência */}
       <section id="ciencia" className="texture-noise py-16 md:py-28 bg-ivory">
