@@ -188,7 +188,7 @@ function Index() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
-                href="#protocolo"
+                href="#pilares"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-deep-blue/20 text-deep-blue px-7 py-4 text-sm font-medium hover:bg-secondary transition-all min-h-[48px]"
               >
                 Como funciona
