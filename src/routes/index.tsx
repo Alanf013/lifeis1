@@ -7,7 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowRight, Moon, Sun, Moon as MoonIcon, Utensils, Dumbbell, Waves, Brain, Activity } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Moon, Sun } from "lucide-react";
+import { PillarsSection } from "@/components/PillarsSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -80,15 +81,6 @@ function Index() {
       d: "Sono profundo consistente preserva memória e clareza ao longo da vida adulta.",
       f: "Science · Xie et al.",
     },
-  ];
-
-  const pillars = [
-    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica.", Icon: MoonIcon },
-    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.", Icon: Utensils },
-    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas.", Icon: Dumbbell },
-    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção.", Icon: Waves },
-    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia.", Icon: Brain },
-    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência.", Icon: Activity },
   ];
 
   const testimonials = [
