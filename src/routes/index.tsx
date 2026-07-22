@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowRight, Moon, Sun } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Moon, Sun, Moon as MoonIcon, Utensils, Dumbbell, Waves, Brain, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,13 +64,6 @@ function Index() {
 
   const serif = "font-[family-name:var(--font-serif)]";
 
-  const pillars = [
-    { n: "01", t: "Força", d: "Preservar músculo, mobilidade e autonomia." },
-    { n: "02", t: "Metabolismo", d: "Manter energia, composição corporal e saúde metabólica." },
-    { n: "03", t: "Cognição", d: "Proteger foco, clareza mental e capacidade de aprender." },
-    { n: "04", t: "Recuperação", d: "Sono, estresse e a capacidade do corpo de se recuperar." },
-  ];
-
   const evidence = [
     {
       t: "Sarcopenia após os 30",
@@ -89,13 +82,13 @@ function Index() {
     },
   ];
 
-  const process = [
-    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica." },
-    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição." },
-    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas." },
-    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção." },
-    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia." },
-    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência." },
+  const pillars = [
+    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica.", Icon: MoonIcon },
+    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.", Icon: Utensils },
+    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas.", Icon: Dumbbell },
+    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção.", Icon: Waves },
+    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia.", Icon: Brain },
+    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência.", Icon: Activity },
   ];
 
   const testimonials = [
@@ -149,7 +142,6 @@ function Index() {
           <nav className="hidden md:flex items-center gap-10 text-sm text-muted-foreground">
             <a href="#pilares" className="hover:text-deep-blue transition-colors">Pilares</a>
             <a href="#ciencia" className="hover:text-deep-blue transition-colors">Ciência</a>
-            <a href="#protocolo" className="hover:text-deep-blue transition-colors">Protocolo</a>
             <a href="#faq" className="hover:text-deep-blue transition-colors">FAQ</a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -196,7 +188,7 @@ function Index() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
-                href="#protocolo"
+                href="#pilares"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-deep-blue/20 text-deep-blue px-7 py-4 text-sm font-medium hover:bg-secondary transition-all min-h-[48px]"
               >
                 Como funciona
@@ -217,39 +209,36 @@ function Index() {
         </div>
       </section>
 
-      {/* Posicionamento + Pilares */}
+      {/* Pilares */}
       <section id="pilares" className="texture-noise py-16 md:py-28 bg-secondary/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl">
             <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Pilares</div>
             <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue text-balance`}>
-              Quatro alavancas.
+              Seis pilares.
               <span className="block italic text-deep-blue/75">Uma estratégia.</span>
             </h2>
           </div>
 
-          <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {pillars.map((p, idx) => (
-              <article
-                key={p.n}
-                className="group relative bg-card border border-border/70 p-6 hover:border-deep-blue/30 transition-colors"
-              >
-                <img
-                  src={[
-                    "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1531353826977-0941b4779a1c?auto=format&fit=crop&w=800&q=80",
-                  ][idx]}
-                  alt=""
-                  className="w-full aspect-[4/3] object-cover mb-5 grayscale group-hover:grayscale-0 transition-all duration-700"
-                  loading="lazy"
-                />
-                <div className="text-[11px] uppercase tracking-[0.25em] text-sage-deep">{p.n}</div>
-                <h3 className={`${serif} mt-2 text-xl text-deep-blue`}>{p.t}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.d}</p>
-              </article>
-            ))}
+          <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {pillars.map((p) => {
+              const Icon = p.Icon;
+              return (
+                <article
+                  key={p.n}
+                  className="group relative bg-card border border-border/70 p-6 sm:p-7 hover:border-deep-blue/30 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <span className={`${serif} text-4xl sm:text-5xl leading-none text-deep-blue/90 font-normal`}>
+                      {p.n}
+                    </span>
+                    <Icon className="h-6 w-6 text-sage-deep shrink-0" strokeWidth={1.5} />
+                  </div>
+                  <h3 className={`${serif} mt-6 text-xl sm:text-2xl text-deep-blue`}>{p.t}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.d}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -285,34 +274,6 @@ function Index() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Protocolo */}
-      <section id="protocolo" className="texture-noise py-16 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Metodologia</div>
-            <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue`}>
-              Quatro etapas.
-            </h2>
-          </div>
-
-          <ol className="mt-10 md:mt-14 relative">
-            <span className="hidden md:block absolute left-0 right-0 top-8 h-px bg-border" />
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-6 relative">
-              {process.map((s) => (
-                <li key={s.n} className="relative">
-                  <div className="flex items-center gap-4">
-                    <span className="h-4 w-4 rounded-full bg-background border-2 border-deep-blue" />
-                    <span className="text-xs font-mono tracking-widest text-sage-deep">{s.n}</span>
-                  </div>
-                  <h3 className={`${serif} mt-4 md:mt-5 text-xl sm:text-2xl text-deep-blue`}>{s.t}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-                </li>
-              ))}
-            </div>
-          </ol>
         </div>
       </section>
 
