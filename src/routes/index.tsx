@@ -278,34 +278,6 @@ function Index() {
         </div>
       </section>
 
-      {/* Protocolo */}
-      <section id="protocolo" className="texture-noise py-16 md:py-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6">Metodologia</div>
-            <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue`}>
-              Quatro etapas.
-            </h2>
-          </div>
-
-          <ol className="mt-10 md:mt-14 relative">
-            <span className="hidden md:block absolute left-0 right-0 top-8 h-px bg-border" />
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-6 relative">
-              {process.map((s) => (
-                <li key={s.n} className="relative">
-                  <div className="flex items-center gap-4">
-                    <span className="h-4 w-4 rounded-full bg-background border-2 border-deep-blue" />
-                    <span className="text-xs font-mono tracking-widest text-sage-deep">{s.n}</span>
-                  </div>
-                  <h3 className={`${serif} mt-4 md:mt-5 text-xl sm:text-2xl text-deep-blue`}>{s.t}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-                </li>
-              ))}
-            </div>
-          </ol>
-        </div>
-      </section>
-
       {/* Prova social */}
       <section className="texture-noise py-16 md:py-28 bg-secondary/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
