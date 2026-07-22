@@ -114,7 +114,7 @@ export function PillarsSection() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl">
           <div
-            className="text-[11px] uppercase tracking-[0.3em] mb-6 font-mono"
+            className="text-[12px] uppercase tracking-[0.3em] mb-6 font-mono font-medium"
             style={{ color: ACCENT }}
           >
             <span
@@ -302,13 +302,13 @@ export function PillarsSection() {
                     <div className="grid md:grid-cols-[1fr_minmax(0,42%)] gap-6 md:gap-10 pb-8 md:pb-12">
                       <div className="pl-0 sm:pl-[calc(2.5rem+2rem)] md:pl-[calc(3rem+2rem)] max-w-xl">
                         <p
-                          className="text-base sm:text-lg leading-relaxed"
-                          style={{ color: "rgba(242,239,233,0.85)" }}
+                          className="text-lg sm:text-xl leading-[1.65]"
+                          style={{ color: "rgba(242,239,233,0.92)" }}
                         >
                           {p.d}
                         </p>
                         <p
-                          className="mt-5 font-mono text-[10px] uppercase tracking-[0.25em]"
+                          className="mt-5 font-mono text-[11px] uppercase tracking-[0.25em] font-medium"
                           style={{ color: ACCENT }}
                         >
                           Fonte · {p.src}
