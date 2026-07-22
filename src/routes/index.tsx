@@ -90,10 +90,12 @@ function Index() {
   ];
 
   const process = [
-    { n: "01", t: "Avaliar", d: "Mapa de biomarcadores, sono, força e composição." },
-    { n: "02", t: "Entender", d: "Dados no contexto da sua vida — não médias." },
-    { n: "03", t: "Ajustar", d: "Protocolo individual e progressivo." },
-    { n: "04", t: "Evoluir", d: "Reavaliações que calibram o caminho." },
+    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica." },
+    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição." },
+    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas." },
+    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção." },
+    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia." },
+    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência." },
   ];
 
   const testimonials = [
@@ -298,7 +300,7 @@ function Index() {
 
           <ol className="mt-10 md:mt-14 relative">
             <span className="hidden md:block absolute left-0 right-0 top-8 h-px bg-border" />
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 relative">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-6 relative">
               {process.map((s) => (
                 <li key={s.n} className="relative">
                   <div className="flex items-center gap-4">
