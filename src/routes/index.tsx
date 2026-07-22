@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowRight, Moon, Sun } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Moon, Sun, Moon as MoonIcon, Utensils, Dumbbell, Waves, Brain, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,13 +64,6 @@ function Index() {
 
   const serif = "font-[family-name:var(--font-serif)]";
 
-  const pillars = [
-    { n: "01", t: "Força", d: "Preservar músculo, mobilidade e autonomia." },
-    { n: "02", t: "Metabolismo", d: "Manter energia, composição corporal e saúde metabólica." },
-    { n: "03", t: "Cognição", d: "Proteger foco, clareza mental e capacidade de aprender." },
-    { n: "04", t: "Recuperação", d: "Sono, estresse e a capacidade do corpo de se recuperar." },
-  ];
-
   const evidence = [
     {
       t: "Sarcopenia após os 30",
@@ -89,13 +82,13 @@ function Index() {
     },
   ];
 
-  const process = [
-    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica." },
-    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição." },
-    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas." },
-    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção." },
-    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia." },
-    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência." },
+  const pillars = [
+    { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica.", Icon: MoonIcon },
+    { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.", Icon: Utensils },
+    { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas.", Icon: Dumbbell },
+    { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção.", Icon: Waves },
+    { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia.", Icon: Brain },
+    { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência.", Icon: Activity },
   ];
 
   const testimonials = [
