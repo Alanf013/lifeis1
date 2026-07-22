@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, ArrowRight, Moon, Sun } from "lucide-react";
 import { PillarsSection } from "@/components/PillarsSection";
+import heroRunner from "@/assets/hero-runner.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -156,9 +157,9 @@ function Index() {
       </header>
 
       {/* Hero */}
-      <section id="top" className="texture-noise relative pt-28 pb-16 md:pt-44 md:pb-28">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-10 lg:gap-14 items-end">
-          <div className="lg:col-span-7">
+      <section id="top" className="texture-noise relative pt-28 md:pt-44">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl">
             <div className="text-[11px] uppercase tracking-[0.3em] text-sage-deep mb-6 sm:mb-8">
               <span className="inline-block h-px w-8 align-middle bg-sage-deep mr-3" />
               Longevidade aplicada
@@ -187,17 +188,18 @@ function Index() {
               </a>
             </div>
           </div>
+        </div>
 
-          <div className="lg:col-span-5">
-            <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1200&q=80"
-                alt="Retrato editorial de adulto saudável em luz natural"
-                className="w-full aspect-[4/5] sm:aspect-[4/5] object-cover rounded-sm shadow-[var(--shadow-elegant)]"
-                loading="eager"
-              />
-            </div>
-          </div>
+        <div className="mt-12 md:mt-20 mb-12 md:mb-20 relative w-full">
+          <img
+            src={heroRunner.url}
+            alt="Corredor em silhueta contra o pôr do sol"
+            className="w-full aspect-[21/9] max-h-[380px] object-cover"
+            style={{ objectPosition: "30% center" }}
+            loading="eager"
+          />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-10 md:w-16 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 md:w-16 bg-gradient-to-l from-background to-transparent" />
         </div>
       </section>
 
