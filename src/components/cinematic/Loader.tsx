@@ -12,7 +12,7 @@ export function Loader() {
   return (
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-500 ${fade ? "opacity-0" : "opacity-100"}`}
-      style={{ background: "#0A0F1F" }}
+      style={{ background: "var(--ivory)" }}
     >
       <div className="text-center">
         <div className="relative w-24 h-24 mx-auto mb-6">
@@ -21,8 +21,7 @@ export function Loader() {
               key={i}
               className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full"
               style={{
-                background: i % 2 ? "#FF6B35" : "#00D4FF",
-                boxShadow: "0 0 8px currentColor",
+                background: i % 2 ? "var(--sage-deep)" : "var(--sage)",
                 transform: `rotate(${i * 30}deg) translateY(-42px)`,
                 animation: `pulseDot 1.4s ease-in-out ${i * 0.08}s infinite`,
               }}
@@ -31,7 +30,7 @@ export function Loader() {
         </div>
         <p
           className="font-mono text-xs uppercase tracking-[0.4em]"
-          style={{ color: "#00D4FF", textShadow: "0 0 8px #00D4FF" }}
+          style={{ color: "var(--sage-deep)" }}
         >
           Carregando sua longevidade…
         </p>
