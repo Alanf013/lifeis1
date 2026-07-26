@@ -7,7 +7,7 @@ const R3F = lazy(async () => {
     import("three"),
   ]);
 
-  function Particles({ count }: { count: number }) {
+  function Particles({ count, animate }: { count: number; animate: boolean }) {
     const ref = useRef<any>(null);
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -23,10 +23,12 @@ const R3F = lazy(async () => {
     useFrame((_, dt) => {
       if (!ref.current) return;
       ref.current.rotation.y += dt * 0.03;
+      if (!animate) return;
       const pos = ref.current.geometry.attributes.position;
       const arr = pos.array as Float32Array;
+      const t = performance.now() * 0.0005;
       for (let i = 0; i < count; i++) {
-        arr[i * 3 + 1] += Math.sin(performance.now() * 0.0005 + i) * 0.002;
+        arr[i * 3 + 1] += Math.sin(t + i) * 0.002;
       }
       pos.needsUpdate = true;
     });
@@ -113,7 +115,7 @@ const R3F = lazy(async () => {
       >
         <ambientLight intensity={0.4} />
         {!lite && <directionalLight position={[5, 5, 5]} intensity={0.6} />}
-        <Particles count={particleCount} />
+        <Particles count={particleCount} animate={!lite} />
         {showModel && (lite ? <TorusKnotLite /> : <TorusKnot />)}
         {starCount > 0 && (
           <drei.Stars radius={40} depth={30} count={starCount} factor={2} fade speed={0.5} />
