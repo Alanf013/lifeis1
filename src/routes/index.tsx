@@ -163,23 +163,23 @@ function Index() {
               Longevidade aplicada
             </div>
             <h1
-              className="text-[2.25rem] sm:text-[3.2rem] md:text-[4.5rem] leading-[1.05] tracking-[-0.02em] font-normal text-balance"
+              className="text-[2.75rem] sm:text-[3.6rem] md:text-[4.75rem] leading-[1.08] tracking-[-0.02em] font-normal text-balance"
               style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
             >
               <Typewriter lines={["Envelhecer é inevitável.", "Envelhecer sem estratégia, não."]} />
             </h1>
-            <p className="mt-6 sm:mt-7 text-lg sm:text-xl max-w-xl leading-[1.6] text-muted-foreground">
+            <p className="mt-6 sm:mt-7 text-xl sm:text-2xl max-w-xl leading-[1.6] text-muted-foreground">
               Protocolo baseado em ciência para preservar energia, força e clareza pelas próximas décadas.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <a href="#cta" className="btn-neon group inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold min-h-[52px]">
+              <a href="#cta" className="btn-neon group inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold min-h-[56px]">
                 Começar avaliação
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
                 href="#pilares"
-                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px]"
+                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-lg font-medium min-h-[56px]"
                 style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 45%, transparent)", color: "var(--sage-deep)" }}
               >
                 Como funciona
@@ -197,7 +197,7 @@ function Index() {
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             <div className="lg:col-span-5 lg:sticky lg:top-28">
               <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Evidência</div>
-              <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+              <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
                 Menos opinião.
                 <span className="block italic text-muted-foreground">Mais evidência.</span>
               </h2>
@@ -218,8 +218,8 @@ function Index() {
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <div className="min-w-0">
-                      <h3 className={`${serif} text-2xl leading-tight`} style={{ color: "var(--deep-blue)" }}>{e.t}</h3>
-                      <p className="mt-3 text-base sm:text-lg leading-[1.65] text-muted-foreground">{e.d}</p>
+                      <h3 className={`${serif} text-2xl sm:text-3xl leading-tight`} style={{ color: "var(--deep-blue)" }}>{e.t}</h3>
+                      <p className="mt-3 text-lg sm:text-xl leading-[1.65] text-muted-foreground">{e.d}</p>
                       <p className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words" style={{ color: "var(--sage-deep)" }}>
                         Fonte · {e.f}
                       </p>
@@ -259,10 +259,10 @@ function Index() {
                 >
                   {t.n.charAt(0)}
                 </div>
-                <blockquote className={`${serif} text-lg sm:text-xl leading-[1.4]`} style={{ color: "var(--deep-blue)" }}>
+                <blockquote className={`${serif} text-xl sm:text-2xl leading-[1.45]`} style={{ color: "var(--deep-blue)" }}>
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
-                <figcaption className="mt-6 text-sm">
+                <figcaption className="mt-6 text-base">
                   <div className="font-medium text-muted-foreground">{t.n}, {t.age} · {t.role}</div>
                 </figcaption>
               </figure>
@@ -289,7 +289,7 @@ function Index() {
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
               <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Perguntas</div>
-              <h2 className={`${serif} text-2xl sm:text-3xl md:text-4xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+              <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
                 O que perguntam antes de começar.
               </h2>
             </div>
@@ -301,10 +301,10 @@ function Index() {
                     value={`item-${i}`}
                     className="border-b border-border"
                   >
-                    <AccordionTrigger className={`${serif} text-left text-lg sm:text-xl hover:no-underline py-6 gap-3 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
+                    <AccordionTrigger className={`${serif} text-left text-xl sm:text-2xl hover:no-underline py-6 gap-3 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
                       {f.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-base leading-[1.65] pb-6 sm:pr-4 text-muted-foreground">
+                    <AccordionContent className="text-lg leading-[1.65] pb-6 sm:pr-4 text-muted-foreground">
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -327,7 +327,7 @@ function Index() {
         />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
           <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-8" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
-          <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+          <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
             Os próximos 10 anos vão passar.
             <span className="block italic text-muted-foreground">Como você quer chegar até lá?</span>
           </h2>
