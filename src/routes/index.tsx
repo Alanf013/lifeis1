@@ -174,7 +174,7 @@ function Index() {
               </a>
               <a
                 href="#pilares"
-                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px] transition-all hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px]"
                 style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 45%, transparent)", color: "var(--sage-deep)" }}
               >
                 Como funciona
