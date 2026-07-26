@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { IconSono, IconAlimentacao, IconAtividade, IconEstresse, IconAnsiedade, IconDor } from "./PillarIcons";
 import type { ComponentType } from "react";
 
@@ -13,16 +14,21 @@ const PILLARS: P[] = [
 ];
 
 export function PillarsCarousel() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setActive((v) => (v + 1) % PILLARS.length), 4000);
+    return () => clearInterval(id);
+  }, []);
   return (
     <section id="pilares" className="relative py-24 md:py-32 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mb-14">
-          <div className="text-[12px] uppercase tracking-[0.3em] font-mono mb-6" style={{ color: "var(--sage-deep)" }}>
+          <div className="text-[13px] uppercase tracking-[0.3em] font-mono mb-6" style={{ color: "var(--sage-deep)" }}>
             <span className="inline-block h-px w-8 align-middle mr-3" style={{ background: "var(--sage-deep)" }} />
             Pilares · 06
           </div>
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
+            className="text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] font-normal"
             style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
           >
             Seis pilares.
@@ -30,7 +36,54 @@ export function PillarsCarousel() {
           </h2>
         </div>
 
-        <div className="flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible relative">
+        {/* Mobile: auto-fade carousel. Desktop: grid. */}
+        <div className="md:hidden relative min-h-[380px]">
+          {PILLARS.map((p, i) => {
+            const Icon = p.Icon;
+            return (
+              <article
+                key={p.n}
+                aria-hidden={active !== i}
+                className="absolute inset-0 rounded-2xl p-6 transition-opacity duration-1000"
+                style={{
+                  opacity: active === i ? 1 : 0,
+                  pointerEvents: active === i ? "auto" : "none",
+                  background: "color-mix(in oklab, var(--card) 92%, transparent)",
+                  backdropFilter: "blur(10px)",
+                  boxShadow: "var(--shadow-soft)",
+                }}
+              >
+                <div className="relative w-16 h-16 mb-5">
+                  <div
+                    className="relative w-16 h-16 rounded-2xl flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg, color-mix(in oklab, var(--sage) 22%, transparent), color-mix(in oklab, var(--sage-deep) 22%, transparent))",
+                    }}
+                  >
+                    <Icon />
+                  </div>
+                </div>
+                <div className="font-mono text-xs tracking-[0.3em] mb-2" style={{ color: "var(--sage-deep)" }}>{p.n}</div>
+                <h3 className="text-3xl leading-tight mb-3" style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}>{p.t}</h3>
+                <p className="text-base leading-[1.65] text-muted-foreground">{p.d}</p>
+              </article>
+            );
+          })}
+          <div className="absolute -bottom-6 left-0 right-0 flex justify-center gap-2">
+            {PILLARS.map((_, i) => (
+              <span
+                key={i}
+                className="h-1.5 rounded-full transition-all duration-500"
+                style={{
+                  width: active === i ? 20 : 6,
+                  background: active === i ? "var(--sage-deep)" : "color-mix(in oklab, var(--sage-deep) 30%, transparent)",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="hidden md:grid gap-6 grid-cols-3 relative">
           {PILLARS.map((p, i) => {
             const Icon = p.Icon;
             return (
@@ -46,7 +99,7 @@ export function PillarsCarousel() {
                   boxShadow: "var(--shadow-soft)",
                   animation: `floatCard 3s ease-in-out ${i * 0.4}s infinite`,
                 }}
-                className="relative min-w-[78%] sm:min-w-[54%] md:min-w-0 snap-center rounded-2xl p-6 md:p-7"
+                className="relative rounded-2xl p-7"
               >
                 <div
                   aria-hidden
@@ -84,12 +137,12 @@ export function PillarsCarousel() {
                 </div>
                 <div className="font-mono text-xs tracking-[0.3em] mb-2" style={{ color: "var(--sage-deep)" }}>{p.n}</div>
                 <h3
-                  className="text-2xl md:text-3xl leading-tight mb-3"
+                  className="text-3xl leading-tight mb-3"
                   style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
                 >
                   {p.t}
                 </h3>
-                <p className="text-sm md:text-base leading-relaxed text-muted-foreground">{p.d}</p>
+                <p className="text-base leading-[1.65] text-muted-foreground">{p.d}</p>
               </motion.article>
             );
           })}
