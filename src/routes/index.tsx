@@ -6,10 +6,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { ArrowUpRight, ArrowRight, Moon, Sun } from "lucide-react";
-import { PillarsSection } from "@/components/PillarsSection";
-import heroRunner from "@/assets/hero-runner.png.asset.json";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Scene3D } from "@/components/cinematic/Scene3D";
+import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
+import { Typewriter } from "@/components/cinematic/Typewriter";
+import { PillarsCarousel } from "@/components/cinematic/PillarsCarousel";
+import { Loader } from "@/components/cinematic/Loader";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,30 +44,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [scrolled, setScrolled] = useState(false);
-  const [dark, setDark] = useState(false);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("theme");
-    const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = stored ? stored === "dark" : prefers;
-    setDark(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-  }, []);
-
-  const toggleTheme = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  };
-
   const serif = "font-[family-name:var(--font-serif)]";
+  const ease = [0.23, 1, 0.32, 1] as const;
 
   const evidence = [
     {
@@ -116,39 +103,37 @@ function Index() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-deep-blue selection:text-primary-foreground">
+    <div
+      className="relative min-h-screen font-sans antialiased overflow-x-hidden"
+      style={{ background: "#0A0F1F", color: "#ffffff" }}
+    >
+      <Loader />
+      <Scene3D />
+      <ReadingProgress />
+      <NeonClock />
       {/* Header */}
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-background/85 backdrop-blur-xl border-b border-border/70"
-            : "bg-transparent"
+          scrolled ? "backdrop-blur-xl border-b" : ""
         }`}
+        style={
+          scrolled
+            ? { background: "rgba(10,15,31,0.75)", borderColor: "rgba(0,212,255,0.15)" }
+            : { background: "transparent" }
+        }
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
           <a href="#top" className="flex items-baseline gap-2 min-w-0">
-            <span className={`${serif} text-lg sm:text-xl tracking-tight text-deep-blue truncate`}>Longevidade Aplicada</span>
-            <span className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground hidden md:inline">
-              est. protocolo
-            </span>
+            <span className={`${serif} text-lg sm:text-xl tracking-tight text-white truncate`}>Longevidade Aplicada</span>
+            <span className="text-[11px] uppercase tracking-[0.25em] hidden md:inline" style={{ color: "#B0C4DE" }}>est. protocolo</span>
           </a>
-          <nav className="hidden md:flex items-center gap-10 text-[15px] font-medium text-foreground/70">
-            <a href="#pilares" className="hover:text-deep-blue transition-colors">Pilares</a>
-            <a href="#ciencia" className="hover:text-deep-blue transition-colors">Ciência</a>
-            <a href="#faq" className="hover:text-deep-blue transition-colors">FAQ</a>
+          <nav className="hidden md:flex items-center gap-10 text-[15px] font-medium" style={{ color: "#B0C4DE" }}>
+            <a href="#pilares" className="hover:text-white transition-colors">Pilares</a>
+            <a href="#ciencia" className="hover:text-white transition-colors">Ciência</a>
+            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <button
-              onClick={toggleTheme}
-              aria-label="Alternar tema"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/70 text-foreground hover:bg-secondary transition-colors"
-            >
-              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
-            <a
-              href="#cta"
-              className="inline-flex items-center gap-2 rounded-full bg-deep-blue text-primary-foreground px-4 sm:px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-all"
-            >
+            <a href="#cta" className="btn-neon inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-medium">
               Protocolo
               <ArrowUpRight className="h-4 w-4 hidden sm:inline" />
             </a>
@@ -157,81 +142,82 @@ function Index() {
       </header>
 
       {/* Hero */}
-      <section id="top" className="texture-noise relative pt-28 md:pt-44">
+      <section id="top" className="relative pt-32 md:pt-48 pb-20 md:pb-32">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl">
-            <div className="text-[12px] uppercase tracking-[0.3em] text-sage-deep font-medium mb-6 sm:mb-8">
-              <span className="inline-block h-px w-8 align-middle bg-sage-deep mr-3" />
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 2.2, ease }}
+            className="max-w-3xl"
+          >
+            <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6 sm:mb-8" style={{ color: "#00D4FF" }}>
+              <span className="inline-block h-px w-8 align-middle mr-3" style={{ background: "#00D4FF" }} />
               Longevidade aplicada
             </div>
-            <h1 className={`${serif} text-[2.25rem] sm:text-[3.2rem] md:text-[4.5rem] lg:text-[5.2rem] leading-[1.02] md:leading-[0.98] tracking-[-0.02em] text-deep-blue font-normal text-balance`}>
-              Envelhecer é inevitável.
-              <span className="block italic text-deep-blue/80">Envelhecer sem estratégia, não.</span>
+            <h1
+              className="text-[2.25rem] sm:text-[3.2rem] md:text-[4.5rem] leading-[1.05] tracking-[-0.02em] text-white font-bold text-balance"
+              style={{ fontFamily: "'Orbitron', var(--font-serif)", textShadow: "0 0 40px rgba(0,212,255,0.25)" }}
+            >
+              <Typewriter lines={["Envelhecer é inevitável.", "Envelhecer sem estratégia, não."]} />
             </h1>
-            <p className="mt-6 sm:mt-7 text-lg sm:text-xl text-foreground/75 max-w-xl leading-[1.6]">
+            <p className="mt-6 sm:mt-7 text-lg sm:text-xl max-w-xl leading-[1.6]" style={{ color: "#B0C4DE" }}>
               Protocolo baseado em ciência para preservar energia, força e clareza pelas próximas décadas.
             </p>
 
-            <div className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <a
-                href="#cta"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-deep-blue text-primary-foreground px-7 py-4 text-base font-medium hover:bg-deep-blue/90 transition-all min-h-[52px]"
-              >
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <a href="#cta" className="btn-neon group inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold min-h-[52px]">
                 Começar avaliação
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
                 href="#pilares"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-deep-blue/25 text-deep-blue px-7 py-4 text-base font-medium hover:bg-secondary transition-all min-h-[52px]"
+                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px] transition-all hover:scale-105"
+                style={{ borderColor: "rgba(0,212,255,0.4)", color: "#00D4FF" }}
               >
                 Como funciona
               </a>
             </div>
-          </div>
-        </div>
-
-        <div className="mt-12 md:mt-20 mb-12 md:mb-20 relative w-full">
-          <img
-            src={heroRunner.url}
-            alt="Corredor em silhueta contra o pôr do sol"
-            className="w-full aspect-[21/9] max-h-[380px] object-cover"
-            style={{ objectPosition: "30% center" }}
-            loading="eager"
-          />
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-10 md:w-16 bg-gradient-to-r from-background to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 md:w-16 bg-gradient-to-l from-background to-transparent" />
+          </motion.div>
         </div>
       </section>
 
-      <PillarsSection />
+      <PillarsCarousel />
 
       {/* Ciência */}
-      <section id="ciencia" className="texture-noise py-16 md:py-28 bg-ivory">
+      <section id="ciencia" className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             <div className="lg:col-span-5 lg:sticky lg:top-28">
-              <div className="text-[12px] uppercase tracking-[0.3em] text-sage-deep font-medium mb-6">Evidência</div>
-              <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-deep-blue text-balance`}>
+              <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "#00D4FF" }}>Evidência</div>
+              <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-white text-balance`}>
                 Menos opinião.
-                <span className="block italic text-deep-blue/75">Mais evidência.</span>
+                <span className="block italic" style={{ color: "#B0C4DE" }}>Mais evidência.</span>
               </h2>
             </div>
 
             <div className="lg:col-span-7">
-              <div className="border-t border-border/70">
+              <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
                 {evidence.map((e, i) => (
-                  <article key={e.t} className="border-b border-border/70 py-8 grid grid-cols-[40px_minmax(0,1fr)] md:grid-cols-[64px_1fr] gap-4 md:gap-6">
-                    <div className="text-sm font-mono text-sage-deep tracking-widest shrink-0">
+                  <motion.article
+                    key={e.t}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.6, delay: i * 0.1, ease }}
+                    className="border-b py-8 grid grid-cols-[40px_minmax(0,1fr)] md:grid-cols-[64px_1fr] gap-4 md:gap-6"
+                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                  >
+                    <div className="text-sm font-mono tracking-widest shrink-0" style={{ color: "#00D4FF" }}>
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <div className="min-w-0">
-                      <h3 className={`${serif} text-2xl text-deep-blue leading-tight`}>{e.t}</h3>
-                      <p className="mt-3 text-base sm:text-lg text-foreground/75 leading-[1.65]">{e.d}</p>
-                      <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-sage-deep font-medium break-words">
+                      <h3 className={`${serif} text-2xl text-white leading-tight`}>{e.t}</h3>
+                      <p className="mt-3 text-base sm:text-lg leading-[1.65]" style={{ color: "#B0C4DE" }}>{e.d}</p>
+                      <p className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words" style={{ color: "#FF6B35" }}>
                         Fonte · {e.f}
                       </p>
                     </div>
-                  </article>
+                  </motion.article>
                 ))}
               </div>
             </div>
@@ -240,45 +226,69 @@ function Index() {
       </section>
 
       {/* Prova social */}
-      <section className="texture-noise py-16 md:py-28 bg-secondary/40">
+      <section className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
-            {testimonials.map((t) => (
-              <figure key={t.n} className="border-t border-deep-blue pt-6">
-                <blockquote className={`${serif} text-lg sm:text-xl text-deep-blue leading-[1.4]`}>
+            {testimonials.map((t, i) => (
+              <motion.figure
+                key={t.n}
+                initial={{ opacity: 0, y: 40, rotateX: 5 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, delay: i * 0.15, ease }}
+                className="relative rounded-2xl p-6 border"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(10px)",
+                  borderColor: "rgba(0,212,255,0.2)",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.5)",
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                <div
+                  className="w-14 h-14 rounded-full mb-4 flex items-center justify-center text-xl font-bold text-white"
+                  style={{
+                    background: "linear-gradient(135deg,#00D4FF,#0066FF)",
+                    boxShadow: "0 0 20px rgba(0,212,255,0.6)",
+                  }}
+                >
+                  {t.n.charAt(0)}
+                </div>
+                <blockquote className={`${serif} text-lg sm:text-xl text-white leading-[1.4]`}>
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
                 <figcaption className="mt-6 text-sm">
-                  <div className="font-medium text-deep-blue">{t.n}, {t.age} · {t.role}</div>
+                  <div className="font-medium" style={{ color: "#B0C4DE" }}>{t.n}, {t.age} · {t.role}</div>
                 </figcaption>
-              </figure>
+              </motion.figure>
             ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="texture-noise py-16 md:py-28 bg-ivory">
+      <section id="faq" className="relative py-16 md:py-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
-              <div className="text-[12px] uppercase tracking-[0.3em] text-sage-deep font-medium mb-6">Perguntas</div>
-              <h2 className={`${serif} text-2xl sm:text-3xl md:text-4xl leading-[1.05] tracking-[-0.02em] text-deep-blue text-balance`}>
+              <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "#00D4FF" }}>Perguntas</div>
+              <h2 className={`${serif} text-2xl sm:text-3xl md:text-4xl leading-[1.05] tracking-[-0.02em] text-white text-balance`}>
                 O que perguntam antes de começar.
               </h2>
             </div>
             <div className="lg:col-span-8">
-              <Accordion type="single" collapsible className="border-t border-border">
+              <Accordion type="single" collapsible className="border-t" style={{ borderColor: "rgba(255,255,255,0.1)" } as any}>
                 {faqs.map((f, i) => (
                   <AccordionItem
                     key={i}
                     value={`item-${i}`}
-                    className="border-b border-border"
+                    className="border-b"
+                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
                   >
-                    <AccordionTrigger className={`${serif} text-left text-lg sm:text-xl text-deep-blue hover:no-underline py-6 gap-3`}>
+                    <AccordionTrigger className={`${serif} text-left text-lg sm:text-xl text-white hover:no-underline py-6 gap-3 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`}>
                       {f.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-base text-foreground/75 leading-[1.65] pb-6 sm:pr-4">
+                    <AccordionContent className="text-base leading-[1.65] pb-6 sm:pr-4" style={{ color: "#B0C4DE" }}>
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -290,32 +300,42 @@ function Index() {
       </section>
 
       {/* CTA final */}
-      <section id="cta" className="texture-noise py-20 md:py-32 bg-deep-blue text-primary-foreground">
+      <section id="cta" className="relative py-24 md:py-36 overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,212,255,0.18), transparent 70%)",
+          }}
+        />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
-          <div className="text-[12px] uppercase tracking-[0.3em] text-sage font-medium mb-8">Próximo passo</div>
-          <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`}>
+          <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-8" style={{ color: "#00D4FF" }}>Próximo passo</div>
+          <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance text-white`}>
             Os próximos 10 anos vão passar.
-            <span className="block italic opacity-80">Como você quer chegar até lá?</span>
+            <span className="block italic" style={{ color: "#B0C4DE" }}>Como você quer chegar até lá?</span>
           </h2>
-          <div className="mt-8 md:mt-10">
-            <Button
-              asChild
-              className="h-14 px-8 sm:px-10 rounded-full bg-background text-deep-blue hover:bg-background/90 text-base font-medium w-full sm:w-auto"
+          <p className="mt-6 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "#FF6B35" }}>
+            Sua próxima década começa agora
+          </p>
+          <div className="mt-10">
+            <a
+              href="mailto:contato@longevidadeaplicada.com"
+              className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
+              style={{ fontFamily: "'Orbitron', sans-serif" }}
             >
-              <a href="mailto:contato@longevidadeaplicada.com">
-                Começar avaliação
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+              Minha próxima década
+              <ArrowRight className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-10 bg-background">
+      <footer className="border-t py-10 relative" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className={`${serif} text-lg text-deep-blue`}>Longevidade Aplicada</div>
-          <p className="text-xs text-muted-foreground">
+          <div className={`${serif} text-lg text-white`}>Longevidade Aplicada</div>
+          <p className="text-xs" style={{ color: "#B0C4DE" }}>
             © {new Date().getFullYear()} · Sem promessas milagrosas.
           </p>
         </div>

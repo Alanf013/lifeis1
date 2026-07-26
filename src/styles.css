@@ -186,6 +186,27 @@
 #lovable-badge {
   display: none !important;
 }
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.2; transform: rotate(var(--r,0deg)) translateY(-42px) scale(0.8); }
+  50% { opacity: 1; transform: rotate(var(--r,0deg)) translateY(-42px) scale(1.4); }
+}
+@keyframes borderShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,212,255,0.6), 0 0 40px rgba(0,212,255,0.2); }
+  50% { box-shadow: 0 0 32px rgba(0,212,255,0.9), 0 0 60px rgba(0,212,255,0.4); }
+}
+.btn-neon {
+  background: linear-gradient(90deg,#00D4FF,#0066FF);
+  color: #fff;
+  border-radius: 999px;
+  animation: glowPulse 2.4s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+}
+.btn-neon:hover { transform: scale(1.1); }
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
 div[style*="Edit with Lovable"],
