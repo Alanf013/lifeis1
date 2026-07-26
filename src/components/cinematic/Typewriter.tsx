@@ -6,18 +6,19 @@ export function Typewriter({ lines, className }: { lines: string[]; className?: 
   useEffect(() => {
     let li = 0, ci = 0;
     const id = setInterval(() => {
-      if (li >= lines.length) {
+      if (!lines || li >= lines.length) {
         clearInterval(id);
         setDone(true);
         return;
       }
+      const current = lines[li] ?? "";
       setText((prev) => {
         const next = [...prev];
-        next[li] = lines[li].slice(0, ci + 1);
+        next[li] = current.slice(0, ci + 1);
         return next;
       });
       ci++;
-      if (ci >= lines[li].length) {
+      if (ci >= current.length) {
         li++;
         ci = 0;
       }
