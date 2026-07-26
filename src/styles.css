@@ -199,6 +199,26 @@
   0%, 100% { box-shadow: 0 10px 24px color-mix(in oklab, var(--sage-deep) 30%, transparent), 0 0 0 0 color-mix(in oklab, var(--sage) 25%, transparent); }
   50% { box-shadow: 0 14px 32px color-mix(in oklab, var(--sage-deep) 45%, transparent), 0 0 0 6px color-mix(in oklab, var(--sage) 15%, transparent); }
 }
+@keyframes spinY {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+@keyframes pulseWave {
+  0%, 100% { transform: scale(0.9); opacity: 0.55; }
+  50% { transform: scale(1.25); opacity: 0.9; }
+}
+@keyframes hexShift {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 60px 104px, 60px 104px; }
+}
+.hex-bg {
+  background-image:
+    radial-gradient(circle at 50% 0, color-mix(in oklab, var(--sage-deep) 12%, transparent) 1px, transparent 2px),
+    radial-gradient(circle at 50% 100%, color-mix(in oklab, var(--sage) 10%, transparent) 1px, transparent 2px);
+  background-size: 60px 104px;
+  animation: hexShift 30s linear infinite;
+  opacity: 0.5;
+}
 .btn-neon {
   background: linear-gradient(135deg, var(--sage), var(--sage-deep));
   color: var(--ivory);
