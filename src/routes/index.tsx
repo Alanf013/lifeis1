@@ -45,10 +45,15 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeT, setActiveT] = useState(0);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => {
+    const id = setInterval(() => setActiveT((v) => (v + 1) % 3), 5000);
+    return () => clearInterval(id);
   }, []);
 
   const serif = "font-[family-name:var(--font-serif)]";
@@ -174,7 +179,7 @@ function Index() {
               </a>
               <a
                 href="#pilares"
-                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px] transition-all hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-base font-medium min-h-[52px]"
                 style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 45%, transparent)", color: "var(--sage-deep)" }}
               >
                 Como funciona
@@ -230,21 +235,18 @@ function Index() {
       {/* Prova social */}
       <section className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
+          <div className="relative max-w-2xl mx-auto min-h-[260px]">
             {testimonials.map((t, i) => (
-              <motion.figure
+              <figure
                 key={t.n}
-                initial={{ opacity: 0, y: 40, rotateX: 5 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: i * 0.15, ease }}
-                className="relative rounded-2xl p-6 border"
+                aria-hidden={activeT !== i}
+                className="absolute inset-0 rounded-2xl p-6 sm:p-8 border transition-opacity duration-1000"
                 style={{
+                  opacity: activeT === i ? 1 : 0,
                   background: "color-mix(in oklab, var(--card) 96%, transparent)",
                   backdropFilter: "blur(10px)",
                   borderColor: "var(--border)",
                   boxShadow: "var(--shadow-soft)",
-                  transformStyle: "preserve-3d",
                 }}
               >
                 <div
@@ -263,8 +265,20 @@ function Index() {
                 <figcaption className="mt-6 text-sm">
                   <div className="font-medium text-muted-foreground">{t.n}, {t.age} · {t.role}</div>
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
+            <div className="absolute -bottom-8 left-0 right-0 flex justify-center gap-2">
+              {testimonials.map((_, i) => (
+                <span
+                  key={i}
+                  className="h-1.5 rounded-full transition-all duration-500"
+                  style={{
+                    width: activeT === i ? 24 : 8,
+                    background: activeT === i ? "var(--sage-deep)" : "color-mix(in oklab, var(--sage-deep) 30%, transparent)",
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

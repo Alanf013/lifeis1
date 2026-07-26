@@ -207,6 +207,10 @@
   0%, 100% { transform: scale(0.9); opacity: 0.55; }
   50% { transform: scale(1.25); opacity: 0.9; }
 }
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
 @keyframes hexShift {
   0% { background-position: 0 0, 0 0; }
   100% { background-position: 60px 104px, 60px 104px; }

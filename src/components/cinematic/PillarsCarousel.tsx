@@ -40,14 +40,13 @@ export function PillarsCarousel() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] }}
-                whileHover={{ rotateY: 6, rotateX: -4, scale: 1.03 }}
                 style={{
-                  transformStyle: "preserve-3d",
                   background: "color-mix(in oklab, var(--card) 92%, transparent)",
                   backdropFilter: "blur(10px)",
                   boxShadow: "var(--shadow-soft)",
+                  animation: `floatCard 3s ease-in-out ${i * 0.4}s infinite`,
                 }}
-                className="relative min-w-[78%] sm:min-w-[54%] md:min-w-0 snap-center rounded-2xl p-6 md:p-7 group"
+                className="relative min-w-[78%] sm:min-w-[54%] md:min-w-0 snap-center rounded-2xl p-6 md:p-7"
               >
                 <div
                   aria-hidden
