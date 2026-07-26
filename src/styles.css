@@ -175,7 +175,6 @@
 
   /* Hide scrollbars but keep functionality */
   ::-webkit-scrollbar { width: 0; height: 0; }
-  }
 
   .texture-noise {
     position: relative;
