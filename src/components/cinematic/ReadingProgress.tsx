@@ -13,13 +13,12 @@ export function ReadingProgress() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
-    <div className="fixed top-0 inset-x-0 h-[3px] z-[60] bg-white/5">
+    <div className="fixed top-0 inset-x-0 h-[3px] z-[60]" style={{ background: "color-mix(in oklab, var(--sage) 10%, transparent)" }}>
       <div
         className="h-full transition-[width] duration-100"
         style={{
           width: `${p * 100}%`,
-          background: "linear-gradient(90deg,#00D4FF,#FF6B35)",
-          boxShadow: "0 0 12px #00D4FF",
+          background: "linear-gradient(90deg, var(--sage), var(--sage-deep))",
         }}
       />
     </div>
@@ -41,11 +40,11 @@ export function NeonClock() {
     <div
       className="fixed bottom-4 right-4 z-40 font-mono text-xs px-3 py-2 rounded-full border hidden sm:block"
       style={{
-        color: "#00D4FF",
-        borderColor: "rgba(0,212,255,0.4)",
-        background: "rgba(10,15,31,0.6)",
+        color: "var(--sage-deep)",
+        borderColor: "color-mix(in oklab, var(--sage-deep) 30%, transparent)",
+        background: "color-mix(in oklab, var(--ivory) 75%, transparent)",
         backdropFilter: "blur(10px)",
-        boxShadow: "0 0 16px rgba(0,212,255,0.25)",
+        boxShadow: "var(--shadow-soft)",
       }}
     >
       {t}

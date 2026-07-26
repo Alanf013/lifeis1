@@ -11,13 +11,13 @@ const R3F = lazy(async () => {
     const ref = useRef<any>(null);
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    const cyan = new THREE.Color("#00D4FF");
-    const orange = new THREE.Color("#FF6B35");
+    const sage = new THREE.Color("#84A98C");
+    const sageDeep = new THREE.Color("#52796F");
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 22;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 14;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
-      const c = i % 3 === 0 ? orange : cyan;
+      const c = i % 3 === 0 ? sageDeep : sage;
       colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
     }
     useFrame((_, dt) => {
@@ -36,7 +36,7 @@ const R3F = lazy(async () => {
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
-        <pointsMaterial size={0.08} vertexColors transparent opacity={0.9} sizeAttenuation depthWrite={false} />
+        <pointsMaterial size={0.06} vertexColors transparent opacity={0.5} sizeAttenuation depthWrite={false} />
       </points>
     );
   }
@@ -54,14 +54,14 @@ const R3F = lazy(async () => {
         <mesh ref={ref}>
           <torusKnotGeometry args={[1.1, 0.32, 180, 24]} />
           <meshStandardMaterial
-            color="#00D4FF"
-            emissive="#0088FF"
-            emissiveIntensity={0.7}
+            color="#84A98C"
+            emissive="#52796F"
+            emissiveIntensity={0.3}
             metalness={0.6}
             roughness={0.2}
           />
         </mesh>
-        <pointLight color="#00D4FF" intensity={2} distance={8} />
+        <pointLight color="#84A98C" intensity={1.2} distance={8} />
       </group>
     );
   }

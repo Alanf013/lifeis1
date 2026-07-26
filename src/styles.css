@@ -196,17 +196,17 @@
   100% { background-position: 200% 50%; }
 }
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(0,212,255,0.6), 0 0 40px rgba(0,212,255,0.2); }
-  50% { box-shadow: 0 0 32px rgba(0,212,255,0.9), 0 0 60px rgba(0,212,255,0.4); }
+  0%, 100% { box-shadow: 0 10px 24px color-mix(in oklab, var(--sage-deep) 30%, transparent), 0 0 0 0 color-mix(in oklab, var(--sage) 25%, transparent); }
+  50% { box-shadow: 0 14px 32px color-mix(in oklab, var(--sage-deep) 45%, transparent), 0 0 0 6px color-mix(in oklab, var(--sage) 15%, transparent); }
 }
 .btn-neon {
-  background: linear-gradient(90deg,#00D4FF,#0066FF);
-  color: #fff;
+  background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+  color: var(--ivory);
   border-radius: 999px;
   animation: glowPulse 2.4s ease-in-out infinite;
   transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
 }
-.btn-neon:hover { transform: scale(1.1); }
+.btn-neon:hover { transform: scale(1.06); }
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
 div[style*="Edit with Lovable"],
