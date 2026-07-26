@@ -17,16 +17,16 @@ export function PillarsCarousel() {
     <section id="pilares" className="relative py-24 md:py-32 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="max-w-2xl mb-14">
-          <div className="text-[12px] uppercase tracking-[0.3em] font-mono mb-6" style={{ color: "#00D4FF" }}>
-            <span className="inline-block h-px w-8 align-middle mr-3" style={{ background: "#00D4FF" }} />
+          <div className="text-[12px] uppercase tracking-[0.3em] font-mono mb-6" style={{ color: "var(--sage-deep)" }}>
+            <span className="inline-block h-px w-8 align-middle mr-3" style={{ background: "var(--sage-deep)" }} />
             Pilares · 06
           </div>
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-white font-normal"
-            style={{ fontFamily: "var(--font-serif)" }}
+            className="text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
+            style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
           >
             Seis pilares.
-            <span className="block italic" style={{ color: "#B0C4DE" }}>Uma estratégia.</span>
+            <span className="block italic text-muted-foreground">Uma estratégia.</span>
           </h2>
         </div>
 
@@ -43,9 +43,9 @@ export function PillarsCarousel() {
                 whileHover={{ rotateY: 6, rotateX: -4, scale: 1.03 }}
                 style={{
                   transformStyle: "preserve-3d",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "color-mix(in oklab, var(--card) 92%, transparent)",
                   backdropFilter: "blur(10px)",
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
+                  boxShadow: "var(--shadow-soft)",
                 }}
                 className="relative min-w-[78%] sm:min-w-[54%] md:min-w-0 snap-center rounded-2xl p-6 md:p-7 group"
               >
@@ -53,7 +53,7 @@ export function PillarsCarousel() {
                   aria-hidden
                   className="absolute inset-0 rounded-2xl p-px pointer-events-none"
                   style={{
-                    background: "linear-gradient(135deg,#00D4FF,#FF6B35,#00D4FF)",
+                    background: "linear-gradient(135deg, var(--sage), var(--sage-deep), var(--sage))",
                     backgroundSize: "200% 200%",
                     animation: "borderShift 6s linear infinite",
                     WebkitMask:
@@ -67,20 +67,20 @@ export function PillarsCarousel() {
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
                   style={{
-                    background: "linear-gradient(135deg,rgba(0,212,255,0.2),rgba(255,107,53,0.2))",
-                    boxShadow: "0 0 20px rgba(0,212,255,0.35)",
+                    background: "linear-gradient(135deg, color-mix(in oklab, var(--sage) 25%, transparent), color-mix(in oklab, var(--sage-deep) 25%, transparent))",
+                    boxShadow: "0 8px 20px color-mix(in oklab, var(--sage-deep) 22%, transparent)",
                   }}
                 >
-                  <Icon className="h-5 w-5" style={{ color: "#00D4FF" }} />
+                  <Icon className="h-5 w-5" style={{ color: "var(--sage-deep)" }} />
                 </motion.div>
-                <div className="font-mono text-xs tracking-[0.3em] mb-2" style={{ color: "#FF6B35" }}>{p.n}</div>
+                <div className="font-mono text-xs tracking-[0.3em] mb-2" style={{ color: "var(--sage-deep)" }}>{p.n}</div>
                 <h3
-                  className="text-2xl md:text-3xl text-white leading-tight mb-3"
-                  style={{ fontFamily: "var(--font-serif)" }}
+                  className="text-2xl md:text-3xl leading-tight mb-3"
+                  style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
                 >
                   {p.t}
                 </h3>
-                <p className="text-sm md:text-base leading-relaxed" style={{ color: "#B0C4DE" }}>{p.d}</p>
+                <p className="text-sm md:text-base leading-relaxed text-muted-foreground">{p.d}</p>
               </motion.article>
             );
           })}
