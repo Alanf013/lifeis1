@@ -1,15 +1,15 @@
-import { Moon, Utensils, Dumbbell, Waves, Brain, Activity } from "lucide-react";
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
+import { IconSono, IconAlimentacao, IconAtividade, IconEstresse, IconAnsiedade, IconDor } from "./PillarIcons";
+import type { ComponentType } from "react";
 
-type P = { n: string; t: string; d: string; icon: LucideIcon };
+type P = { n: string; t: string; d: string; Icon: ComponentType };
 const PILLARS: P[] = [
-  { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica.", icon: Moon },
-  { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.", icon: Utensils },
-  { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas.", icon: Dumbbell },
-  { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção.", icon: Waves },
-  { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia.", icon: Brain },
-  { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência.", icon: Activity },
+  { n: "01", t: "Sono", d: "Ritmo circadiano, profundidade e regularidade como base fisiológica.", Icon: IconSono },
+  { n: "02", t: "Alimentação", d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.", Icon: IconAlimentacao },
+  { n: "03", t: "Atividade física", d: "Força, mobilidade e capacidade aeróbica em doses progressivas.", Icon: IconAtividade },
+  { n: "04", t: "Gerenciamento de estresse", d: "Regulação autonômica e recuperação como prática, não exceção.", Icon: IconEstresse },
+  { n: "05", t: "Administração de ansiedade", d: "Ferramentas cognitivas e comportamentais aplicadas ao dia a dia.", Icon: IconAnsiedade },
+  { n: "06", t: "Dor", d: "Leitura da dor crônica e estratégia para reduzir sua interferência.", Icon: IconDor },
 ];
 
 export function PillarsCarousel() {
@@ -30,9 +30,9 @@ export function PillarsCarousel() {
           </h2>
         </div>
 
-        <div className="flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible">
+        <div className="flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible relative">
           {PILLARS.map((p, i) => {
-            const Icon = p.icon;
+            const Icon = p.Icon;
             return (
               <motion.article
                 key={p.n}
@@ -62,17 +62,27 @@ export function PillarsCarousel() {
                     maskComposite: "exclude",
                   }}
                 />
-                <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                  style={{
-                    background: "linear-gradient(135deg, color-mix(in oklab, var(--sage) 25%, transparent), color-mix(in oklab, var(--sage-deep) 25%, transparent))",
-                    boxShadow: "0 8px 20px color-mix(in oklab, var(--sage-deep) 22%, transparent)",
-                  }}
-                >
-                  <Icon className="h-5 w-5" style={{ color: "var(--sage-deep)" }} />
-                </motion.div>
+                <div className="relative w-16 h-16 mb-5" style={{ perspective: "600px" }}>
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 rounded-2xl"
+                    style={{
+                      background: "radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--sage) 55%, transparent), transparent 70%)",
+                      animation: "pulseWave 3s ease-in-out infinite",
+                    }}
+                  />
+                  <div
+                    className="relative w-16 h-16 rounded-2xl flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg, color-mix(in oklab, var(--sage) 22%, transparent), color-mix(in oklab, var(--sage-deep) 22%, transparent))",
+                      boxShadow: "0 8px 20px color-mix(in oklab, var(--sage-deep) 22%, transparent)",
+                      animation: `spinY ${9 + i}s linear infinite`,
+                      transformStyle: "preserve-3d",
+                    }}
+                  >
+                    <Icon />
+                  </div>
+                </div>
                 <div className="font-mono text-xs tracking-[0.3em] mb-2" style={{ color: "var(--sage-deep)" }}>{p.n}</div>
                 <h3
                   className="text-2xl md:text-3xl leading-tight mb-3"

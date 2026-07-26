@@ -13,6 +13,7 @@ import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgre
 import { Typewriter } from "@/components/cinematic/Typewriter";
 import { PillarsCarousel } from "@/components/cinematic/PillarsCarousel";
 import { Loader } from "@/components/cinematic/Loader";
+import { MouseParticles } from "@/components/cinematic/MouseParticles";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -109,6 +110,8 @@ function Index() {
     >
       <Loader />
       <Scene3D />
+      <MouseParticles />
+      <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none hex-bg" />
       <ReadingProgress />
       <NeonClock />
       {/* Header */}
