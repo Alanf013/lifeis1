@@ -13,22 +13,6 @@ type Pillar = {
 const PILLARS: Pillar[] = [
   {
     n: "01",
-    t: "VO₂ Máximo",
-    d: "O VO₂ máximo mede a capacidade do corpo de captar, transportar e utilizar oxigênio durante o esforço — um dos indicadores mais fortes de longevidade que existem. Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e hipertensão. Além de ganhar anos de vida, um bom VO₂ máximo traz mais disposição no dia a dia, sono de melhor qualidade e recuperação mais rápida após o esforço.",
-    f: "",
-    poster:
-      "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=900&q=70",
-  },
-  {
-    n: "02",
-    t: "Massa Magra / Força",
-    d: "O músculo vai muito além do movimento: hoje é reconhecido como um verdadeiro órgão endócrino, liberando substâncias que beneficiam praticamente todo o organismo. Depois dos 30 anos, perdemos massa muscular naturalmente se ela não for estimulada — um processo chamado sarcopenia. Treinar força, aliado a uma boa ingestão de proteína e sono de qualidade, preserva força, protege as articulações e reduz o risco de quedas ao longo da vida.",
-    f: "",
-    poster:
-      "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=900&q=70",
-  },
-  {
-    n: "03",
     t: "Sono",
     d: "O sono é a base de toda recuperação do corpo. É durante o sono profundo que o organismo repara tecidos, regula hormônios e reduz a inflamação acumulada do dia. Dormir mal aumenta a sensibilidade à dor, atrasa a recuperação muscular e compromete a concentração e o humor no dia seguinte.",
     f: "",
@@ -36,7 +20,7 @@ const PILLARS: Pillar[] = [
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
   },
   {
-    n: "04",
+    n: "02",
     t: "Alimentação",
     d: "Mais importante do que restringir é garantir densidade nutricional — nutrientes suficientes para sustentar o metabolismo, a recuperação muscular e o controle da inflamação. Uma alimentação rica em ultraprocessados favorece processos inflamatórios que aceleram o envelhecimento, enquanto um padrão individualizado protege o sistema imunológico e potencializa os resultados do treino.",
     f: "",
@@ -44,7 +28,15 @@ const PILLARS: Pillar[] = [
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=900&q=70",
   },
   {
-    n: "05",
+    n: "03",
+    t: "Exercício Físico",
+    d: "O exercício físico é a base da longevidade saudável e combina dois fatores essenciais: capacidade cardiorrespiratória e força muscular. A capacidade de captar, transportar e utilizar oxigênio durante o esforço (VO₂ máximo) é um dos indicadores mais fortes de menor risco cardiovascular e maior expectativa de vida. Já o músculo funciona como um verdadeiro órgão endócrino — treinar força preserva massa magra, protege as articulações, melhora o equilíbrio e reduz o risco de quedas, especialmente a partir dos 30 anos, quando a perda muscular natural (sarcopenia) começa a acelerar.",
+    f: "",
+    poster:
+      "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=900&q=70",
+  },
+  {
+    n: "04",
     t: "Gerenciamento do Estresse",
     d: "O estresse crônico eleva os níveis de cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter uma rotina saudável. Entender os fatores emocionais por trás do abandono do treino é tão importante quanto o programa de exercícios em si — muitas vezes, a dificuldade não é física, mas emocional.",
     f: "",
@@ -52,12 +44,20 @@ const PILLARS: Pillar[] = [
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=70",
   },
   {
-    n: "06",
+    n: "05",
     t: "Administração da Ansiedade",
     d: "O cérebro está em constante adaptação — cada hábito repetido fortalece conexões neurais ligadas à disciplina, ao autocontrole e à capacidade de lidar com desafios. O exercício físico regular estimula a liberação de endorfina, dopamina e serotonina, contribuindo diretamente para o equilíbrio emocional, a qualidade do sono e o bem-estar geral.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1476611317561-60117649dd94?auto=format&fit=crop&w=900&q=70",
+  },
+  {
+    n: "06",
+    t: "Dor",
+    d: "A dor raramente tem uma única causa — na maioria das vezes, resulta da interação entre fatores físicos, metabólicos, emocionais e comportamentais. Sono, alimentação, exercício e gerenciamento do estresse influenciam diretamente a recuperação dos tecidos, a inflamação e a forma como o corpo responde a lesões. Quando esses pilares são mantidos de forma consistente, a incidência de dores tende a diminuir, o risco de lesões cai e, caso aconteçam, a recuperação costuma ser mais rápida.",
+    f: "",
+    poster:
+      "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=70",
   },
 ];
 
