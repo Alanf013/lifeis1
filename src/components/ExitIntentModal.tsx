@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitLead } from "@/lib/leads.functions";
+import { trackEvent } from "@/lib/analytics";
 
 const FAIXAS = ["18-29", "30-39", "40-49", "50-59", "60+"];
 const KEY = "exit-intent-shown";
@@ -16,6 +17,8 @@ export function ExitIntentModal() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const shown = useRef(false);
   const send = useServerFn(submitLead);
+  const [errors, setErrors] = useState<{ nome?: string; faixa?: string; consent?: string }>({});
+  const waUrl = useRef<string | null>(null);
 
   const trigger = useCallback(() => {
     if (shown.current) return;
@@ -23,6 +26,7 @@ export function ExitIntentModal() {
     shown.current = true;
     try { sessionStorage.setItem(KEY, "1"); } catch { /* ignore */ }
     setOpen(true);
+    trackEvent("popup_exibido", { origem: "exit_intent" });
   }, []);
 
   useEffect(() => {
@@ -97,18 +101,28 @@ export function ExitIntentModal() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (status === "sending") return;
+
+    const nextErrors: typeof errors = {};
+    if (nome.trim().length < 2) nextErrors.nome = "Informe seu nome (mínimo 2 caracteres).";
+    if (!faixa) nextErrors.faixa = "Selecione sua faixa etária.";
+    if (!consent) nextErrors.consent = "É preciso aceitar para continuar.";
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
     const nomeLimpo = nome.trim();
     const faixaSel = faixa!;
-    // Abre já no clique (mesma interação) para não ser bloqueado como popup.
-    if (!isEbook) {
-      const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
-      window.open(`https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
-    }
+    const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
+    waUrl.current = `https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`;
     setStatus("sending");
     try {
       await send({ data: { nome: nomeLimpo, faixaEtaria: faixaSel } });
       setStatus("done");
+      trackEvent("popup_lead_enviado", { faixa_etaria: faixaSel, modo: mode });
+      if (!isEbook && waUrl.current) {
+        const url = waUrl.current;
+        setTimeout(() => window.open(url, "_blank", "noopener,noreferrer"), 1200);
+      }
     } catch {
       setStatus("error");
     }
