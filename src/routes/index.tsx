@@ -291,7 +291,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative py-16 md:py-28">
+      <section id="faq" className="relative py-14 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
@@ -301,17 +301,22 @@ function Index() {
               </h2>
             </div>
             <div className="lg:col-span-8">
-              <Accordion type="single" collapsible className="border-t border-border">
+              <Accordion type="single" collapsible className="border-t-2" style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 35%, transparent)" }}>
                 {faqs.map((f, i) => (
                   <AccordionItem
                     key={i}
                     value={`item-${i}`}
                     className="border-b border-border"
                   >
-                    <AccordionTrigger className={`${serif} text-left text-xl sm:text-2xl hover:no-underline py-6 gap-3 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
-                      {f.q}
+                    <AccordionTrigger className={`${serif} text-left text-xl sm:text-2xl hover:no-underline py-6 gap-4 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
+                      <span className="flex items-baseline gap-4 min-w-0">
+                        <span className="font-mono text-sm shrink-0" style={{ color: "var(--sage-deep)" }}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0">{f.q}</span>
+                      </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-lg leading-[1.65] pb-6 sm:pr-4 text-muted-foreground">
+                    <AccordionContent className="text-lg leading-[1.65] pb-6 sm:pr-4 pl-0 sm:pl-10 text-muted-foreground">
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -323,7 +328,7 @@ function Index() {
       </section>
 
       {/* CTA final */}
-      <section id="cta" className="relative py-24 md:py-36 overflow-hidden">
+      <section id="cta" className="relative py-16 md:py-24 overflow-hidden">
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
@@ -333,15 +338,15 @@ function Index() {
           }}
         />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
-          <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-8" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
-          <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+          <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
+          <h2 className={`${serif} text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.03] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
             Os próximos 10 anos vão passar.
             <span className="block italic text-muted-foreground">Como você quer chegar até lá?</span>
           </h2>
-          <p className="mt-6 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
+          <p className="mt-5 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
             Sua próxima década começa agora
           </p>
-          <div className="mt-10">
+          <div className="mt-8">
             <a
               href="mailto:contato@longevidadeaplicada.com"
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
