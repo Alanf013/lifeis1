@@ -90,16 +90,6 @@ function Index() {
 
   const evidence = [
     {
-      t: "VO₂ Máximo",
-      d: "Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e morte por todas as causas.",
-      f: "",
-    },
-    {
-      t: "Massa Magra / Força — Sarcopenia após os 30",
-      d: "Adultos sedentários perdem 3–8% de massa muscular por década. Treino de força reverte boa parte.",
-      f: "Journal of Applied Physiology · Volpi et al.",
-    },
-    {
       t: "Sono",
       d: "O sono profundo regula hormônios e reduz processos inflamatórios; sono ruim aumenta a sensibilidade à dor e reduz a recuperação muscular.",
       f: "",
@@ -110,6 +100,11 @@ function Index() {
       f: "Nature Reviews Endocrinology · Franceschi & Campisi",
     },
     {
+      t: "Exercício Físico — Sarcopenia após os 30",
+      d: "Maior capacidade cardiorrespiratória (VO₂ máximo) reduz risco cardiovascular e mortalidade; adultos sedentários perdem 3–8% de massa muscular por década, e o treino de força reverte boa parte.",
+      f: "Journal of Applied Physiology · Volpi et al.",
+    },
+    {
       t: "Gerenciamento do Estresse",
       d: "Estresse crônico eleva cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter hábitos saudáveis.",
       f: "",
@@ -117,6 +112,11 @@ function Index() {
     {
       t: "Administração da Ansiedade",
       d: "Exercício físico regular estimula endorfina, dopamina e serotonina, melhorando humor, sono e função cognitiva.",
+      f: "",
+    },
+    {
+      t: "Dor",
+      d: "A dor resulta da interação entre fatores físicos, metabólicos, emocionais e comportamentais; manter os pilares reduz incidência de dores e acelera a recuperação.",
       f: "",
     },
   ];
