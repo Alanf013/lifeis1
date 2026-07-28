@@ -90,7 +90,7 @@ function PillarMedia({ p }: { p: Pillar }) {
   return (
     <div
       ref={ref}
-      className="relative w-full aspect-[4/5] overflow-hidden rounded-xl"
+      className="media-frame relative w-full aspect-[4/5] overflow-hidden rounded-xl"
       style={{ background: "color-mix(in oklab, var(--sage) 18%, transparent)" }}
     >
       {visible && hasVideo ? (
@@ -112,7 +112,8 @@ function PillarMedia({ p }: { p: Pillar }) {
           alt={p.t}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover"
+          className="ken-burns w-full h-full object-cover"
+          style={{ animationDelay: `${(Number(p.n) % 3) * 1.6}s` }}
         />
       )}
       <div

@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowUpRight, ArrowRight, Instagram, MessageCircle } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
@@ -40,9 +40,39 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const INSTAGRAM_URL = "https://instagram.com/SEUUSUARIOAQUI";
+const WHATSAPP_URL = "https://wa.me/SEUNUMEROAQUI";
+
+const ease = [0.23, 1, 0.32, 1] as const;
+
+function Reveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay, ease }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [activeT, setActiveT] = useState(0);
+  const { scrollY } = useScroll();
+  const heroBgY = useTransform(scrollY, [0, 800], [0, 120]);
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0.35]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
@@ -54,23 +84,37 @@ function Index() {
   }, []);
 
   const serif = "font-[family-name:var(--font-serif)]";
-  const ease = [0.23, 1, 0.32, 1] as const;
 
   const evidence = [
     {
-      t: "Sarcopenia após os 30",
-      d: "Adultos sedentários perdem 3–8% de massa muscular por década. Força reverte boa parte.",
+      t: "VO₂ Máximo",
+      d: "Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e morte por todas as causas.",
+      f: "[inserir fonte]",
+    },
+    {
+      t: "Massa Magra / Força — Sarcopenia após os 30",
+      d: "Adultos sedentários perdem 3–8% de massa muscular por década. Treino de força reverte boa parte.",
       f: "Journal of Applied Physiology · Volpi et al.",
     },
     {
-      t: "Inflammaging",
-      d: "Inflamação silenciosa é hoje um dos principais motores do envelhecimento.",
-      f: "Nature Reviews Endocrinology · Franceschin & Campisi",
+      t: "Sono",
+      d: "O sono profundo regula hormônios e reduz processos inflamatórios; sono ruim aumenta a sensibilidade à dor e reduz a recuperação muscular.",
+      f: "[inserir fonte]",
     },
     {
-      t: "Sono e função cognitiva",
-      d: "O sono profundo ativa a limpeza glinfática do cérebro. Regularidade preserva memória e clareza ao longo da vida adulta.",
-      f: "Science · Xie et al.",
+      t: "Alimentação — Inflammaging",
+      d: "Inflamação silenciosa é hoje um dos principais motores do envelhecimento.",
+      f: "Nature Reviews Endocrinology · Franceschi & Campisi",
+    },
+    {
+      t: "Gerenciamento do Estresse",
+      d: "Estresse crônico eleva cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter hábitos saudáveis.",
+      f: "[inserir fonte]",
+    },
+    {
+      t: "Administração da Ansiedade",
+      d: "Exercício físico regular estimula endorfina, dopamina e serotonina, melhorando humor, sono e função cognitiva.",
+      f: "[inserir fonte]",
     },
   ];
 
@@ -111,7 +155,19 @@ function Index() {
       style={{ background: "var(--ivory)", color: "var(--deep-blue)" }}
     >
       <Scene3D />
-      <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none hex-bg" />
+      <motion.div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none hex-bg"
+        style={{ y: heroBgY, opacity: heroOpacity }}
+      />
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 85% 65% at 50% 40%, transparent 50%, color-mix(in oklab, var(--deep-blue) 10%, transparent) 100%)",
+        }}
+      />
       <ReadingProgress />
       <NeonClock />
       {/* Header */}
@@ -134,8 +190,26 @@ function Index() {
             <a href="#pilares" className="hover:text-foreground transition-colors">Pilares</a>
             <a href="#ciencia" className="hover:text-foreground transition-colors">Ciência</a>
             <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hover:text-foreground transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full text-muted-foreground"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
             <a href="#cta" className="btn-neon inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-medium">
               Protocolo
               <ArrowUpRight className="h-4 w-4 hidden sm:inline" />
@@ -190,51 +264,55 @@ function Index() {
       <PillarsVideo />
 
       {/* Ciência */}
-      <section id="ciencia" className="relative py-14 md:py-20">
+      <section id="ciencia" className="relative py-14 md:py-20 vignette">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            <div className="lg:col-span-5 lg:sticky lg:top-28">
-              <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Evidência</div>
-              <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
-                Menos opinião.
-                <span className="block italic text-muted-foreground">Mais evidência.</span>
-              </h2>
-            </div>
+          <Reveal className="max-w-2xl mb-10 md:mb-14">
+            <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5" style={{ color: "var(--sage-deep)" }}>Evidência</div>
+            <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+              Menos opinião.
+              <span className="block italic text-muted-foreground">Mais evidência.</span>
+            </h2>
+          </Reveal>
 
-            <div className="lg:col-span-7">
-              <div className="border-t border-border">
-                {evidence.map((e, i) => (
-                  <motion.article
-                    key={e.t}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.6, delay: i * 0.1, ease }}
-                    className="border-b border-border py-8 grid grid-cols-[52px_minmax(0,1fr)] md:grid-cols-[88px_1fr] gap-4 md:gap-6"
-                  >
-                    <div
-                      className="font-mono text-3xl md:text-5xl leading-none tracking-tight shrink-0"
-                      style={{ color: "color-mix(in oklab, var(--sage-deep) 70%, transparent)" }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className={`${serif} text-2xl sm:text-3xl leading-tight`} style={{ color: "var(--deep-blue)" }}>{e.t}</h3>
-                      <p className="mt-3 text-lg sm:text-xl leading-[1.65] text-muted-foreground">{e.d}</p>
-                      <p
-                        className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] sm:text-[13px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
-                        style={{
-                          color: "var(--sage-deep)",
-                          background: "color-mix(in oklab, var(--sage) 18%, transparent)",
-                        }}
-                      >
-                        Fonte · {e.f}
-                      </p>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </div>
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+            {evidence.map((e, i) => (
+              <motion.article
+                key={e.t}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-70px" }}
+                transition={{ duration: 0.6, delay: (i % 2) * 0.08, ease }}
+                className="relative rounded-2xl border p-6 sm:p-7"
+                style={{
+                  background: "color-mix(in oklab, var(--card) 94%, transparent)",
+                  borderColor: "var(--border)",
+                  boxShadow: "var(--shadow-soft)",
+                }}
+              >
+                <div
+                  className="font-mono text-sm tracking-[0.3em] mb-2"
+                  style={{ color: "var(--sage-deep)" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <h3
+                  className={`${serif} text-2xl sm:text-3xl leading-tight break-words`}
+                  style={{ color: "var(--deep-blue)" }}
+                >
+                  {e.t}
+                </h3>
+                <p className="mt-3 text-lg leading-[1.65] text-muted-foreground">{e.d}</p>
+                <p
+                  className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
+                  style={{
+                    color: "var(--sage-deep)",
+                    background: "color-mix(in oklab, var(--sage) 18%, transparent)",
+                  }}
+                >
+                  Fonte · {e.f}
+                </p>
+              </motion.article>
+            ))}
           </div>
         </div>
       </section>
@@ -242,7 +320,7 @@ function Index() {
       {/* Prova social */}
       <section className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="relative max-w-2xl mx-auto min-h-[260px]">
+          <Reveal className="relative max-w-2xl mx-auto min-h-[260px]">
             {testimonials.map((t, i) => (
               <figure
                 key={t.n}
@@ -286,14 +364,14 @@ function Index() {
                 />
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative py-14 md:py-20">
+      <section id="faq" className="relative py-14 md:py-20 vignette">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+          <Reveal className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
               <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Perguntas</div>
               <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
@@ -323,7 +401,7 @@ function Index() {
                 ))}
               </Accordion>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -337,7 +415,7 @@ function Index() {
               "radial-gradient(ellipse 60% 50% at 50% 50%, color-mix(in oklab, var(--sage) 22%, transparent), transparent 70%)",
           }}
         />
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
+        <Reveal className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
           <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
           <h2 className={`${serif} text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.03] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
             Os próximos 10 anos vão passar.
@@ -355,18 +433,44 @@ function Index() {
               <ArrowRight className="h-5 w-5" />
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-border py-10 relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className={`${serif} text-lg`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</div>
+          <div className="flex items-center gap-4">
+            <div className={`${serif} text-lg`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</div>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+          </div>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} · Sem promessas milagrosas.
           </p>
         </div>
       </footer>
+
+      {/* WhatsApp flutuante */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Falar no WhatsApp"
+        className="wa-pulse fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full"
+        style={{
+          background: "linear-gradient(135deg, var(--sage), var(--sage-deep))",
+          color: "var(--ivory)",
+        }}
+      >
+        <MessageCircle className="h-6 w-6" />
+      </a>
     </div>
   );
 }

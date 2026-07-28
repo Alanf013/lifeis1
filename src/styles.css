@@ -69,7 +69,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.975 0.008 85);
+  --background: oklch(0.945 0.014 85);
   --foreground: oklch(0.19 0.035 240);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.19 0.035 240);
@@ -85,13 +85,13 @@
   --accent-foreground: oklch(0.19 0.035 240);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.9 0.01 85);
-  --input: oklch(0.92 0.01 85);
+  --border: oklch(0.875 0.014 85);
+  --input: oklch(0.9 0.012 85);
   --ring: oklch(0.5 0.03 235);
   --sage: oklch(0.72 0.04 155);
   --sage-deep: oklch(0.5 0.05 165);
   --deep-blue: oklch(0.2 0.04 235);
-  --ivory: oklch(0.97 0.012 85);
+  --ivory: oklch(0.945 0.014 85);
   --gradient-hero: linear-gradient(135deg, oklch(0.18 0.04 235) 0%, oklch(0.24 0.045 230) 100%);
   --shadow-elegant: 0 30px 60px -30px oklch(0.2 0.04 235 / 0.18);
   --shadow-soft: 0 10px 40px -20px oklch(0.2 0.04 235 / 0.08);
@@ -240,6 +240,43 @@
   transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
 }
 .btn-neon:hover { transform: scale(1.06); }
+
+/* Ken Burns – slow continuous zoom on static photos */
+@keyframes kenBurns {
+  0%   { transform: scale(1) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.09) translate3d(-1.5%, -1.5%, 0); }
+  100% { transform: scale(1) translate3d(0, 0, 0); }
+}
+.ken-burns {
+  animation: kenBurns 14s ease-in-out infinite;
+  will-change: transform;
+}
+.media-frame:hover .ken-burns { transform: scale(1.03); }
+.media-frame {
+  transition: box-shadow 500ms ease, transform 500ms ease;
+}
+.media-frame:hover {
+  box-shadow: 0 28px 60px -24px color-mix(in oklab, var(--deep-blue) 45%, transparent);
+}
+
+/* Soft vignette to remove the "blown out" feel on light sections */
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 90% 70% at 50% 50%, transparent 55%, color-mix(in oklab, var(--deep-blue) 9%, transparent) 100%);
+}
+
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--sage-deep) 45%, transparent); }
+  50% { box-shadow: 0 0 0 12px color-mix(in oklab, var(--sage-deep) 0%, transparent); }
+}
+.wa-pulse { animation: waPulse 2.4s ease-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ken-burns, .wa-pulse, .btn-neon { animation: none !important; }
+}
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
 div[style*="Edit with Lovable"],
