@@ -415,7 +415,7 @@ function Index() {
               "radial-gradient(ellipse 60% 50% at 50% 50%, color-mix(in oklab, var(--sage) 22%, transparent), transparent 70%)",
           }}
         />
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
+        <Reveal className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
           <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
           <h2 className={`${serif} text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.03] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
             Os próximos 10 anos vão passar.
@@ -433,18 +433,44 @@ function Index() {
               <ArrowRight className="h-5 w-5" />
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-border py-10 relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className={`${serif} text-lg`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</div>
+          <div className="flex items-center gap-4">
+            <div className={`${serif} text-lg`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</div>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+          </div>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} · Sem promessas milagrosas.
           </p>
         </div>
       </footer>
+
+      {/* WhatsApp flutuante */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Falar no WhatsApp"
+        className="wa-pulse fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full"
+        style={{
+          background: "linear-gradient(135deg, var(--sage), var(--sage-deep))",
+          color: "var(--ivory)",
+        }}
+      >
+        <MessageCircle className="h-6 w-6" />
+      </a>
     </div>
   );
 }
