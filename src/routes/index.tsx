@@ -90,7 +90,7 @@ function Index() {
     {
       t: "VO₂ Máximo",
       d: "Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e morte por todas as causas.",
-      f: "[inserir fonte]",
+      f: "",
     },
     {
       t: "Massa Magra / Força — Sarcopenia após os 30",
@@ -100,7 +100,7 @@ function Index() {
     {
       t: "Sono",
       d: "O sono profundo regula hormônios e reduz processos inflamatórios; sono ruim aumenta a sensibilidade à dor e reduz a recuperação muscular.",
-      f: "[inserir fonte]",
+      f: "",
     },
     {
       t: "Alimentação — Inflammaging",
@@ -110,12 +110,12 @@ function Index() {
     {
       t: "Gerenciamento do Estresse",
       d: "Estresse crônico eleva cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter hábitos saudáveis.",
-      f: "[inserir fonte]",
+      f: "",
     },
     {
       t: "Administração da Ansiedade",
       d: "Exercício físico regular estimula endorfina, dopamina e serotonina, melhorando humor, sono e função cognitiva.",
-      f: "[inserir fonte]",
+      f: "",
     },
   ];
 
@@ -303,15 +303,17 @@ function Index() {
                   {e.t}
                 </h3>
                 <p className="mt-3 text-lg leading-[1.65] text-muted-foreground">{e.d}</p>
-                <p
-                  className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
-                  style={{
-                    color: "var(--sage-deep)",
-                    background: "color-mix(in oklab, var(--sage) 18%, transparent)",
-                  }}
-                >
-                  Fonte · {e.f}
-                </p>
+                {e.f ? (
+                  <p
+                    className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
+                    style={{
+                      color: "var(--sage-deep)",
+                      background: "color-mix(in oklab, var(--sage) 18%, transparent)",
+                    }}
+                  >
+                    Fonte · {e.f}
+                  </p>
+                ) : null}
               </motion.article>
             ))}
           </div>
