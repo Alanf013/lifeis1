@@ -211,13 +211,20 @@ export function ExitIntentModal() {
             <input
               id="exit-nome"
               value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              onChange={(e) => {
+                setNome(e.target.value);
+                if (errors.nome) setErrors((p) => ({ ...p, nome: undefined }));
+              }}
               maxLength={80}
               autoComplete="name"
+              aria-invalid={!!errors.nome}
               placeholder="Como podemos te chamar"
               className="mt-2 w-full min-h-12 rounded-xl border px-4 text-base outline-none"
-              style={{ background: "var(--background)", borderColor: "var(--border)" }}
+              style={{ background: "var(--background)", borderColor: errors.nome ? "var(--destructive)" : "var(--border)" }}
             />
+            {errors.nome ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.nome}</p>
+            ) : null}
 
             <p className="mt-5 text-sm font-medium">Faixa etária</p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -227,7 +234,10 @@ export function ExitIntentModal() {
                   <button
                     key={f}
                     type="button"
-                    onClick={() => setFaixa(f)}
+                    onClick={() => {
+                      setFaixa(f);
+                      if (errors.faixa) setErrors((p) => ({ ...p, faixa: undefined }));
+                    }}
                     aria-pressed={active}
                     className="min-h-11 rounded-full border px-4 text-sm font-medium transition-transform"
                     style={{
@@ -243,12 +253,18 @@ export function ExitIntentModal() {
                 );
               })}
             </div>
+            {errors.faixa ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.faixa}</p>
+            ) : null}
 
             <label className="mt-5 flex items-start gap-3 text-sm leading-[1.5] text-muted-foreground">
               <input
                 type="checkbox"
                 checked={consent}
-                onChange={(e) => setConsent(e.target.checked)}
+                onChange={(e) => {
+                  setConsent(e.target.checked);
+                  if (errors.consent) setErrors((p) => ({ ...p, consent: undefined }));
+                }}
                 className="mt-1 h-5 w-5 shrink-0"
               />
               <span>
@@ -257,6 +273,9 @@ export function ExitIntentModal() {
                   : "Concordo em ser contatado pelo WhatsApp sobre minha análise gratuita."}
               </span>
             </label>
+            {errors.consent ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.consent}</p>
+            ) : null}
 
             {status === "error" ? (
               <p className="mt-4 text-sm" style={{ color: "var(--destructive)" }}>
