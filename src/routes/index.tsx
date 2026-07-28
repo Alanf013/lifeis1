@@ -437,6 +437,7 @@ function Index() {
             <a
               href="/assets/guia-longevidade-aplicada.pdf"
               download
+              onClick={() => trackEvent("guia_pdf_clicado", { local: "cta_final" })}
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
             >
               Quero meu guia gratuito
