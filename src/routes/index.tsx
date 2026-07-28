@@ -40,8 +40,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const INSTAGRAM_URL = "https://instagram.com/SEUUSUARIOAQUI";
-const WHATSAPP_URL = "https://wa.me/SEUNUMEROAQUI";
+const INSTAGRAM_URL = "https://www.instagram.com/ale.saudebemestar_/";
+const WHATSAPP_URL =
+  "https://wa.me/5531994570976?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20os%20planos%20de%20longevidade.";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
@@ -465,8 +466,8 @@ function Index() {
         aria-label="Falar no WhatsApp"
         className="wa-pulse fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full"
         style={{
-          background: "linear-gradient(135deg, var(--sage), var(--sage-deep))",
-          color: "var(--ivory)",
+          background: "#25D366",
+          color: "#FFFFFF",
         }}
       >
         <MessageCircle className="h-6 w-6" />
