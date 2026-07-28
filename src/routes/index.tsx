@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowUpRight, ArrowRight, Instagram, MessageCircle } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
@@ -40,9 +40,39 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+const INSTAGRAM_URL = "https://instagram.com/SEUUSUARIOAQUI";
+const WHATSAPP_URL = "https://wa.me/SEUNUMEROAQUI";
+
+const ease = [0.23, 1, 0.32, 1] as const;
+
+function Reveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay, ease }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [activeT, setActiveT] = useState(0);
+  const { scrollY } = useScroll();
+  const heroBgY = useTransform(scrollY, [0, 800], [0, 120]);
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0.35]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
@@ -54,23 +84,37 @@ function Index() {
   }, []);
 
   const serif = "font-[family-name:var(--font-serif)]";
-  const ease = [0.23, 1, 0.32, 1] as const;
 
   const evidence = [
     {
-      t: "Sarcopenia após os 30",
-      d: "Adultos sedentários perdem 3–8% de massa muscular por década. Força reverte boa parte.",
+      t: "VO₂ Máximo",
+      d: "Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e morte por todas as causas.",
+      f: "[inserir fonte]",
+    },
+    {
+      t: "Massa Magra / Força — Sarcopenia após os 30",
+      d: "Adultos sedentários perdem 3–8% de massa muscular por década. Treino de força reverte boa parte.",
       f: "Journal of Applied Physiology · Volpi et al.",
     },
     {
-      t: "Inflammaging",
-      d: "Inflamação silenciosa é hoje um dos principais motores do envelhecimento.",
-      f: "Nature Reviews Endocrinology · Franceschin & Campisi",
+      t: "Sono",
+      d: "O sono profundo regula hormônios e reduz processos inflamatórios; sono ruim aumenta a sensibilidade à dor e reduz a recuperação muscular.",
+      f: "[inserir fonte]",
     },
     {
-      t: "Sono e função cognitiva",
-      d: "O sono profundo ativa a limpeza glinfática do cérebro. Regularidade preserva memória e clareza ao longo da vida adulta.",
-      f: "Science · Xie et al.",
+      t: "Alimentação — Inflammaging",
+      d: "Inflamação silenciosa é hoje um dos principais motores do envelhecimento.",
+      f: "Nature Reviews Endocrinology · Franceschi & Campisi",
+    },
+    {
+      t: "Gerenciamento do Estresse",
+      d: "Estresse crônico eleva cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter hábitos saudáveis.",
+      f: "[inserir fonte]",
+    },
+    {
+      t: "Administração da Ansiedade",
+      d: "Exercício físico regular estimula endorfina, dopamina e serotonina, melhorando humor, sono e função cognitiva.",
+      f: "[inserir fonte]",
     },
   ];
 
