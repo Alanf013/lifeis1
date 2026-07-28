@@ -14,7 +14,7 @@ const PILLARS: Pillar[] = [
   {
     n: "01",
     t: "VO₂ Máximo",
-    d: "A capacidade de captar, transportar e utilizar oxigênio no esforço — um dos maiores preditores de longevidade.",
+    d: "O VO₂ máximo mede a capacidade do corpo de captar, transportar e utilizar oxigênio durante o esforço — um dos indicadores mais fortes de longevidade que existem. Pessoas com maior capacidade cardiorrespiratória têm menor risco de doenças cardiovasculares, diabetes tipo 2 e hipertensão. Além de ganhar anos de vida, um bom VO₂ máximo traz mais disposição no dia a dia, sono de melhor qualidade e recuperação mais rápida após o esforço.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=900&q=70",
@@ -22,15 +22,15 @@ const PILLARS: Pillar[] = [
   {
     n: "02",
     t: "Massa Magra / Força",
-    d: "O músculo é um órgão endócrino ativo — preserva força, protege articulações e reduz inflamação.",
-    f: "Fonte: Journal of Applied Physiology — Volpi et al.",
+    d: "O músculo vai muito além do movimento: hoje é reconhecido como um verdadeiro órgão endócrino, liberando substâncias que beneficiam praticamente todo o organismo. Depois dos 30 anos, perdemos massa muscular naturalmente se ela não for estimulada — um processo chamado sarcopenia. Treinar força, aliado a uma boa ingestão de proteína e sono de qualidade, preserva força, protege as articulações e reduz o risco de quedas ao longo da vida.",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=900&q=70",
   },
   {
     n: "03",
     t: "Sono",
-    d: "Ritmo circadiano, profundidade e regularidade como base fisiológica de toda a recuperação.",
+    d: "O sono é a base de toda recuperação do corpo. É durante o sono profundo que o organismo repara tecidos, regula hormônios e reduz a inflamação acumulada do dia. Dormir mal aumenta a sensibilidade à dor, atrasa a recuperação muscular e compromete a concentração e o humor no dia seguinte.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
@@ -38,7 +38,7 @@ const PILLARS: Pillar[] = [
   {
     n: "04",
     t: "Alimentação",
-    d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.",
+    d: "Mais importante do que restringir é garantir densidade nutricional — nutrientes suficientes para sustentar o metabolismo, a recuperação muscular e o controle da inflamação. Uma alimentação rica em ultraprocessados favorece processos inflamatórios que aceleram o envelhecimento, enquanto um padrão individualizado protege o sistema imunológico e potencializa os resultados do treino.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=900&q=70",
@@ -46,7 +46,7 @@ const PILLARS: Pillar[] = [
   {
     n: "05",
     t: "Gerenciamento do Estresse",
-    d: "O estresse crônico eleva cortisol, prejudica o sono e reduz a recuperação muscular.",
+    d: "O estresse crônico eleva os níveis de cortisol, prejudica o sono, dificulta a recuperação muscular e reduz a motivação para manter uma rotina saudável. Entender os fatores emocionais por trás do abandono do treino é tão importante quanto o programa de exercícios em si — muitas vezes, a dificuldade não é física, mas emocional.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=70",
@@ -54,7 +54,7 @@ const PILLARS: Pillar[] = [
   {
     n: "06",
     t: "Administração da Ansiedade",
-    d: "Neuroplasticidade: cada hábito repetido fortalece conexões neurais de disciplina e autocontrole.",
+    d: "O cérebro está em constante adaptação — cada hábito repetido fortalece conexões neurais ligadas à disciplina, ao autocontrole e à capacidade de lidar com desafios. O exercício físico regular estimula a liberação de endorfina, dopamina e serotonina, contribuindo diretamente para o equilíbrio emocional, a qualidade do sono e o bem-estar geral.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1476611317561-60117649dd94?auto=format&fit=crop&w=900&q=70",
@@ -218,17 +218,10 @@ function PillarCard({ p, i }: { p: Pillar; i: number }) {
               >
                 {p.t}
               </h3>
-              <p className="mt-2 text-base sm:text-lg leading-[1.6] text-muted-foreground">
+              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] text-muted-foreground">
                 {p.d}
               </p>
-              {p.f ? (
-                <p
-                  className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words"
-                  style={{ color: "var(--sage-deep)" }}
-                >
-                  {p.f}
-                </p>
-              ) : null}
+
             </article>
   );
 }

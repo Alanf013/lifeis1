@@ -429,13 +429,14 @@ function Index() {
             Sua próxima década começa agora
           </p>
           <div className="mt-8">
-            <a
-              href="mailto:contato@longevidadeaplicada.com"
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("open-lead-modal"))}
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
             >
-              Minha próxima década
+              Quero meu guia gratuito
               <ArrowRight className="h-5 w-5" />
-            </a>
+            </button>
           </div>
         </Reveal>
       </section>
