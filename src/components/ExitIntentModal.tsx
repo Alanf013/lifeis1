@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitLead } from "@/lib/leads.functions";
+import { trackEvent } from "@/lib/analytics";
 
 const FAIXAS = ["18-29", "30-39", "40-49", "50-59", "60+"];
 const KEY = "exit-intent-shown";
@@ -16,6 +17,8 @@ export function ExitIntentModal() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const shown = useRef(false);
   const send = useServerFn(submitLead);
+  const [errors, setErrors] = useState<{ nome?: string; faixa?: string; consent?: string }>({});
+  const waUrl = useRef<string | null>(null);
 
   const trigger = useCallback(() => {
     if (shown.current) return;
@@ -23,6 +26,7 @@ export function ExitIntentModal() {
     shown.current = true;
     try { sessionStorage.setItem(KEY, "1"); } catch { /* ignore */ }
     setOpen(true);
+    trackEvent("popup_exibido", { origem: "exit_intent" });
   }, []);
 
   useEffect(() => {
@@ -97,18 +101,28 @@ export function ExitIntentModal() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (status === "sending") return;
+
+    const nextErrors: typeof errors = {};
+    if (nome.trim().length < 2) nextErrors.nome = "Informe seu nome (mínimo 2 caracteres).";
+    if (!faixa) nextErrors.faixa = "Selecione sua faixa etária.";
+    if (!consent) nextErrors.consent = "É preciso aceitar para continuar.";
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
     const nomeLimpo = nome.trim();
     const faixaSel = faixa!;
-    // Abre já no clique (mesma interação) para não ser bloqueado como popup.
-    if (!isEbook) {
-      const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
-      window.open(`https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
-    }
+    const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
+    waUrl.current = `https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`;
     setStatus("sending");
     try {
       await send({ data: { nome: nomeLimpo, faixaEtaria: faixaSel } });
       setStatus("done");
+      trackEvent("popup_lead_enviado", { faixa_etaria: faixaSel, modo: mode });
+      if (!isEbook && waUrl.current) {
+        const url = waUrl.current;
+        setTimeout(() => window.open(url, "_blank", "noopener,noreferrer"), 1200);
+      }
     } catch {
       setStatus("error");
     }
@@ -153,8 +167,19 @@ export function ExitIntentModal() {
             <p className="mt-3 text-lg text-muted-foreground">
               {isEbook
                 ? "Enviamos o guia gratuito e o especialista entra em contato pelo WhatsApp."
-                : "O especialista entra em contato pelo WhatsApp para sua análise gratuita."}
+                : "Recebemos seus dados! Você será direcionado ao WhatsApp para falar com o especialista."}
             </p>
+            {!isEbook && waUrl.current ? (
+              <a
+                href={waUrl.current}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block text-base underline"
+                style={{ color: "var(--sage-deep)" }}
+              >
+                Abrir o WhatsApp agora
+              </a>
+            ) : null}
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -186,13 +211,20 @@ export function ExitIntentModal() {
             <input
               id="exit-nome"
               value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              onChange={(e) => {
+                setNome(e.target.value);
+                if (errors.nome) setErrors((p) => ({ ...p, nome: undefined }));
+              }}
               maxLength={80}
               autoComplete="name"
+              aria-invalid={!!errors.nome}
               placeholder="Como podemos te chamar"
               className="mt-2 w-full min-h-12 rounded-xl border px-4 text-base outline-none"
-              style={{ background: "var(--background)", borderColor: "var(--border)" }}
+              style={{ background: "var(--background)", borderColor: errors.nome ? "var(--destructive)" : "var(--border)" }}
             />
+            {errors.nome ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.nome}</p>
+            ) : null}
 
             <p className="mt-5 text-sm font-medium">Faixa etária</p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -202,7 +234,10 @@ export function ExitIntentModal() {
                   <button
                     key={f}
                     type="button"
-                    onClick={() => setFaixa(f)}
+                    onClick={() => {
+                      setFaixa(f);
+                      if (errors.faixa) setErrors((p) => ({ ...p, faixa: undefined }));
+                    }}
                     aria-pressed={active}
                     className="min-h-11 rounded-full border px-4 text-sm font-medium transition-transform"
                     style={{
@@ -218,12 +253,18 @@ export function ExitIntentModal() {
                 );
               })}
             </div>
+            {errors.faixa ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.faixa}</p>
+            ) : null}
 
             <label className="mt-5 flex items-start gap-3 text-sm leading-[1.5] text-muted-foreground">
               <input
                 type="checkbox"
                 checked={consent}
-                onChange={(e) => setConsent(e.target.checked)}
+                onChange={(e) => {
+                  setConsent(e.target.checked);
+                  if (errors.consent) setErrors((p) => ({ ...p, consent: undefined }));
+                }}
                 className="mt-1 h-5 w-5 shrink-0"
               />
               <span>
@@ -232,6 +273,9 @@ export function ExitIntentModal() {
                   : "Concordo em ser contatado pelo WhatsApp sobre minha análise gratuita."}
               </span>
             </label>
+            {errors.consent ? (
+              <p className="mt-1.5 text-sm" style={{ color: "var(--destructive)" }}>{errors.consent}</p>
+            ) : null}
 
             {status === "error" ? (
               <p className="mt-4 text-sm" style={{ color: "var(--destructive)" }}>
