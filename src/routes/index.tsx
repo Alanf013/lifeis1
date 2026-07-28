@@ -461,6 +461,7 @@ function Index() {
       </footer>
 
       {/* WhatsApp flutuante */}
+      <ExitIntentModal />
       <a
         href={WHATSAPP_URL}
         target="_blank"
