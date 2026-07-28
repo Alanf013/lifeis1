@@ -11,6 +11,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
+import { ExitIntentModal } from "@/components/ExitIntentModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
