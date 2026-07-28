@@ -429,14 +429,19 @@ function Index() {
             Sua próxima década começa agora
           </p>
           <div className="mt-8">
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("open-lead-modal"))}
+            {/*
+              TODO: subir o e-book real em public/assets/guia-longevidade-aplicada.pdf
+              (nome exato) antes de publicar. Enquanto o arquivo não existir,
+              este download não vai funcionar.
+            */}
+            <a
+              href="/assets/guia-longevidade-aplicada.pdf"
+              download
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
             >
               Quero meu guia gratuito
               <ArrowRight className="h-5 w-5" />
-            </button>
+            </a>
           </div>
         </Reveal>
       </section>
