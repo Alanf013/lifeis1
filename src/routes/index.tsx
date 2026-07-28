@@ -264,51 +264,55 @@ function Index() {
       <PillarsVideo />
 
       {/* Ciência */}
-      <section id="ciencia" className="relative py-14 md:py-20">
+      <section id="ciencia" className="relative py-14 md:py-20 vignette">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            <div className="lg:col-span-5 lg:sticky lg:top-28">
-              <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Evidência</div>
-              <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
-                Menos opinião.
-                <span className="block italic text-muted-foreground">Mais evidência.</span>
-              </h2>
-            </div>
+          <Reveal className="max-w-2xl mb-10 md:mb-14">
+            <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5" style={{ color: "var(--sage-deep)" }}>Evidência</div>
+            <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+              Menos opinião.
+              <span className="block italic text-muted-foreground">Mais evidência.</span>
+            </h2>
+          </Reveal>
 
-            <div className="lg:col-span-7">
-              <div className="border-t border-border">
-                {evidence.map((e, i) => (
-                  <motion.article
-                    key={e.t}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.6, delay: i * 0.1, ease }}
-                    className="border-b border-border py-8 grid grid-cols-[52px_minmax(0,1fr)] md:grid-cols-[88px_1fr] gap-4 md:gap-6"
-                  >
-                    <div
-                      className="font-mono text-3xl md:text-5xl leading-none tracking-tight shrink-0"
-                      style={{ color: "color-mix(in oklab, var(--sage-deep) 70%, transparent)" }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className={`${serif} text-2xl sm:text-3xl leading-tight`} style={{ color: "var(--deep-blue)" }}>{e.t}</h3>
-                      <p className="mt-3 text-lg sm:text-xl leading-[1.65] text-muted-foreground">{e.d}</p>
-                      <p
-                        className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] sm:text-[13px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
-                        style={{
-                          color: "var(--sage-deep)",
-                          background: "color-mix(in oklab, var(--sage) 18%, transparent)",
-                        }}
-                      >
-                        Fonte · {e.f}
-                      </p>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </div>
+          <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+            {evidence.map((e, i) => (
+              <motion.article
+                key={e.t}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-70px" }}
+                transition={{ duration: 0.6, delay: (i % 2) * 0.08, ease }}
+                className="relative rounded-2xl border p-6 sm:p-7"
+                style={{
+                  background: "color-mix(in oklab, var(--card) 94%, transparent)",
+                  borderColor: "var(--border)",
+                  boxShadow: "var(--shadow-soft)",
+                }}
+              >
+                <div
+                  className="font-mono text-sm tracking-[0.3em] mb-2"
+                  style={{ color: "var(--sage-deep)" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <h3
+                  className={`${serif} text-2xl sm:text-3xl leading-tight break-words`}
+                  style={{ color: "var(--deep-blue)" }}
+                >
+                  {e.t}
+                </h3>
+                <p className="mt-3 text-lg leading-[1.65] text-muted-foreground">{e.d}</p>
+                <p
+                  className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
+                  style={{
+                    color: "var(--sage-deep)",
+                    background: "color-mix(in oklab, var(--sage) 18%, transparent)",
+                  }}
+                >
+                  Fonte · {e.f}
+                </p>
+              </motion.article>
+            ))}
           </div>
         </div>
       </section>
