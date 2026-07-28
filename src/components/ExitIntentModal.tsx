@@ -9,6 +9,7 @@ const MIN_DELAY = 15_000;
 
 export function ExitIntentModal() {
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<"exit" | "ebook">("exit");
   const [nome, setNome] = useState("");
   const [faixa, setFaixa] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
@@ -72,6 +73,16 @@ export function ExitIntentModal() {
   }, [trigger]);
 
   useEffect(() => {
+    const onOpenEbook = () => {
+      setMode("ebook");
+      setStatus("idle");
+      setOpen(true);
+    };
+    window.addEventListener("open-lead-modal", onOpenEbook);
+    return () => window.removeEventListener("open-lead-modal", onOpenEbook);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     window.addEventListener("keydown", onKey);
@@ -79,6 +90,8 @@ export function ExitIntentModal() {
   }, [open]);
 
   if (!open) return null;
+
+  const isEbook = mode === "ebook";
 
   const canSubmit = nome.trim().length >= 2 && !!faixa && consent && status !== "sending";
 
@@ -131,7 +144,9 @@ export function ExitIntentModal() {
               Recebido, {nome.split(" ")[0]}.
             </h2>
             <p className="mt-3 text-lg text-muted-foreground">
-              O especialista entra em contato pelo WhatsApp para sua análise gratuita.
+              {isEbook
+                ? "Enviamos o guia gratuito e o especialista entra em contato pelo WhatsApp."
+                : "O especialista entra em contato pelo WhatsApp para sua análise gratuita."}
             </p>
             <button
               type="button"
@@ -148,10 +163,14 @@ export function ExitIntentModal() {
               className="pr-10 text-2xl sm:text-3xl leading-tight"
               style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
             >
-              Antes de você ir — que tal uma análise gratuita?
+              {isEbook
+                ? "Receba o guia gratuito de longevidade"
+                : "Antes de você ir — que tal uma análise gratuita?"}
             </h2>
             <p className="mt-3 text-base sm:text-lg leading-[1.6] text-muted-foreground">
-              Descubra seu ponto de partida com o especialista, sem compromisso.
+              {isEbook
+                ? "Um material prático com os seis pilares aplicados ao dia a dia, sem compromisso."
+                : "Descubra seu ponto de partida com o especialista, sem compromisso."}
             </p>
 
             <label htmlFor="exit-nome" className="mt-6 block text-sm font-medium">
@@ -200,7 +219,11 @@ export function ExitIntentModal() {
                 onChange={(e) => setConsent(e.target.checked)}
                 className="mt-1 h-5 w-5 shrink-0"
               />
-              <span>Concordo em ser contatado pelo WhatsApp sobre minha análise gratuita.</span>
+              <span>
+                {isEbook
+                  ? "Concordo em receber o guia e ser contatado pelo WhatsApp."
+                  : "Concordo em ser contatado pelo WhatsApp sobre minha análise gratuita."}
+              </span>
             </label>
 
             {status === "error" ? (
@@ -214,7 +237,11 @@ export function ExitIntentModal() {
               disabled={!canSubmit}
               className="btn-neon mt-6 w-full min-h-12 text-base font-medium disabled:opacity-50"
             >
-              {status === "sending" ? "Enviando…" : "Quero minha análise gratuita"}
+              {status === "sending"
+                ? "Enviando…"
+                : isEbook
+                  ? "Quero meu guia gratuito"
+                  : "Quero minha análise gratuita"}
             </button>
           </form>
         )}
