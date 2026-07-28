@@ -167,8 +167,19 @@ export function ExitIntentModal() {
             <p className="mt-3 text-lg text-muted-foreground">
               {isEbook
                 ? "Enviamos o guia gratuito e o especialista entra em contato pelo WhatsApp."
-                : "O especialista entra em contato pelo WhatsApp para sua análise gratuita."}
+                : "Recebemos seus dados! Você será direcionado ao WhatsApp para falar com o especialista."}
             </p>
+            {!isEbook && waUrl.current ? (
+              <a
+                href={waUrl.current}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block text-base underline"
+                style={{ color: "var(--sage-deep)" }}
+              >
+                Abrir o WhatsApp agora
+              </a>
+            ) : null}
             <button
               type="button"
               onClick={() => setOpen(false)}
