@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 
 type Pillar = {
   n: string;
@@ -16,7 +15,7 @@ const PILLARS: Pillar[] = [
     n: "01",
     t: "VO₂ Máximo",
     d: "A capacidade de captar, transportar e utilizar oxigênio no esforço — um dos maiores preditores de longevidade.",
-    f: "Fonte: [inserir]",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=900&q=70",
   },
@@ -32,7 +31,7 @@ const PILLARS: Pillar[] = [
     n: "03",
     t: "Sono",
     d: "Ritmo circadiano, profundidade e regularidade como base fisiológica de toda a recuperação.",
-    f: "Fonte: [inserir]",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
   },
@@ -40,7 +39,7 @@ const PILLARS: Pillar[] = [
     n: "04",
     t: "Alimentação",
     d: "Padrão alimentar individualizado — densidade nutricional antes de restrição.",
-    f: "Fonte: [inserir]",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=900&q=70",
   },
@@ -48,7 +47,7 @@ const PILLARS: Pillar[] = [
     n: "05",
     t: "Gerenciamento do Estresse",
     d: "O estresse crônico eleva cortisol, prejudica o sono e reduz a recuperação muscular.",
-    f: "Fonte: [inserir]",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=70",
   },
@@ -56,11 +55,35 @@ const PILLARS: Pillar[] = [
     n: "06",
     t: "Administração da Ansiedade",
     d: "Neuroplasticidade: cada hábito repetido fortalece conexões neurais de disciplina e autocontrole.",
-    f: "Fonte: [inserir]",
+    f: "",
     poster:
       "https://images.unsplash.com/photo-1476611317561-60117649dd94?auto=format&fit=crop&w=900&q=70",
   },
 ];
+
+function useInView<T extends HTMLElement>(rootMargin = "120px") {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [rootMargin]);
+  return { ref, inView };
+}
 
 function PillarMedia({ p }: { p: Pillar }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -99,7 +122,7 @@ function PillarMedia({ p }: { p: Pillar }) {
           muted
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           poster={p.poster}
           className="w-full h-full object-cover"
         >
@@ -112,6 +135,7 @@ function PillarMedia({ p }: { p: Pillar }) {
           alt={p.t}
           loading="lazy"
           decoding="async"
+          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
           className="ken-burns w-full h-full object-cover"
           style={{ animationDelay: `${(Number(p.n) % 3) * 1.6}s` }}
         />
