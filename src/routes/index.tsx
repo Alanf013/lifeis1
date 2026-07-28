@@ -155,7 +155,19 @@ function Index() {
       style={{ background: "var(--ivory)", color: "var(--deep-blue)" }}
     >
       <Scene3D />
-      <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none hex-bg" />
+      <motion.div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none hex-bg"
+        style={{ y: heroBgY, opacity: heroOpacity }}
+      />
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 85% 65% at 50% 40%, transparent 50%, color-mix(in oklab, var(--deep-blue) 10%, transparent) 100%)",
+        }}
+      />
       <ReadingProgress />
       <NeonClock />
       {/* Header */}
@@ -178,8 +190,26 @@ function Index() {
             <a href="#pilares" className="hover:text-foreground transition-colors">Pilares</a>
             <a href="#ciencia" className="hover:text-foreground transition-colors">Ciência</a>
             <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hover:text-foreground transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full text-muted-foreground"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
             <a href="#cta" className="btn-neon inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-medium">
               Protocolo
               <ArrowUpRight className="h-4 w-4 hidden sm:inline" />
