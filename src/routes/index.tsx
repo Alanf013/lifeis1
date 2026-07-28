@@ -320,7 +320,7 @@ function Index() {
       {/* Prova social */}
       <section className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="relative max-w-2xl mx-auto min-h-[260px]">
+          <Reveal className="relative max-w-2xl mx-auto min-h-[260px]">
             {testimonials.map((t, i) => (
               <figure
                 key={t.n}
@@ -364,14 +364,14 @@ function Index() {
                 />
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative py-14 md:py-20">
+      <section id="faq" className="relative py-14 md:py-20 vignette">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+          <Reveal className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
               <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Perguntas</div>
               <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
@@ -401,7 +401,7 @@ function Index() {
                 ))}
               </Accordion>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
