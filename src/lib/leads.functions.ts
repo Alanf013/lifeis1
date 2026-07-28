@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { sanitizeFaixa, sanitizeNome } from "./leads.server";
 
 export const submitLead = createServerFn({ method: "POST" })
   .inputValidator((data: { nome: string; faixaEtaria: string }) => data)
