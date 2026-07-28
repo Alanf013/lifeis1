@@ -98,9 +98,16 @@ export function ExitIntentModal() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
+    const nomeLimpo = nome.trim();
+    const faixaSel = faixa!;
+    // Abre já no clique (mesma interação) para não ser bloqueado como popup.
+    if (!isEbook) {
+      const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
+      window.open(`https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+    }
     setStatus("sending");
     try {
-      await send({ data: { nome: nome.trim(), faixaEtaria: faixa! } });
+      await send({ data: { nome: nomeLimpo, faixaEtaria: faixaSel } });
       setStatus("done");
     } catch {
       setStatus("error");
@@ -241,7 +248,7 @@ export function ExitIntentModal() {
                 ? "Enviando…"
                 : isEbook
                   ? "Quero meu guia gratuito"
-                  : "Quero minha análise gratuita"}
+                  : "Falar com o especialista"}
             </button>
           </form>
         )}
