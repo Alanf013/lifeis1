@@ -184,17 +184,25 @@ export function PillarsVideo() {
 
         <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {PILLARS.map((p, i) => (
-            <motion.article
-              key={p.n}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.23, 1, 0.32, 1] }}
-              className="rounded-2xl p-4 sm:p-5 border"
+            <PillarCard key={p.n} p={p} i={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PillarCard({ p, i }: { p: Pillar; i: number }) {
+  const { ref, inView } = useInView<HTMLElement>("-40px");
+  return (
+            <article
+              ref={ref}
+              className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-4 sm:p-5 border`}
               style={{
                 background: "color-mix(in oklab, var(--card) 96%, transparent)",
                 borderColor: "var(--border)",
                 boxShadow: "var(--shadow-soft)",
+                transitionDelay: `${(i % 3) * 80}ms`,
               }}
             >
               <PillarMedia p={p} />
@@ -213,16 +221,14 @@ export function PillarsVideo() {
               <p className="mt-2 text-base sm:text-lg leading-[1.6] text-muted-foreground">
                 {p.d}
               </p>
-              <p
-                className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words"
-                style={{ color: "var(--sage-deep)" }}
-              >
-                {p.f}
-              </p>
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
+              {p.f ? (
+                <p
+                  className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words"
+                  style={{ color: "var(--sage-deep)" }}
+                >
+                  {p.f}
+                </p>
+              ) : null}
+            </article>
   );
 }
