@@ -10,10 +10,7 @@ import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
-import { Typewriter } from "@/components/cinematic/Typewriter";
-import { PillarsCarousel } from "@/components/cinematic/PillarsCarousel";
-import { Loader } from "@/components/cinematic/Loader";
-import { MouseParticles } from "@/components/cinematic/MouseParticles";
+import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -72,7 +69,7 @@ function Index() {
     },
     {
       t: "Sono e função cognitiva",
-      d: "Sono profundo consistente preserva memória e clareza ao longo da vida adulta.",
+      d: "O sono profundo ativa a limpeza glinfática do cérebro. Regularidade preserva memória e clareza ao longo da vida adulta.",
       f: "Science · Xie et al.",
     },
   ];
@@ -113,9 +110,7 @@ function Index() {
       className="relative min-h-screen font-sans antialiased overflow-x-hidden"
       style={{ background: "var(--ivory)", color: "var(--deep-blue)" }}
     >
-      <Loader />
       <Scene3D />
-      <MouseParticles />
       <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none hex-bg" />
       <ReadingProgress />
       <NeonClock />
@@ -150,12 +145,12 @@ function Index() {
       </header>
 
       {/* Hero */}
-      <section id="top" className="relative pt-32 md:pt-48 pb-20 md:pb-32">
+      <section id="top" className="relative pt-28 md:pt-40 pb-12 md:pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 2.2, ease }}
+            transition={{ duration: 0.8, delay: 0.1, ease }}
             className="max-w-3xl"
           >
             <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6 sm:mb-8" style={{ color: "var(--sage-deep)" }}>
@@ -166,7 +161,10 @@ function Index() {
               className="text-[2.75rem] sm:text-[3.6rem] md:text-[4.75rem] leading-[1.08] tracking-[-0.02em] font-normal text-balance"
               style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
             >
-              <Typewriter lines={["Envelhecer é inevitável.", "Envelhecer sem estratégia, não."]} />
+              Envelhecer é inevitável.
+              <span className="block italic text-muted-foreground">
+                Envelhecer sem estratégia, não.
+              </span>
             </h1>
             <p className="mt-6 sm:mt-7 text-xl sm:text-2xl max-w-xl leading-[1.6] text-muted-foreground">
               Protocolo baseado em ciência para preservar energia, força e clareza pelas próximas décadas.
@@ -189,10 +187,10 @@ function Index() {
         </div>
       </section>
 
-      <PillarsCarousel />
+      <PillarsVideo />
 
       {/* Ciência */}
-      <section id="ciencia" className="relative py-16 md:py-28">
+      <section id="ciencia" className="relative py-14 md:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             <div className="lg:col-span-5 lg:sticky lg:top-28">
@@ -212,15 +210,24 @@ function Index() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.6, delay: i * 0.1, ease }}
-                    className="border-b border-border py-8 grid grid-cols-[40px_minmax(0,1fr)] md:grid-cols-[64px_1fr] gap-4 md:gap-6"
+                    className="border-b border-border py-8 grid grid-cols-[52px_minmax(0,1fr)] md:grid-cols-[88px_1fr] gap-4 md:gap-6"
                   >
-                    <div className="text-sm font-mono tracking-widest shrink-0" style={{ color: "var(--sage-deep)" }}>
+                    <div
+                      className="font-mono text-3xl md:text-5xl leading-none tracking-tight shrink-0"
+                      style={{ color: "color-mix(in oklab, var(--sage-deep) 70%, transparent)" }}
+                    >
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <div className="min-w-0">
                       <h3 className={`${serif} text-2xl sm:text-3xl leading-tight`} style={{ color: "var(--deep-blue)" }}>{e.t}</h3>
                       <p className="mt-3 text-lg sm:text-xl leading-[1.65] text-muted-foreground">{e.d}</p>
-                      <p className="mt-4 text-[11px] uppercase tracking-[0.2em] font-mono font-medium break-words" style={{ color: "var(--sage-deep)" }}>
+                      <p
+                        className="mt-4 inline-block rounded-full px-3 py-1.5 text-[12px] sm:text-[13px] uppercase tracking-[0.18em] font-mono font-semibold break-words"
+                        style={{
+                          color: "var(--sage-deep)",
+                          background: "color-mix(in oklab, var(--sage) 18%, transparent)",
+                        }}
+                      >
                         Fonte · {e.f}
                       </p>
                     </div>
@@ -284,7 +291,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative py-16 md:py-28">
+      <section id="faq" className="relative py-14 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
             <div className="lg:col-span-4">
@@ -294,17 +301,22 @@ function Index() {
               </h2>
             </div>
             <div className="lg:col-span-8">
-              <Accordion type="single" collapsible className="border-t border-border">
+              <Accordion type="single" collapsible className="border-t-2" style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 35%, transparent)" }}>
                 {faqs.map((f, i) => (
                   <AccordionItem
                     key={i}
                     value={`item-${i}`}
                     className="border-b border-border"
                   >
-                    <AccordionTrigger className={`${serif} text-left text-xl sm:text-2xl hover:no-underline py-6 gap-3 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
-                      {f.q}
+                    <AccordionTrigger className={`${serif} text-left text-xl sm:text-2xl hover:no-underline py-6 gap-4 [&[data-state=open]>svg]:rotate-45 [&>svg]:transition-transform [&>svg]:duration-300`} style={{ color: "var(--deep-blue)" }}>
+                      <span className="flex items-baseline gap-4 min-w-0">
+                        <span className="font-mono text-sm shrink-0" style={{ color: "var(--sage-deep)" }}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0">{f.q}</span>
+                      </span>
                     </AccordionTrigger>
-                    <AccordionContent className="text-lg leading-[1.65] pb-6 sm:pr-4 text-muted-foreground">
+                    <AccordionContent className="text-lg leading-[1.65] pb-6 sm:pr-4 pl-0 sm:pl-10 text-muted-foreground">
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -316,7 +328,7 @@ function Index() {
       </section>
 
       {/* CTA final */}
-      <section id="cta" className="relative py-24 md:py-36 overflow-hidden">
+      <section id="cta" className="relative py-16 md:py-24 overflow-hidden">
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
@@ -326,15 +338,15 @@ function Index() {
           }}
         />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
-          <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-8" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
-          <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
+          <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
+          <h2 className={`${serif} text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.03] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
             Os próximos 10 anos vão passar.
             <span className="block italic text-muted-foreground">Como você quer chegar até lá?</span>
           </h2>
-          <p className="mt-6 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
+          <p className="mt-5 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
             Sua próxima década começa agora
           </p>
-          <div className="mt-10">
+          <div className="mt-8">
             <a
               href="mailto:contato@longevidadeaplicada.com"
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
