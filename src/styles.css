@@ -294,6 +294,14 @@
   .ken-burns, .wa-pulse, .btn-neon { animation: none !important; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* Mobile: corta animações contínuas caras (repaint constante em tela cheia) */
+@media (max-width: 767px) {
+  .ken-burns { animation: none; will-change: auto; }
+  .hex-bg { animation: none; }
+  .btn-neon { animation: none; }
+  .reveal { will-change: auto; }
+}
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
 div[style*="Edit with Lovable"],

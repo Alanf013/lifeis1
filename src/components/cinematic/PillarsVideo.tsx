@@ -135,6 +135,7 @@ function PillarMedia({ p }: { p: Pillar }) {
           alt={p.t}
           loading="lazy"
           decoding="async"
+          srcSet={`${p.poster.replace(/w=\d+/, "w=480")} 480w, ${p.poster.replace(/w=\d+/, "w=720")} 720w, ${p.poster} 900w`}
           sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
           className="ken-burns w-full h-full object-cover"
           style={{ animationDelay: `${(Number(p.n) % 3) * 1.6}s` }}
