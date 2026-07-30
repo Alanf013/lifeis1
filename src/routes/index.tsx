@@ -202,7 +202,7 @@ function Index() {
             : { background: "transparent" }
         }
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))] sm:px-6">
           <a href="#top" className="flex items-baseline gap-2 min-w-0">
             <span className={`${serif} text-lg sm:text-xl tracking-tight truncate`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</span>
             <span className="text-[11px] uppercase tracking-[0.25em] hidden lg:inline text-muted-foreground whitespace-nowrap">est. protocolo</span>
@@ -343,7 +343,7 @@ function Index() {
       {/* Prova social */}
       <section className="relative py-16 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <Reveal className="relative max-w-2xl mx-auto min-h-[260px]">
+          <Reveal className="relative max-w-2xl mx-auto min-h-[340px] sm:min-h-[280px]">
             {testimonials.map((t, i) => (
               <figure
                 key={t.n}
@@ -496,7 +496,7 @@ function Index() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"
-        className="wa-pulse fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full"
+        className="wa-pulse fixed z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))]"
         style={{
           background: "#25D366",
           color: "#FFFFFF",
