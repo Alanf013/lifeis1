@@ -3,14 +3,22 @@ import { useEffect, useState } from "react";
 export function ReadingProgress() {
   const [p, setP] = useState(0);
   useEffect(() => {
+    let raf = 0;
     const onScroll = () => {
-      const h = document.documentElement;
-      const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
-      setP(Math.max(0, Math.min(1, scrolled)));
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const h = document.documentElement;
+        const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+        setP(Math.max(0, Math.min(1, scrolled)));
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
   return (
     <div className="fixed top-0 inset-x-0 h-[3px] z-[60]" style={{ background: "color-mix(in oklab, var(--sage) 10%, transparent)" }}>
@@ -38,7 +46,7 @@ export function NeonClock() {
   }, []);
   return (
     <div
-      className="fixed bottom-4 right-24 z-40 font-mono text-xs px-3 py-2 rounded-full border hidden sm:block"
+      className="fixed bottom-4 right-24 z-40 font-mono text-xs px-3 py-2 rounded-full border hidden lg:block"
       style={{
         color: "var(--sage-deep)",
         borderColor: "color-mix(in oklab, var(--sage-deep) 30%, transparent)",

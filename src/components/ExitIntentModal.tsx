@@ -130,7 +130,7 @@ export function ExitIntentModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain"
       style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
       role="dialog"
       aria-modal="true"
@@ -139,7 +139,7 @@ export function ExitIntentModal() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md rounded-2xl border p-6 sm:p-8"
+        className="relative w-full max-w-md rounded-2xl border p-6 sm:p-8 max-h-[85dvh] overflow-y-auto overscroll-contain"
         style={{
           background: "var(--card)",
           borderColor: "var(--border)",
