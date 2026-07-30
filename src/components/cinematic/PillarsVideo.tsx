@@ -14,7 +14,7 @@ const PILLARS: Pillar[] = [
   {
     n: "01",
     t: "Sono",
-    d: "O sono é a base de toda recuperação do corpo. É durante o sono profundo que o organismo repara tecidos, regula hormônios e reduz a inflamação acumulada do dia. Dormir mal aumenta a sensibilidade à dor, atrasa a recuperação muscular e compromete a concentração e o humor no dia seguinte.",
+    d: "Quem dorme mal tende a comer pior porque a falta de sono desregula os hormônios da fome. Ela aumenta a grelina (hormônio que estimula a fome), reduz a leptina (hormônio da saciedade) e altera áreas do cérebro ligadas ao prazer e ao controle dos impulsos, aumentando o desejo por alimentos calóricos, doces e gordurosos.",
     f: "",
     poster:
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
