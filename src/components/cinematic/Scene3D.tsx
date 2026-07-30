@@ -134,17 +134,24 @@ export function Scene3D({ heavy = true }: { heavy?: boolean }) {
   }>({ mobile: false, reduce: false, lowEnd: false });
 
   useEffect(() => {
-    setMounted(true);
     const mobile = window.matchMedia("(max-width: 767px)").matches;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cores = (navigator as any).hardwareConcurrency ?? 8;
     const mem = (navigator as any).deviceMemory ?? 8;
     const lowEnd = cores <= 4 || mem <= 4;
     setProfile({ mobile, reduce, lowEnd });
+    // Mobile e reduced-motion nunca baixam o bundle 3D.
+    if (mobile || reduce) return;
+    const start = () => setMounted(true);
+    if ("requestIdleCallback" in window) {
+      const id = (window as any).requestIdleCallback(start, { timeout: 2500 });
+      return () => (window as any).cancelIdleCallback?.(id);
+    }
+    const t = window.setTimeout(start, 1200);
+    return () => window.clearTimeout(t);
   }, []);
 
-  if (!mounted) return null;
-  if (profile.reduce) return null;
+  if (!mounted || profile.reduce || profile.mobile) return null;
 
   const mobile = profile.mobile;
   const lite = mobile || profile.lowEnd;
