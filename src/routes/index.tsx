@@ -244,7 +244,7 @@ function Index() {
               </span>
             </h1>
             <p className="mt-6 sm:mt-7 text-xl sm:text-2xl max-w-xl leading-[1.6] text-muted-foreground">
-              Protocolo baseado em ciência para preservar energia, força e clareza pelas próximas décadas.
+              Meu protocolo é baseado na individualidade biológica e nas melhores evidências científicas, respeitando as necessidades, objetivos e limitações de cada pessoa. Através de uma abordagem multifatorial e generalista.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
