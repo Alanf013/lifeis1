@@ -202,7 +202,7 @@ function Index() {
             : { background: "transparent" }
         }
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))] sm:px-6">
+        <div className="max-w-6xl mx-auto h-16 sm:h-20 flex items-center justify-between gap-3 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))] sm:[padding-left:max(1.5rem,env(safe-area-inset-left))] sm:[padding-right:max(1.5rem,env(safe-area-inset-right))]">
           <a href="#top" className="flex items-baseline gap-2 min-w-0">
             <span className={`${serif} text-lg sm:text-xl tracking-tight truncate`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</span>
             <span className="text-[11px] uppercase tracking-[0.25em] hidden lg:inline text-muted-foreground whitespace-nowrap">est. protocolo</span>
