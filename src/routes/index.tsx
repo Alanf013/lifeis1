@@ -266,6 +266,28 @@ function Index() {
 
       <PillarsVideo />
 
+      {/* Protocolo */}
+      <section id="protocolo" className="relative py-14 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <Reveal>
+            <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5" style={{ color: "var(--sage-deep)" }}>
+              O protocolo
+            </div>
+            <blockquote
+              className={`${serif} text-2xl sm:text-3xl md:text-[2.5rem] leading-[1.35] tracking-[-0.01em] text-balance`}
+              style={{ color: "var(--deep-blue)" }}
+            >
+              Meu protocolo é baseado na{" "}
+              <span className="italic text-muted-foreground">individualidade biológica</span>{" "}
+              e nas melhores evidências científicas, respeitando as necessidades, objetivos e
+              limitações de cada pessoa — através de uma abordagem{" "}
+              <span className="italic text-muted-foreground">multifatorial e generalista</span>.
+            </blockquote>
+            <div className="mt-7 h-px w-24" style={{ background: "var(--sage-deep)" }} />
+          </Reveal>
+        </div>
+      </section>
+
       {/* Ciência */}
       <section id="ciencia" className="relative py-14 md:py-20 vignette">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
