@@ -73,13 +73,31 @@ function Reveal({
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [activeT, setActiveT] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const { scrollY } = useScroll();
   const heroBgY = useTransform(scrollY, [0, 800], [0, 120]);
   const heroOpacity = useTransform(scrollY, [0, 600], [1, 0.35]);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        setScrolled(window.scrollY > 20);
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
   useEffect(() => {
     const id = setInterval(() => setActiveT((v) => (v + 1) % 3), 5000);
@@ -161,7 +179,7 @@ function Index() {
       <motion.div
         aria-hidden
         className="fixed inset-0 -z-10 pointer-events-none hex-bg"
-        style={{ y: heroBgY, opacity: heroOpacity }}
+        style={isMobile ? { opacity: 0.35 } : { y: heroBgY, opacity: heroOpacity }}
       />
       <div
         aria-hidden
