@@ -187,7 +187,7 @@ function Index() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
           <a href="#top" className="flex items-baseline gap-2 min-w-0">
             <span className={`${serif} text-lg sm:text-xl tracking-tight truncate`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</span>
-            <span className="text-[11px] uppercase tracking-[0.25em] hidden md:inline text-muted-foreground">est. protocolo</span>
+            <span className="text-[11px] uppercase tracking-[0.25em] hidden lg:inline text-muted-foreground whitespace-nowrap">est. protocolo</span>
           </a>
           <nav className="hidden md:flex items-center gap-10 text-[15px] font-medium text-muted-foreground">
             <a href="#pilares" className="hover:text-foreground transition-colors">Pilares</a>
@@ -330,9 +330,11 @@ function Index() {
               <figure
                 key={t.n}
                 aria-hidden={activeT !== i}
-                className="absolute inset-0 rounded-2xl p-6 sm:p-8 border transition-opacity duration-1000"
+                className="absolute inset-0 rounded-2xl p-6 sm:p-8 border transition-opacity duration-500"
                 style={{
                   opacity: activeT === i ? 1 : 0,
+                  visibility: activeT === i ? "visible" : "hidden",
+                  pointerEvents: activeT === i ? "auto" : "none",
                   background: "color-mix(in oklab, var(--card) 96%, transparent)",
                   backdropFilter: "blur(10px)",
                   borderColor: "var(--border)",
