@@ -38,7 +38,7 @@ export function NeonClock() {
   }, []);
   return (
     <div
-      className="fixed bottom-4 right-4 z-40 font-mono text-xs px-3 py-2 rounded-full border hidden sm:block"
+      className="fixed bottom-4 right-24 z-40 font-mono text-xs px-3 py-2 rounded-full border hidden sm:block"
       style={{
         color: "var(--sage-deep)",
         borderColor: "color-mix(in oklab, var(--sage-deep) 30%, transparent)",
