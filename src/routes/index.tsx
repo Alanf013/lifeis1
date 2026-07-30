@@ -203,20 +203,20 @@ function Index() {
         }
       >
         <div className="max-w-6xl mx-auto h-16 sm:h-20 flex items-center justify-between gap-3 [padding-left:max(1rem,env(safe-area-inset-left))] [padding-right:max(1rem,env(safe-area-inset-right))] sm:[padding-left:max(1.5rem,env(safe-area-inset-left))] sm:[padding-right:max(1.5rem,env(safe-area-inset-right))]">
-          <a href="#top" className="flex items-baseline gap-2 min-w-0">
+          <a href="#top" className="flex items-baseline gap-2 min-w-0 min-h-11 py-2">
             <span className={`${serif} text-lg sm:text-xl tracking-tight truncate`} style={{ color: "var(--deep-blue)" }}>Longevidade Aplicada</span>
             <span className="text-[11px] uppercase tracking-[0.25em] hidden lg:inline text-muted-foreground whitespace-nowrap">est. protocolo</span>
           </a>
-          <nav className="hidden md:flex items-center gap-10 text-[15px] font-medium text-muted-foreground">
-            <a href="#pilares" className="hover:text-foreground transition-colors">Pilares</a>
-            <a href="#ciencia" className="hover:text-foreground transition-colors">Ciência</a>
-            <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+          <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[15px] font-medium text-muted-foreground">
+            <a href="#pilares" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">Pilares</a>
+            <a href="#ciencia" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">Ciência</a>
+            <a href="#faq" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">FAQ</a>
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="hover:text-foreground transition-colors"
+              className="inline-flex items-center justify-center h-11 w-11 hover:text-foreground transition-colors"
             >
               <Instagram className="h-5 w-5" />
             </a>
@@ -478,7 +478,7 @@ function Index() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center justify-center h-11 w-11 -ml-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Instagram className="h-5 w-5" />
             </a>
