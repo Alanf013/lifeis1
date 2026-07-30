@@ -210,7 +210,7 @@ function Index() {
           <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[15px] font-medium text-muted-foreground">
             <a href="#pilares" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">Pilares</a>
             <a href="#ciencia" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">Ciência</a>
-            <a href="#faq" className="inline-flex items-center min-h-11 hover:text-foreground transition-colors">FAQ</a>
+            <a href="#faq" className="inline-flex items-center justify-center min-h-11 min-w-11 hover:text-foreground transition-colors">FAQ</a>
             <a
               href={INSTAGRAM_URL}
               target="_blank"
