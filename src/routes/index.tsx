@@ -180,7 +180,7 @@ function Index() {
         }`}
         style={
           scrolled
-            ? { background: "color-mix(in oklab, var(--ivory) 82%, transparent)", borderColor: "color-mix(in oklab, var(--sage) 30%, transparent)" }
+            ? { background: "color-mix(in oklab, var(--ivory) 96%, transparent)", borderColor: "color-mix(in oklab, var(--sage) 30%, transparent)" }
             : { background: "transparent" }
         }
       >
