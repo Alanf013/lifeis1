@@ -143,12 +143,13 @@ export function Scene3D({ heavy = true }: { heavy?: boolean }) {
     // Mobile e reduced-motion nunca baixam o bundle 3D.
     if (mobile || reduce) return;
     const start = () => setMounted(true);
-    if ("requestIdleCallback" in window) {
-      const id = (window as any).requestIdleCallback(start, { timeout: 2500 });
+    const ric = (window as any).requestIdleCallback;
+    if (typeof ric === "function") {
+      const id = ric(start, { timeout: 2500 });
       return () => (window as any).cancelIdleCallback?.(id);
     }
-    const t = window.setTimeout(start, 1200);
-    return () => window.clearTimeout(t);
+    const t = setTimeout(start, 1200);
+    return () => clearTimeout(t);
   }, []);
 
   if (!mounted || profile.reduce || profile.mobile) return null;
