@@ -410,6 +410,16 @@ export function PillarsVideo() {
                   "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.88) 100%)",
               }}
             />
+            {/* Véu de transição entre pilares: escurece o bloco que sai */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 pointer-events-none"
+              style={{
+                background: "rgba(0,0,0,1)",
+                opacity: reduce ? 0 : active === i ? 0 : 0.28,
+                transition: "opacity 900ms ease-out",
+              }}
+            />
             <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 pb-12 md:pb-20">
               <article
                 className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border backdrop-blur-md transition-all duration-700"
