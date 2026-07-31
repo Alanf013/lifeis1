@@ -14,6 +14,8 @@ type Pillar = {
   audio?: string;
 };
 
+type PinState = "before" | "pinned" | "after";
+
 const PILLARS: Pillar[] = [
   {
     n: "01",
@@ -102,7 +104,7 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
     }
     el.play().catch(() => {});
 
-    const MAX = 0.25;
+    const MAX = 0.4;
     const STEP = 1000 / 60 / 500; // 0.5s
     if (fadeRef.current) window.clearInterval(fadeRef.current);
     fadeRef.current = window.setInterval(() => {
@@ -161,6 +163,7 @@ export function PillarsVideo() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [soundOn, setSoundOn] = useState(true);
   const [active, setActive] = useState(0);
+  const [pinState, setPinState] = useState<PinState>("before");
 
   useAmbientAudio(soundOn, active);
 
@@ -179,6 +182,8 @@ export function PillarsVideo() {
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     const idx = Math.min(total - 1, Math.max(0, Math.floor(v * total)));
     setActive((prev) => (prev === idx ? prev : idx));
+    const next: PinState = v <= 0 ? "before" : v >= 1 ? "after" : "pinned";
+    setPinState((prev) => (prev === next ? prev : next));
   });
 
   // Publica o pilar ativo para o indicador global de progresso.
@@ -229,7 +234,17 @@ export function PillarsVideo() {
       className="relative isolate [--pillar-step:100vh] max-md:[--pillar-step:145vh]"
       style={{ height: sectionHeight, background: "var(--deep-blue)" }}
     >
-      <div className="sticky top-0 h-[100vh] overflow-hidden flex flex-col">
+      <div
+        className="overflow-hidden flex flex-col"
+        style={{
+          position: pinState === "pinned" ? "fixed" : "absolute",
+          top: pinState === "after" ? "auto" : 0,
+          bottom: pinState === "after" ? 0 : "auto",
+          left: 0,
+          right: 0,
+          height: "100vh",
+        }}
+      >
         {/* Fundo: imagem do pilar ativo, com crossfade suave a cada troca */}
         <AnimatePresence>
           <motion.div
