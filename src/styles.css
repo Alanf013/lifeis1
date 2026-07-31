@@ -252,6 +252,17 @@
   will-change: transform;
 }
 .media-frame:hover .ken-burns { transform: scale(1.03); }
+
+/* Zoom lento e contínuo no vídeo de fundo da seção "Seis pilares" — dá o respiro cinematográfico */
+@keyframes cinematicBgZoom {
+  0%   { transform: scale(1.06); }
+  50%  { transform: scale(1.16); }
+  100% { transform: scale(1.06); }
+}
+.cinematic-bg-video {
+  animation: cinematicBgZoom 22s ease-in-out infinite;
+  will-change: transform;
+}
 .media-frame {
   transition: box-shadow 500ms ease, transform 500ms ease;
 }
@@ -291,7 +302,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ken-burns, .wa-pulse, .btn-neon { animation: none !important; }
+  .ken-burns, .wa-pulse, .btn-neon, .cinematic-bg-video { animation: none !important; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
@@ -301,6 +312,7 @@
   .hex-bg { animation: none; }
   .btn-neon { animation: none; }
   .reveal { will-change: auto; }
+  .cinematic-bg-video { animation: none; will-change: auto; }
 }
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
