@@ -250,6 +250,34 @@ export function PillarsVideo() {
 
   useAmbientAudio(soundOn, active);
 
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  // Parallax sutil: o vídeo se desloca ~18% mais devagar que o scroll.
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
+
+  // Publica o pilar ativo para o indicador global de progresso.
+  useEffect(() => {
+    setPillarProgress({ active, total: PILLARS.length });
+  }, [active]);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => setPillarProgress({ inSection: e.isIntersecting })),
+      { threshold: 0.08 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      setPillarProgress({ inSection: false });
+    };
+  }, []);
+
   // Lazy: só baixa o vídeo de fundo quando a seção se aproxima do viewport.
   useEffect(() => {
     const el = sectionRef.current;
@@ -281,7 +309,7 @@ export function PillarsVideo() {
     >
       {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
       {bgReady && !bgFailed ? (
-        <video
+        <motion.video
           aria-hidden
           autoPlay
           muted
@@ -289,11 +317,19 @@ export function PillarsVideo() {
           playsInline
           preload="none"
           onError={() => setBgFailed(true)}
-          className="absolute inset-0 -z-10 h-full w-full object-cover cinematic-bg-video"
-          style={{ opacity: 0.55, filter: "saturate(0.85) contrast(1.05)" }}
+          className="absolute -z-10 object-cover cinematic-bg-video will-change-transform"
+          style={{
+            opacity: 0.55,
+            filter: "saturate(0.85) contrast(1.05)",
+            top: "-12%",
+            left: 0,
+            width: "100%",
+            height: "124%",
+            y: reduce ? 0 : bgY,
+          }}
         >
           <source src={BG_VIDEO_MP4} type="video/mp4" />
-        </video>
+        </motion.video>
       ) : null}
       {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar o vídeo respirar */}
       <div
