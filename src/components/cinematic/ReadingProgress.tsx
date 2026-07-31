@@ -1,4 +1,72 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import {
+  getPillarProgress,
+  subscribePillarProgress,
+} from "./pillarProgress";
+
+const PILLAR_LABELS = [
+  "Sono",
+  "Alimentação",
+  "Exercício",
+  "Estresse",
+  "Ansiedade",
+  "Dor",
+];
+
+/** Indicador de qual dos 6 pilares está em foco, visível apenas na seção. */
+export function PillarIndicator() {
+  const { inSection, active, total } = useSyncExternalStore(
+    subscribePillarProgress,
+    getPillarProgress,
+    getPillarProgress,
+  );
+
+  return (
+    <div
+      aria-hidden={!inSection}
+      className="fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-50 hidden sm:flex flex-col items-start gap-3 transition-all duration-500"
+      style={{
+        opacity: inSection ? 1 : 0,
+        transform: `translateY(-50%) translateX(${inSection ? "0" : "-12px"})`,
+        pointerEvents: "none",
+      }}
+    >
+      {Array.from({ length: total }).map((_, i) => {
+        const on = i === active;
+        return (
+          <div key={i} className="flex items-center gap-2">
+            <span
+              className="font-mono text-[10px] tracking-[0.22em] transition-all duration-300"
+              style={{
+                color: on ? "var(--ivory)" : "color-mix(in oklab, var(--ivory) 42%, transparent)",
+              }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span
+              className="block h-px transition-all duration-500"
+              style={{
+                width: on ? 26 : 12,
+                background: on
+                  ? "var(--sage)"
+                  : "color-mix(in oklab, var(--ivory) 32%, transparent)",
+              }}
+            />
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.2em] transition-all duration-300"
+              style={{
+                color: "var(--ivory)",
+                opacity: on ? 0.9 : 0,
+              }}
+            >
+              {PILLAR_LABELS[i]}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export function ReadingProgress() {
   const [p, setP] = useState(0);
