@@ -84,7 +84,7 @@ const AUDIO_GAIN: Record<number, number> = {
 /** Troca instantânea de áudio ambiente entre pilares (sem sobreposição). */
 function useAmbientAudio(enabled: boolean, activeIndex: number) {
   const elsRef = useRef<Record<number, HTMLAudioElement>>({});
-  const fadeRef = useRef<number | null>(null);
+  const fadeRef = useRef<number[]>([]);
   const activeIndexRef = useRef(activeIndex);
 
   useEffect(() => {
@@ -92,23 +92,60 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
   }, [activeIndex]);
 
   useEffect(() => {
-    if (!enabled) {
-      Object.values(elsRef.current).forEach((a) => {
-        a.pause();
-        a.currentTime = 0;
+    // Microfade (~110ms): evita o estalo/clique do corte seco, sem sobreposição.
+    const FADE_MS = 110;
+    const STEP_MS = 15;
+
+    const clearFades = () => {
+      fadeRef.current.forEach((id) => {
+        window.clearInterval(id);
+        window.clearTimeout(id);
       });
-      return;
+      fadeRef.current = [];
+    };
+
+    const fadeTo = (el: HTMLAudioElement, to: number, onDone?: () => void) => {
+      const from = el.volume;
+      const steps = Math.max(1, Math.round(FADE_MS / STEP_MS));
+      let i = 0;
+      const id = window.setInterval(() => {
+        i += 1;
+        el.volume = Math.min(1, Math.max(0, from + (to - from) * (i / steps)));
+        if (i >= steps) {
+          window.clearInterval(id);
+          fadeRef.current = fadeRef.current.filter((x) => x !== id);
+          onDone?.();
+        }
+      }, STEP_MS);
+      fadeRef.current.push(id);
+    };
+
+    if (!enabled) {
+      clearFades();
+      Object.values(elsRef.current).forEach((a) => {
+        if (a.paused) return;
+        fadeTo(a, 0, () => {
+          a.pause();
+          a.currentTime = 0;
+        });
+      });
+      return () => clearFades();
     }
     const target = PILLARS[activeIndex]?.audio;
     if (!target) return;
 
-    // Para imediatamente qualquer outro pilar: nunca dois sons juntos.
+    clearFades();
+
+    // Fade-out curtíssimo dos demais pilares antes de subir o novo:
+    // nunca dois sons audíveis ao mesmo tempo.
+    let pending = 0;
     Object.entries(elsRef.current).forEach(([k, a]) => {
-      if (Number(k) !== activeIndex) {
+      if (Number(k) === activeIndex || a.paused) return;
+      pending += 1;
+      fadeTo(a, 0, () => {
         a.pause();
         a.currentTime = 0;
-        a.volume = 0;
-      }
+      });
     });
 
     let el = elsRef.current[activeIndex];
@@ -119,15 +156,22 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
       el.volume = 0;
       elsRef.current[activeIndex] = el;
     }
-    el.volume = AUDIO_GAIN[activeIndex] ?? 0.18;
-    el.play().catch(() => {});
-
-    return () => {
-      if (fadeRef.current) {
-        window.clearInterval(fadeRef.current);
-        fadeRef.current = null;
-      }
+    const gain = AUDIO_GAIN[activeIndex] ?? 0.18;
+    const audio = el;
+    const start = () => {
+      audio.volume = 0;
+      audio
+        .play()
+        .then(() => fadeTo(audio, gain))
+        .catch(() => {});
     };
+    if (pending > 0) {
+      fadeRef.current.push(window.setTimeout(start, FADE_MS));
+    } else {
+      start();
+    }
+
+    return () => clearFades();
   }, [enabled, activeIndex]);
 
   // Navegadores bloqueiam áudio com som antes da primeira interação real do
