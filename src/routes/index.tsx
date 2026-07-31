@@ -173,7 +173,7 @@ function Index() {
 
   return (
     <div
-      className="relative min-h-screen font-sans antialiased overflow-x-hidden"
+      className="relative min-h-screen font-sans antialiased"
       style={{ background: "var(--ivory)", color: "var(--deep-blue)" }}
     >
       <Scene3D />
