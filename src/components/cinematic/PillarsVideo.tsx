@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import bgVideoAsset from "@/assets/pilares-fundo.mp4.asset.json";
+import { WordReveal } from "./TextReveal";
+import { setPillarProgress } from "./pillarProgress";
 
 type Pillar = {
   n: string;
