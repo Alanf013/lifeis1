@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import bgVideoAsset from "@/assets/pilares-fundo.mp4.asset.json";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { WordReveal } from "./TextReveal";
 import { setPillarProgress } from "./pillarProgress";
 
@@ -13,12 +12,7 @@ type Pillar = {
   poster: string;
   /** arquivo de áudio ambiente do pilar (loop, volume baixo) */
   audio?: string;
-  /** Coloque aqui os arquivos quando estiverem prontos: { mp4: "/videos/vo2.mp4", webm: "/videos/vo2.webm" } */
-  video?: { mp4?: string; webm?: string };
 };
-
-/** Vídeo de textura de fundo da seção (10s, loop, sem áudio). */
-const BG_VIDEO_MP4 = bgVideoAsset.url;
 
 const PILLARS: Pillar[] = [
   {
@@ -101,80 +95,6 @@ function useInView<T extends HTMLElement>(rootMargin = "120px") {
   return { ref, inView };
 }
 
-function PillarMedia({ p }: { p: Pillar }) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setVisible(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  const hasVideo = Boolean(p.video?.mp4 || p.video?.webm);
-
-  return (
-    <div
-      ref={ref}
-      className="media-frame relative w-full aspect-[4/5] overflow-hidden rounded-xl"
-      style={{ background: "color-mix(in oklab, var(--sage) 18%, transparent)" }}
-    >
-      {visible && hasVideo ? (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={p.poster}
-          className="w-full h-full object-cover"
-        >
-          {p.video?.webm ? <source src={p.video.webm} type="video/webm" /> : null}
-          {p.video?.mp4 ? <source src={p.video.mp4} type="video/mp4" /> : null}
-        </video>
-      ) : (
-        <img
-          src={p.poster}
-          alt={p.t}
-          loading="lazy"
-          decoding="async"
-          srcSet={`${p.poster.replace(/w=\d+/, "w=480")} 480w, ${p.poster.replace(/w=\d+/, "w=720")} 720w, ${p.poster} 900w`}
-          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
-          className="ken-burns w-full h-full object-cover"
-          style={{ animationDelay: `${(Number(p.n) % 3) * 1.6}s` }}
-        />
-      )}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(180deg, transparent 45%, color-mix(in oklab, var(--deep-blue) 45%, transparent))",
-        }}
-      />
-      <span
-        className="absolute bottom-3 left-3 font-mono text-[11px] tracking-[0.3em]"
-        style={{ color: "var(--ivory)" }}
-      >
-        {p.n}
-      </span>
-    </div>
-  );
-}
-
 /** Crossfade de áudio ambiente entre pilares, só depois de o usuário ativar o som. */
 function useAmbientAudio(enabled: boolean, activeIndex: number) {
   const elsRef = useRef<Record<number, HTMLAudioElement>>({});
@@ -243,35 +163,12 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
 
 export function PillarsVideo() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [bgReady, setBgReady] = useState(false);
-  const [bgFailed, setBgFailed] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [active, setActive] = useState(0);
 
   useAmbientAudio(soundOn, active);
 
   const reduce = Boolean(useReducedMotion());
-  const bgVideoRef = useRef<HTMLVideoElement | null>(null);
-  const [bgDuration, setBgDuration] = useState(0);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  // Parallax sutil: o vídeo se desloca ~18% mais devagar que o scroll.
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
-
-  // Vídeo "andando" junto com o scroll: avança ao descer, volta ao subir —
-  // em vez de tocar sozinho em loop, independente da rolagem.
-  useEffect(() => {
-    if (reduce) return;
-    const unsubscribe = scrollYProgress.on("change", (v) => {
-      const video = bgVideoRef.current;
-      if (!video || !bgDuration) return;
-      const clamped = Math.min(1, Math.max(0, v));
-      video.currentTime = clamped * bgDuration;
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress, bgDuration, reduce]);
 
   // Publica o pilar ativo para o indicador global de progresso.
   useEffect(() => {
@@ -293,27 +190,11 @@ export function PillarsVideo() {
     };
   }, []);
 
-  // Lazy: só baixa o vídeo de fundo quando a seção se aproxima do viewport.
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setBgReady(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "300px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   const backToTop = useCallback(() => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
+
+  const bgPoster = PILLARS[active]?.poster;
 
   return (
     <section
@@ -322,39 +203,31 @@ export function PillarsVideo() {
       className="relative isolate overflow-hidden py-14 md:py-20"
       style={{ background: "var(--deep-blue)" }}
     >
-      {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
-      {bgReady && !bgFailed ? (
-        <motion.video
-          ref={bgVideoRef}
+      {/* Fundo: imagem do pilar ativo, com crossfade suave a cada troca — sem vídeo, leve e confiável */}
+      <AnimatePresence>
+        <motion.div
+          key={bgPoster}
           aria-hidden
-          autoPlay={reduce}
-          muted
-          loop={reduce}
-          playsInline
-          preload="metadata"
-          onLoadedMetadata={(e) => setBgDuration(e.currentTarget.duration || 0)}
-          onError={() => setBgFailed(true)}
-          className="absolute -z-10 object-cover will-change-transform"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduce ? 0 : 1.1, ease: "easeInOut" }}
+          className="absolute inset-0 -z-10"
           style={{
-            opacity: 0.55,
-            filter: "saturate(0.85) contrast(1.05)",
-            top: "-12%",
-            left: 0,
-            width: "100%",
-            height: "124%",
-            y: reduce ? 0 : bgY,
+            backgroundImage: `url(${bgPoster})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "saturate(0.85) contrast(1.05) blur(1px)",
           }}
-        >
-          <source src={BG_VIDEO_MP4} type="video/mp4" />
-        </motion.video>
-      ) : null}
-      {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar o vídeo respirar */}
+        />
+      </AnimatePresence>
+      {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar a imagem respirar */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.85) 100%)",
+            "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.68) 55%, rgba(0,0,0,0.9) 100%)",
         }}
       />
       {/* Reforço no topo e no rodapé para transicionar suavemente com as seções vizinhas */}
@@ -363,7 +236,7 @@ export function PillarsVideo() {
         className="absolute inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.65) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.7) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.8) 100%)",
         }}
       />
       {/* Grain analógico */}
@@ -493,31 +366,32 @@ function PillarCard({
   return (
             <article
               ref={ref}
-              className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-4 sm:p-5 border`}
+              className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-6 sm:p-7 border backdrop-blur-md`}
               style={{
-                background: "color-mix(in oklab, var(--card) 97%, transparent)",
-                borderColor: "var(--border)",
-                boxShadow: "0 18px 50px -24px rgba(0,0,0,0.65)",
+                background: "color-mix(in oklab, black 38%, transparent)",
+                borderColor: "color-mix(in oklab, var(--ivory) 14%, transparent)",
+                boxShadow: "0 18px 50px -24px rgba(0,0,0,0.75)",
                 transitionDelay: `${(i % 3) * 80}ms`,
               }}
             >
-              <PillarMedia p={p} />
               <div
-                className="mt-5 font-mono text-xs tracking-[0.3em]"
-                style={{ color: "var(--sage-deep)" }}
+                className="font-mono text-xs tracking-[0.3em]"
+                style={{ color: "var(--sage)" }}
               >
                 {p.n}
               </div>
               <h3
-                className="mt-1 text-2xl sm:text-3xl leading-tight"
-                style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
+                className="mt-2 text-2xl sm:text-3xl leading-tight"
+                style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
               >
                 {p.t}
               </h3>
-              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] font-medium text-muted-foreground">
+              <p
+                className="mt-3 text-[15px] sm:text-base leading-[1.65] font-medium"
+                style={{ color: "color-mix(in oklab, var(--ivory) 78%, transparent)" }}
+              >
                 {p.d}
               </p>
-
             </article>
   );
 }
