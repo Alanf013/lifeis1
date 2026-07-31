@@ -161,8 +161,6 @@ export function PillarsVideo() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [soundOn, setSoundOn] = useState(true);
   const [active, setActive] = useState(0);
-  const [pinState, setPinState] = useState<PinState>("before");
-
   useAmbientAudio(soundOn, active);
 
   const reduce = Boolean(useReducedMotion());
