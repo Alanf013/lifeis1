@@ -165,12 +165,11 @@
     color: var(--color-foreground);
     background-image: var(--texture-grain);
     background-repeat: repeat;
-    overflow-x: hidden;
   }
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Hide scrollbars but keep functionality */
