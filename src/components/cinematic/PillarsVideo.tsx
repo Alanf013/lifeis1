@@ -378,15 +378,29 @@ export function PillarsVideo() {
             }}
             className="relative isolate flex items-end min-h-[78vh] md:min-h-[86vh]"
           >
-            <img
-              src={p.poster}
-              alt={p.t}
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={i === 0 ? "high" : "low"}
-              className="absolute inset-0 -z-20 h-full w-full object-cover"
-              style={{ filter: "saturate(0.85) contrast(1.05)" }}
-            />
+            <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+              <img
+                src={p.poster}
+                alt={p.t}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={i === 0 ? "high" : "low"}
+                className="h-full w-full object-cover will-change-transform"
+                style={{
+                  filter:
+                    reduce || active === i
+                      ? "saturate(0.92) contrast(1.06) brightness(1)"
+                      : "saturate(0.7) contrast(1.02) brightness(0.82)",
+                  transform: reduce
+                    ? "none"
+                    : active === i
+                      ? "scale(1.06) translateY(0)"
+                      : "scale(1.01) translateY(8px)",
+                  transition:
+                    "transform 2600ms cubic-bezier(0.22,1,0.36,1), filter 1200ms ease-out",
+                }}
+              />
+            </div>
             {/* Vinheta + gradiente para legibilidade do texto */}
             <div
               aria-hidden
