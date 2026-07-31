@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { WordReveal } from "./TextReveal";
 import { setPillarProgress } from "./pillarProgress";
 
