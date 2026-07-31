@@ -246,6 +246,20 @@ export function PillarsVideo() {
     };
   }, []);
 
+  // Revelação suave do painel de fechamento (apenas visual, não toca no áudio)
+  const closingRef = useRef<HTMLDivElement | null>(null);
+  const [closingIn, setClosingIn] = useState(false);
+  useEffect(() => {
+    const el = closingRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => setClosingIn(e.isIntersecting),
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const backToTop = useCallback(() => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
@@ -416,15 +430,24 @@ export function PillarsVideo() {
 
       {/* Fechamento / loop da experiência */}
       <div
+        ref={closingRef}
         className="relative flex flex-col items-center justify-center gap-3 px-6 pb-16 pt-10 text-center"
         style={{
           background:
             "linear-gradient(180deg, color-mix(in oklab, black 55%, transparent) 0%, color-mix(in oklab, black 88%, transparent) 100%)",
+          opacity: reduce ? 1 : closingIn ? 1 : 0,
+          transform: reduce ? "none" : closingIn ? "translateY(0)" : "translateY(14px)",
+          transition: "opacity 700ms ease-out, transform 700ms cubic-bezier(0.22,1,0.36,1)",
         }}
       >
         <p
           className="text-sm sm:text-base"
-          style={{ color: "color-mix(in oklab, var(--ivory) 62%, transparent)" }}
+          style={{
+            color: "color-mix(in oklab, var(--ivory) 62%, transparent)",
+            opacity: reduce ? 1 : closingIn ? 1 : 0,
+            transform: reduce ? "none" : closingIn ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 600ms ease-out 120ms, transform 600ms ease-out 120ms",
+          }}
         >
           Seis pilares. Uma única estratégia de longevidade.
         </p>
@@ -436,6 +459,13 @@ export function PillarsVideo() {
             color: "var(--ink, #0B0E14)",
             borderColor: "transparent",
             background: "var(--sage)",
+            opacity: reduce ? 1 : closingIn ? 1 : 0,
+            transform: reduce ? "none" : closingIn ? "scale(1)" : "scale(0.96)",
+            transition:
+              "opacity 600ms ease-out 240ms, transform 600ms cubic-bezier(0.22,1,0.36,1) 240ms",
+            boxShadow: closingIn
+              ? "0 18px 40px -22px color-mix(in oklab, var(--sage) 80%, transparent)"
+              : "none",
           }}
         >
           <ArrowUp size={18} />
