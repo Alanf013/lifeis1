@@ -73,12 +73,12 @@ const PILLARS: Pillar[] = [
 
 /** Ganho relativo por pilar (volume geral baixo, sem sobreposição). */
 const AUDIO_GAIN: Record<number, number> = {
-  0: 0.16, // Sono — bem sutil
-  1: 0.18, // Alimentação
-  2: 0.22, // Exercício
-  3: 0.16, // Estresse
-  4: 0.18, // Ansiedade
-  5: 0.2, // Dor
+  0: 0.07, // Sono — quase imperceptível
+  1: 0.08, // Alimentação
+  2: 0.1, // Exercício
+  3: 0.07, // Estresse
+  4: 0.08, // Ansiedade
+  5: 0.09, // Dor
 };
 
 /** Troca instantânea de áudio ambiente entre pilares (sem sobreposição). */
@@ -378,15 +378,29 @@ export function PillarsVideo() {
             }}
             className="relative isolate flex items-end min-h-[78vh] md:min-h-[86vh]"
           >
-            <img
-              src={p.poster}
-              alt={p.t}
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={i === 0 ? "high" : "low"}
-              className="absolute inset-0 -z-20 h-full w-full object-cover"
-              style={{ filter: "saturate(0.85) contrast(1.05)" }}
-            />
+            <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+              <img
+                src={p.poster}
+                alt={p.t}
+                loading={i === 0 ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={i === 0 ? "high" : "low"}
+                className="h-full w-full object-cover will-change-transform"
+                style={{
+                  filter:
+                    reduce || active === i
+                      ? "saturate(0.92) contrast(1.06) brightness(1)"
+                      : "saturate(0.7) contrast(1.02) brightness(0.82)",
+                  transform: reduce
+                    ? "none"
+                    : active === i
+                      ? "scale(1.06) translateY(0)"
+                      : "scale(1.01) translateY(8px)",
+                  transition:
+                    "transform 2600ms cubic-bezier(0.22,1,0.36,1), filter 1200ms ease-out",
+                }}
+              />
+            </div>
             {/* Vinheta + gradiente para legibilidade do texto */}
             <div
               aria-hidden
@@ -394,6 +408,16 @@ export function PillarsVideo() {
               style={{
                 background:
                   "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.88) 100%)",
+              }}
+            />
+            {/* Véu de transição entre pilares: escurece o bloco que sai */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 pointer-events-none"
+              style={{
+                background: "rgba(0,0,0,1)",
+                opacity: reduce ? 0 : active === i ? 0 : 0.28,
+                transition: "opacity 900ms ease-out",
               }}
             />
             <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 pb-12 md:pb-20">
