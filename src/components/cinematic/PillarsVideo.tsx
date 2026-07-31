@@ -276,7 +276,7 @@ export function PillarsVideo() {
       className="relative isolate overflow-hidden py-14 md:py-20"
       style={{ background: "var(--deep-blue)" }}
     >
-      {/* Vídeo de textura (silencioso, loop, lazy) */}
+      {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
       {bgReady && !bgFailed ? (
         <video
           aria-hidden
@@ -286,24 +286,36 @@ export function PillarsVideo() {
           playsInline
           preload="none"
           onError={() => setBgFailed(true)}
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
-          style={{ opacity: 0.3 }}
+          className="absolute inset-0 -z-10 h-full w-full object-cover cinematic-bg-video"
+          style={{ opacity: 0.55, filter: "saturate(0.85) contrast(1.05)" }}
         >
           <source src={BG_VIDEO_MP4} type="video/mp4" />
         </video>
       ) : null}
-      {/* Overlay escuro */}
+      {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar o vídeo respirar */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 pointer-events-none"
-        style={{ background: "rgba(0,0,0,0.55)" }}
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.85) 100%)",
+        }}
+      />
+      {/* Reforço no topo e no rodapé para transicionar suavemente com as seções vizinhas */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.65) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.7) 100%)",
+        }}
       />
       {/* Grain analógico */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
         style={{
-          opacity: 0.07,
+          opacity: 0.09,
           backgroundImage:
             "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
         }}
