@@ -172,10 +172,164 @@ function PillarMedia({ p }: { p: Pillar }) {
   );
 }
 
+/** Crossfade de áudio ambiente entre pilares, só depois de o usuário ativar o som. */
+function useAmbientAudio(enabled: boolean, activeIndex: number) {
+  const elsRef = useRef<Record<number, HTMLAudioElement>>({});
+  const fadeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      Object.values(elsRef.current).forEach((a) => {
+        a.pause();
+        a.currentTime = 0;
+      });
+      return;
+    }
+    const target = PILLARS[activeIndex]?.audio;
+    if (!target) return;
+
+    let el = elsRef.current[activeIndex];
+    if (!el) {
+      el = new Audio(target);
+      el.loop = true;
+      el.preload = "none";
+      el.volume = 0;
+      elsRef.current[activeIndex] = el;
+    }
+    el.play().catch(() => {});
+
+    const MAX = 0.25;
+    const STEP = 1000 / 60 / 500; // 0.5s
+    if (fadeRef.current) window.clearInterval(fadeRef.current);
+    fadeRef.current = window.setInterval(() => {
+      let done = true;
+      Object.entries(elsRef.current).forEach(([k, a]) => {
+        const isActive = Number(k) === activeIndex;
+        const goal = isActive ? MAX : 0;
+        const delta = STEP * MAX;
+        if (Math.abs(a.volume - goal) <= delta) {
+          a.volume = goal;
+          if (!isActive && a.volume === 0 && !a.paused) a.pause();
+        } else {
+          a.volume = Math.min(1, Math.max(0, a.volume + (a.volume < goal ? delta : -delta)));
+          done = false;
+        }
+      });
+      if (done && fadeRef.current) {
+        window.clearInterval(fadeRef.current);
+        fadeRef.current = null;
+      }
+    }, 1000 / 60);
+
+    return () => {
+      if (fadeRef.current) {
+        window.clearInterval(fadeRef.current);
+        fadeRef.current = null;
+      }
+    };
+  }, [enabled, activeIndex]);
+
+  useEffect(
+    () => () => {
+      Object.values(elsRef.current).forEach((a) => a.pause());
+      elsRef.current = {};
+    },
+    [],
+  );
+}
+
 export function PillarsVideo() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [bgReady, setBgReady] = useState(false);
+  const [bgFailed, setBgFailed] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+  const [active, setActive] = useState(0);
+
+  useAmbientAudio(soundOn, active);
+
+  // Lazy: só baixa o vídeo de fundo quando a seção se aproxima do viewport.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setBgReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const backToTop = useCallback(() => {
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
-    <section id="pilares" className="relative py-14 md:py-20">
+    <section
+      id="pilares"
+      ref={sectionRef}
+      className="relative isolate overflow-hidden py-14 md:py-20"
+      style={{ background: "var(--deep-blue)" }}
+    >
+      {/* Vídeo de textura (silencioso, loop, lazy) */}
+      {bgReady && !bgFailed ? (
+        <video
+          aria-hidden
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          onError={() => setBgFailed(true)}
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          style={{ opacity: 0.3 }}
+        >
+          <source src={BG_VIDEO_WEBM} type="video/webm" />
+          <source src={BG_VIDEO_MP4} type="video/mp4" />
+        </video>
+      ) : null}
+      {/* Overlay escuro */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none"
+        style={{ background: "rgba(0,0,0,0.55)" }}
+      />
+      {/* Grain analógico */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
+        style={{
+          opacity: 0.07,
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Controle de som — silenciado por padrão */}
+        <div className="flex justify-end mb-6">
+          <button
+            type="button"
+            onClick={() => setSoundOn((v) => !v)}
+            aria-pressed={soundOn}
+            aria-label={soundOn ? "Desativar som ambiente" : "Ativar som ambiente"}
+            className="inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full border font-mono text-[11px] uppercase tracking-[0.24em] transition-colors"
+            style={{
+              color: "var(--ivory)",
+              borderColor: "color-mix(in oklab, var(--ivory) 32%, transparent)",
+              background: "color-mix(in oklab, black 30%, transparent)",
+            }}
+          >
+            {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {soundOn ? "Som ligado" : "Ativar som"}
+          </button>
+        </div>
+
         <div className="max-w-2xl mb-10 md:mb-14">
           <div
             className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
