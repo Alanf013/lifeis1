@@ -380,7 +380,15 @@ export function PillarsVideo() {
           </button>
         </div>
 
-        <div className="max-w-2xl mb-10 md:mb-14">
+        <div className="sticky top-16 md:top-20 z-10 max-w-2xl mb-10 md:mb-14 pb-4 pt-2">
+          <div
+            aria-hidden
+            className="absolute inset-x-[-1rem] inset-y-[-1rem] -z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, color-mix(in oklab, var(--deep-blue) 78%, transparent) 55%, transparent 100%)",
+            }}
+          />
           <div
             className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
             style={{ color: "var(--sage)" }}
@@ -395,13 +403,14 @@ export function PillarsVideo() {
             className="text-4xl sm:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
             style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
           >
-            Seis pilares.
-            <span
-              className="block italic"
+            <WordReveal as="div" text="Seis pilares." />
+            <WordReveal
+              as="div"
+              text="Uma estratégia."
+              delay={0.12}
+              className="italic"
               style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
-            >
-              Uma estratégia.
-            </span>
+            />
           </h2>
         </div>
 
