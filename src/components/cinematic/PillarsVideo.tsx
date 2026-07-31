@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import bgVideoAsset from "@/assets/pilares-fundo.mp4.asset.json";
+import { WordReveal } from "./TextReveal";
+import { setPillarProgress } from "./pillarProgress";
 
 type Pillar = {
   n: string;
@@ -247,6 +250,34 @@ export function PillarsVideo() {
 
   useAmbientAudio(soundOn, active);
 
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  // Parallax sutil: o vídeo se desloca ~18% mais devagar que o scroll.
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
+
+  // Publica o pilar ativo para o indicador global de progresso.
+  useEffect(() => {
+    setPillarProgress({ active, total: PILLARS.length });
+  }, [active]);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => setPillarProgress({ inSection: e.isIntersecting })),
+      { threshold: 0.08 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      setPillarProgress({ inSection: false });
+    };
+  }, []);
+
   // Lazy: só baixa o vídeo de fundo quando a seção se aproxima do viewport.
   useEffect(() => {
     const el = sectionRef.current;
@@ -273,12 +304,12 @@ export function PillarsVideo() {
     <section
       id="pilares"
       ref={sectionRef}
-      className="relative isolate overflow-hidden py-14 md:py-20"
+      className="relative isolate overflow-x-clip py-14 md:py-20"
       style={{ background: "var(--deep-blue)" }}
     >
       {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
       {bgReady && !bgFailed ? (
-        <video
+        <motion.video
           aria-hidden
           autoPlay
           muted
@@ -286,11 +317,19 @@ export function PillarsVideo() {
           playsInline
           preload="none"
           onError={() => setBgFailed(true)}
-          className="absolute inset-0 -z-10 h-full w-full object-cover cinematic-bg-video"
-          style={{ opacity: 0.55, filter: "saturate(0.85) contrast(1.05)" }}
+          className="absolute -z-10 object-cover cinematic-bg-video will-change-transform"
+          style={{
+            opacity: 0.55,
+            filter: "saturate(0.85) contrast(1.05)",
+            top: "-12%",
+            left: 0,
+            width: "100%",
+            height: "124%",
+            y: reduce ? 0 : bgY,
+          }}
         >
           <source src={BG_VIDEO_MP4} type="video/mp4" />
-        </video>
+        </motion.video>
       ) : null}
       {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar o vídeo respirar */}
       <div
@@ -341,7 +380,15 @@ export function PillarsVideo() {
           </button>
         </div>
 
-        <div className="max-w-2xl mb-10 md:mb-14">
+        <div className="sticky top-16 md:top-20 z-10 max-w-2xl mb-10 md:mb-14 pb-4 pt-2">
+          <div
+            aria-hidden
+            className="absolute inset-x-[-1rem] inset-y-[-1rem] -z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(180deg, color-mix(in oklab, var(--deep-blue) 78%, transparent) 55%, transparent 100%)",
+            }}
+          />
           <div
             className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
             style={{ color: "var(--sage)" }}
@@ -356,13 +403,14 @@ export function PillarsVideo() {
             className="text-4xl sm:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
             style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
           >
-            Seis pilares.
-            <span
-              className="block italic"
+            <WordReveal as="div" text="Seis pilares." />
+            <WordReveal
+              as="div"
+              text="Uma estratégia."
+              delay={0.12}
+              className="italic"
               style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
-            >
-              Uma estratégia.
-            </span>
+            />
           </h2>
         </div>
 

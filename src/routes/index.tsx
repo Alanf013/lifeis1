@@ -10,7 +10,8 @@ import { ArrowUpRight, ArrowRight, Instagram, MessageCircle } from "lucide-react
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { trackEvent } from "@/lib/analytics";
-import { ReadingProgress, NeonClock } from "@/components/cinematic/ReadingProgress";
+import { ReadingProgress, NeonClock, PillarIndicator } from "@/components/cinematic/ReadingProgress";
+import { WordReveal } from "@/components/cinematic/TextReveal";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
 import { ExitIntentModal } from "@/components/ExitIntentModal";
 
@@ -190,6 +191,7 @@ function Index() {
         }}
       />
       <ReadingProgress />
+      <PillarIndicator />
       <NeonClock />
       {/* Header */}
       <header
@@ -290,8 +292,8 @@ function Index() {
           <Reveal className="max-w-2xl mb-10 md:mb-14">
             <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5" style={{ color: "var(--sage-deep)" }}>Evidência</div>
             <h2 className={`${serif} text-4xl sm:text-5xl md:text-6xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
-              Menos opinião.
-              <span className="block italic text-muted-foreground">Mais evidência.</span>
+              <WordReveal as="div" text="Menos opinião." />
+              <WordReveal as="div" delay={0.12} text="Mais evidência." className="italic text-muted-foreground" />
             </h2>
           </Reveal>
 
@@ -400,7 +402,7 @@ function Index() {
             <div className="lg:col-span-4">
               <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Perguntas</div>
               <h2 className={`${serif} text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
-                O que perguntam antes de começar.
+                <WordReveal as="div" text="O que perguntam antes de começar." />
               </h2>
             </div>
             <div className="lg:col-span-8">
@@ -443,8 +445,8 @@ function Index() {
         <Reveal className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
           <div className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-6" style={{ color: "var(--sage-deep)" }}>Próximo passo</div>
           <h2 className={`${serif} text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.03] tracking-[-0.02em] text-balance`} style={{ color: "var(--deep-blue)" }}>
-            Os próximos 10 anos vão passar.
-            <span className="block italic text-muted-foreground">Como você quer chegar até lá?</span>
+            <WordReveal as="div" text="Os próximos 10 anos vão passar." />
+            <WordReveal as="div" delay={0.15} text="Como você quer chegar até lá?" className="italic text-muted-foreground" />
           </h2>
           <p className="mt-5 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
             Sua próxima década começa agora
