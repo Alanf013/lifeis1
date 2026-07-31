@@ -116,7 +116,7 @@ function Index() {
     {
       t: "Alimentação — Inflammaging",
       d: "Inflamação silenciosa é hoje um dos principais motores do envelhecimento.",
-      f: "Nature Reviews Endocrinology · Franceschi & Campisi",
+      f: "",
     },
     {
       t: "Exercício Físico — Sarcopenia após os 30",
