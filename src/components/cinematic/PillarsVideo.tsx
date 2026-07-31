@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { WordReveal } from "./TextReveal";
 import { setPillarProgress } from "./pillarProgress";
 
@@ -102,7 +102,7 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
     }
     el.play().catch(() => {});
 
-    const MAX = 0.4;
+    const MAX = 0.55;
     const STEP = 1000 / 60 / 500; // 0.5s
     if (fadeRef.current) window.clearInterval(fadeRef.current);
     fadeRef.current = window.setInterval(() => {
@@ -159,6 +159,7 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
 
 export function PillarsVideo() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const blockRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [soundOn, setSoundOn] = useState(true);
   const [active, setActive] = useState(0);
   useAmbientAudio(soundOn, active);
@@ -166,19 +167,23 @@ export function PillarsVideo() {
   const reduce = Boolean(useReducedMotion());
   const total = PILLARS.length;
 
-  // Progresso de scroll ao longo de TODA a seção (que agora é bem mais alta,
-  // ~total x 100vh). O índice ativo é uma função direta dessa posição —
-  // nunca "pula" pilares, mesmo em scroll rápido, porque não depende de
-  // IntersectionObserver por card (que podia perder cards intermediários).
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(total - 1, Math.max(0, Math.floor(v * total)));
-    setActive((prev) => (prev === idx ? prev : idx));
-  });
+  // Pilar ativo = bloco que está no centro da tela. Simples, sem "pin" de
+  // scroll (que travava a rolagem) e sem depender de altura fixa.
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const i = Number((e.target as HTMLElement).dataset.index);
+          if (!Number.isNaN(i)) setActive((prev) => (prev === i ? prev : i));
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+    );
+    blockRefs.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   // Publica o pilar ativo para o indicador global de progresso.
   useEffect(() => {
@@ -204,83 +209,20 @@ export function PillarsVideo() {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const goToPillar = useCallback(
-    (i: number) => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const step = el.offsetHeight / total;
-      const target = el.offsetTop + step * i + step / 2;
-      window.scrollTo({ top: target, behavior: "smooth" });
-    },
-    [total],
-  );
-
-  const pillar = PILLARS[active];
-
-  // Altura total da seção: um "andar" de 100vh por pilar (um pouco mais em
-  // mobile, onde o texto é mais alto que a tela e 100vh apertaria demais).
-  const sectionHeight = useMemo(() => `calc(var(--pillar-step, 100vh) * ${total})`, [total]);
+  const goToPillar = useCallback((i: number) => {
+    blockRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
 
   return (
     <section
       id="pilares"
       ref={sectionRef}
-      className="relative isolate [--pillar-step:70vh] max-md:[--pillar-step:95vh]"
-      style={{ height: sectionHeight, background: "var(--deep-blue)" }}
+      className="relative isolate"
+      style={{ background: "var(--deep-blue)" }}
     >
-      <div
-        className="sticky top-0 overflow-hidden flex flex-col"
-        style={{ height: "100vh" }}
-      >
-        {/* Fundo: imagem do pilar ativo, com crossfade suave a cada troca */}
-        <AnimatePresence>
-          <motion.div
-            key={pillar?.poster}
-            aria-hidden
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0 : 1.1, ease: "easeInOut" }}
-            className="absolute inset-0 -z-10"
-            style={{
-              backgroundImage: `url(${pillar?.poster})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "saturate(0.85) contrast(1.05) blur(1px)",
-            }}
-          />
-        </AnimatePresence>
-        {/* Vinheta cinematográfica */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.68) 55%, rgba(0,0,0,0.9) 100%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.8) 100%)",
-          }}
-        />
-        {/* Grain analógico */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
-          style={{
-            opacity: 0.09,
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-          }}
-        />
-
-        <div className="relative flex-1 flex flex-col max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 md:py-10">
-          {/* Cabeçalho: título fixo no topo + controle de som */}
-          <div className="flex items-start justify-between gap-4">
+      <div className="relative max-w-6xl mx-auto w-full px-4 sm:px-6 pt-14 md:pt-20 pb-8">
+        {/* Cabeçalho da seção + controle de som */}
+        <div className="flex items-start justify-between gap-4">
             <div className="max-w-xl">
               <div
                 className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-4"
@@ -321,45 +263,76 @@ export function PillarsVideo() {
               {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
               {soundOn ? "Som ligado" : "Ativar som"}
             </button>
-          </div>
+        </div>
+      </div>
 
-          {/* Card do pilar ativo — um de cada vez, crossfade suave */}
-          <div className="relative flex-1 flex items-center">
-            <AnimatePresence mode="wait">
-              <motion.article
-                key={pillar?.n}
-                initial={{ opacity: 0, y: reduce ? 0 : 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: reduce ? 0 : -18 }}
-                transition={{ duration: reduce ? 0 : 0.5, ease: [0.23, 1, 0.32, 1] }}
-                className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border backdrop-blur-md"
+      {/* Blocos: um pilar após o outro, na ordem, com a imagem visível */}
+      <div className="flex flex-col">
+        {PILLARS.map((p, i) => (
+          <div
+            key={p.n}
+            data-index={i}
+            ref={(el) => {
+              blockRefs.current[i] = el;
+            }}
+            className="relative isolate flex items-end min-h-[78vh] md:min-h-[86vh]"
+          >
+            <img
+              src={p.poster}
+              alt={p.t}
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchPriority={i === 0 ? "high" : "low"}
+              className="absolute inset-0 -z-20 h-full w-full object-cover"
+              style={{ filter: "saturate(0.85) contrast(1.05)" }}
+            />
+            {/* Vinheta + gradiente para legibilidade do texto */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.88) 100%)",
+              }}
+            />
+            <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 pb-12 md:pb-20">
+              <article
+                className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border backdrop-blur-md transition-all duration-700"
                 style={{
-                  background: "color-mix(in oklab, black 38%, transparent)",
+                  background: "color-mix(in oklab, black 42%, transparent)",
                   borderColor: "color-mix(in oklab, var(--ivory) 14%, transparent)",
                   boxShadow: "0 18px 50px -24px rgba(0,0,0,0.75)",
+                  opacity: reduce || active === i ? 1 : 0.72,
+                  transform: reduce || active === i ? "none" : "translateY(10px)",
                 }}
               >
                 <div className="font-mono text-xs tracking-[0.3em]" style={{ color: "var(--sage)" }}>
-                  {pillar?.n}
+                  {p.n}
                 </div>
                 <h3
                   className="mt-2 text-2xl sm:text-3xl leading-tight"
                   style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
                 >
-                  {pillar?.t}
+                  {p.t}
                 </h3>
                 <p
                   className="mt-3 text-[15px] sm:text-base leading-[1.65] font-medium"
-                  style={{ color: "color-mix(in oklab, var(--ivory) 78%, transparent)" }}
+                  style={{ color: "color-mix(in oklab, var(--ivory) 82%, transparent)" }}
                 >
-                  {pillar?.d}
+                  {p.d}
                 </p>
-              </motion.article>
-            </AnimatePresence>
+              </article>
+            </div>
           </div>
+        ))}
+      </div>
 
-          {/* Indicador: os 6 pilares, destaca o ativo, clicável */}
-          <div className="flex items-center justify-center gap-2.5 pb-2">
+      {/* Indicador: os 6 pilares, destaca o ativo, clicável */}
+      <div className="sticky bottom-3 z-10 flex items-center justify-center gap-2.5 py-2 pointer-events-none">
+        <div
+          className="pointer-events-auto flex items-center gap-2.5 px-3 rounded-full"
+          style={{ background: "color-mix(in oklab, black 45%, transparent)", backdropFilter: "blur(6px)" }}
+        >
             {PILLARS.map((p, i) => (
               <button
                 key={p.n}
@@ -381,12 +354,11 @@ export function PillarsVideo() {
                 />
               </button>
             ))}
-          </div>
         </div>
       </div>
 
-      {/* Fechamento / loop da experiência — fica no fim do scroll da seção */}
-      <div className="absolute bottom-6 inset-x-0 flex justify-center z-10">
+      {/* Fechamento / loop da experiência */}
+      <div className="relative flex justify-center pb-12 pt-4">
         <button
           type="button"
           onClick={backToTop}
