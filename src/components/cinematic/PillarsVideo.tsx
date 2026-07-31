@@ -250,13 +250,28 @@ export function PillarsVideo() {
 
   useAmbientAudio(soundOn, active);
 
-  const reduce = useReducedMotion();
+  const reduce = Boolean(useReducedMotion());
+  const bgVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [bgDuration, setBgDuration] = useState(0);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
   // Parallax sutil: o vídeo se desloca ~18% mais devagar que o scroll.
   const bgY = useTransform(scrollYProgress, [0, 1], ["-9%", "9%"]);
+
+  // Vídeo "andando" junto com o scroll: avança ao descer, volta ao subir —
+  // em vez de tocar sozinho em loop, independente da rolagem.
+  useEffect(() => {
+    if (reduce) return;
+    const unsubscribe = scrollYProgress.on("change", (v) => {
+      const video = bgVideoRef.current;
+      if (!video || !bgDuration) return;
+      const clamped = Math.min(1, Math.max(0, v));
+      video.currentTime = clamped * bgDuration;
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, bgDuration, reduce]);
 
   // Publica o pilar ativo para o indicador global de progresso.
   useEffect(() => {
@@ -304,20 +319,22 @@ export function PillarsVideo() {
     <section
       id="pilares"
       ref={sectionRef}
-      className="relative isolate overflow-x-clip py-14 md:py-20"
+      className="relative isolate overflow-hidden py-14 md:py-20"
       style={{ background: "var(--deep-blue)" }}
     >
       {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
       {bgReady && !bgFailed ? (
         <motion.video
+          ref={bgVideoRef}
           aria-hidden
-          autoPlay
+          autoPlay={reduce}
           muted
-          loop
+          loop={reduce}
           playsInline
-          preload="none"
+          preload="metadata"
+          onLoadedMetadata={(e) => setBgDuration(e.currentTarget.duration || 0)}
           onError={() => setBgFailed(true)}
-          className="absolute -z-10 object-cover cinematic-bg-video will-change-transform"
+          className="absolute -z-10 object-cover will-change-transform"
           style={{
             opacity: 0.55,
             filter: "saturate(0.85) contrast(1.05)",
