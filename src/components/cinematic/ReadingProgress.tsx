@@ -24,7 +24,7 @@ export function PillarIndicator() {
   return (
     <div
       aria-hidden={!inSection}
-      className="fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-50 hidden sm:flex flex-col items-start gap-3 transition-all duration-500"
+      className="fixed left-2 xl:left-4 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-start gap-3 transition-all duration-500"
       style={{
         opacity: inSection ? 1 : 0,
         transform: `translateY(-50%) translateX(${inSection ? "0" : "-12px"})`,
@@ -53,7 +53,7 @@ export function PillarIndicator() {
               }}
             />
             <span
-              className="font-mono text-[10px] uppercase tracking-[0.2em] transition-all duration-300"
+              className="hidden 2xl:inline font-mono text-[10px] uppercase tracking-[0.2em] transition-all duration-300"
               style={{
                 color: "var(--ivory)",
                 opacity: on ? 0.9 : 0,
