@@ -304,7 +304,7 @@ export function PillarsVideo() {
     <section
       id="pilares"
       ref={sectionRef}
-      className="relative isolate overflow-hidden py-14 md:py-20"
+      className="relative isolate overflow-x-clip py-14 md:py-20"
       style={{ background: "var(--deep-blue)" }}
     >
       {/* Vídeo de textura (silencioso, loop, lazy) — mais presente, com zoom lento cinematográfico */}
