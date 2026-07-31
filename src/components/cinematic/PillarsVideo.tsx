@@ -438,7 +438,6 @@ function PillarCard({
               >
                 {p.t}
               </h3>
-              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] text-muted-foreground">
               <p className="mt-2 text-[15px] sm:text-base leading-[1.65] font-medium text-muted-foreground">
                 {p.d}
               </p>
