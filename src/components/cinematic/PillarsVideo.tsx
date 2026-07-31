@@ -250,10 +250,6 @@ export function PillarsVideo() {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const goToPillar = useCallback((i: number) => {
-    blockRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, []);
-
   // Botão de som só aparece quando a pessoa já rolou até o fim da página,
   // para não interromper a experiência sensorial dos 6 pilares.
   const [showSound, setShowSound] = useState(false);
