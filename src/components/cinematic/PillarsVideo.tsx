@@ -246,6 +246,20 @@ export function PillarsVideo() {
     };
   }, []);
 
+  // Revelação suave do painel de fechamento (apenas visual, não toca no áudio)
+  const closingRef = useRef<HTMLDivElement | null>(null);
+  const [closingIn, setClosingIn] = useState(false);
+  useEffect(() => {
+    const el = closingRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => setClosingIn(e.isIntersecting),
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const backToTop = useCallback(() => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
