@@ -14,8 +14,6 @@ type Pillar = {
   audio?: string;
 };
 
-type PinState = "before" | "pinned" | "after";
-
 const PILLARS: Pillar[] = [
   {
     n: "01",
