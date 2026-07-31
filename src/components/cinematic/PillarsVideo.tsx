@@ -250,10 +250,6 @@ export function PillarsVideo() {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const goToPillar = useCallback((i: number) => {
-    blockRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, []);
-
   // Botão de som só aparece quando a pessoa já rolou até o fim da página,
   // para não interromper a experiência sensorial dos 6 pilares.
   const [showSound, setShowSound] = useState(false);
@@ -418,51 +414,33 @@ export function PillarsVideo() {
         ))}
       </div>
 
-      {/* Indicador: os 6 pilares, destaca o ativo, clicável */}
-      <div className="sticky bottom-3 z-10 flex items-center justify-center gap-2.5 py-2 pointer-events-none">
-        <div
-          className="pointer-events-auto flex items-center gap-2.5 px-3 rounded-full"
-          style={{ background: "color-mix(in oklab, black 45%, transparent)", backdropFilter: "blur(6px)" }}
-        >
-            {PILLARS.map((p, i) => (
-              <button
-                key={p.n}
-                type="button"
-                onClick={() => goToPillar(i)}
-                aria-label={`Ir para ${p.t}`}
-                aria-current={active === i}
-                className="min-h-[28px] min-w-[28px] flex items-center justify-center"
-              >
-                <span
-                  className="h-1.5 rounded-full transition-all duration-300"
-                  style={{
-                    width: active === i ? 28 : 8,
-                    background:
-                      active === i
-                        ? "var(--sage)"
-                        : "color-mix(in oklab, var(--ivory) 30%, transparent)",
-                  }}
-                />
-              </button>
-            ))}
-        </div>
-      </div>
-
       {/* Fechamento / loop da experiência */}
-      <div className="relative flex justify-center pb-12 pt-4">
+      <div
+        className="relative flex flex-col items-center justify-center gap-3 px-6 pb-16 pt-10 text-center"
+        style={{
+          background:
+            "linear-gradient(180deg, color-mix(in oklab, black 55%, transparent) 0%, color-mix(in oklab, black 88%, transparent) 100%)",
+        }}
+      >
+        <p
+          className="text-sm sm:text-base"
+          style={{ color: "color-mix(in oklab, var(--ivory) 62%, transparent)" }}
+        >
+          Seis pilares. Uma única estratégia de longevidade.
+        </p>
         <button
           type="button"
           onClick={backToTop}
-          className="group inline-flex items-center gap-3 min-h-[48px] px-6 rounded-full border transition-colors"
+          className="group inline-flex items-center gap-3 min-h-[52px] px-7 rounded-full border transition-transform duration-300 hover:scale-[1.03]"
           style={{
-            color: "var(--ivory)",
-            borderColor: "color-mix(in oklab, var(--ivory) 30%, transparent)",
-            background: "color-mix(in oklab, black 35%, transparent)",
+            color: "var(--ink, #0B0E14)",
+            borderColor: "transparent",
+            background: "var(--sage)",
           }}
         >
           <ArrowUp size={18} />
           <span className="italic text-lg sm:text-xl" style={{ fontFamily: "var(--font-serif)" }}>
-            Sentir tudo de novo
+            Reviver a experiência
           </span>
         </button>
       </div>
