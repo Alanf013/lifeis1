@@ -25,6 +25,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/sono.mp3",
   },
   {
     n: "02",
@@ -33,6 +34,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/alimentacao.mp3",
   },
   {
     n: "03",
@@ -41,6 +43,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/exercicio.mp3",
   },
   {
     n: "04",
@@ -49,6 +52,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/estresse.mp3",
   },
   {
     n: "05",
@@ -57,6 +61,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1476611317561-60117649dd94?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/ansiedade.mp3",
   },
   {
     n: "06",
@@ -65,6 +70,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/dor.mp3",
   },
 ];
 
