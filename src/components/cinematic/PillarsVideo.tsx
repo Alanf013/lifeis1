@@ -73,12 +73,12 @@ const PILLARS: Pillar[] = [
 
 /** Ganho relativo por pilar (volume geral baixo, sem sobreposição). */
 const AUDIO_GAIN: Record<number, number> = {
-  0: 0.16, // Sono — bem sutil
-  1: 0.18, // Alimentação
-  2: 0.22, // Exercício
-  3: 0.16, // Estresse
-  4: 0.18, // Ansiedade
-  5: 0.2, // Dor
+  0: 0.07, // Sono — quase imperceptível
+  1: 0.08, // Alimentação
+  2: 0.1, // Exercício
+  3: 0.07, // Estresse
+  4: 0.08, // Ansiedade
+  5: 0.09, // Dor
 };
 
 /** Troca instantânea de áudio ambiente entre pilares (sem sobreposição). */
