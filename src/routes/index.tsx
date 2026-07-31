@@ -120,8 +120,8 @@ function Index() {
     },
     {
       t: "Exercício Físico — Sarcopenia após os 30",
-      d: "Maior capacidade cardiorrespiratória (VO₂ máximo) reduz risco cardiovascular e mortalidade; adultos sedentários perdem 3–8% de massa muscular por década, e o treino de força reverte boa parte.",
-      f: "Journal of Applied Physiology · Volpi et al.",
+      d: "Maior capacidade cardiorrespiratória (VO₂ máximo) reduz risco cardiovascular e mortalidade; adultos sedentários perdem 3–8% de massa muscular por decade, e o treino de força reverte boa parte.",
+      f: "",
     },
     {
       t: "Gerenciamento do Estresse",
