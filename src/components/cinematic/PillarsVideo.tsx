@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
 import { WordReveal } from "./TextReveal";
 import { setPillarProgress } from "./pillarProgress";
 
@@ -71,34 +71,15 @@ const PILLARS: Pillar[] = [
   },
 ];
 
-function useInView<T extends HTMLElement>(rootMargin = "120px") {
-  const ref = useRef<T | null>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") {
-      setInView(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setInView(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [rootMargin]);
-  return { ref, inView };
-}
-
-/** Crossfade de áudio ambiente entre pilares, só depois de o usuário ativar o som. */
+/** Crossfade de áudio ambiente entre pilares. Toca por padrão; usuário pode desligar. */
 function useAmbientAudio(enabled: boolean, activeIndex: number) {
   const elsRef = useRef<Record<number, HTMLAudioElement>>({});
   const fadeRef = useRef<number | null>(null);
+  const activeIndexRef = useRef(activeIndex);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   useEffect(() => {
     if (!enabled) {
@@ -152,6 +133,21 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
     };
   }, [enabled, activeIndex]);
 
+  // Navegadores bloqueiam áudio com som antes da primeira interação real do
+  // usuário. Assim que ela acontecer (clique, tecla, toque ou scroll), tenta
+  // retomar a reprodução do pilar ativo naquele momento — dá a sensação de
+  // já "vir com som ligado" assim que a pessoa começa a usar o site.
+  useEffect(() => {
+    if (!enabled) return;
+    const tryResume = () => {
+      const el = elsRef.current[activeIndexRef.current];
+      el?.play().catch(() => {});
+    };
+    const events: Array<keyof WindowEventMap> = ["pointerdown", "keydown", "touchstart", "wheel"];
+    events.forEach((ev) => window.addEventListener(ev, tryResume, { once: true, passive: true }));
+    return () => events.forEach((ev) => window.removeEventListener(ev, tryResume));
+  }, [enabled]);
+
   useEffect(
     () => () => {
       Object.values(elsRef.current).forEach((a) => a.pause());
@@ -163,17 +159,32 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
 
 export function PillarsVideo() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
   const [active, setActive] = useState(0);
 
   useAmbientAudio(soundOn, active);
 
   const reduce = Boolean(useReducedMotion());
+  const total = PILLARS.length;
+
+  // Progresso de scroll ao longo de TODA a seção (que agora é bem mais alta,
+  // ~total x 100vh). O índice ativo é uma função direta dessa posição —
+  // nunca "pula" pilares, mesmo em scroll rápido, porque não depende de
+  // IntersectionObserver por card (que podia perder cards intermediários).
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const idx = Math.min(total - 1, Math.max(0, Math.floor(v * total)));
+    setActive((prev) => (prev === idx ? prev : idx));
+  });
 
   // Publica o pilar ativo para o indicador global de progresso.
   useEffect(() => {
-    setPillarProgress({ active, total: PILLARS.length });
-  }, [active]);
+    setPillarProgress({ active, total });
+  }, [active, total]);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -194,204 +205,202 @@ export function PillarsVideo() {
     sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const bgPoster = PILLARS[active]?.poster;
+  const goToPillar = useCallback(
+    (i: number) => {
+      const el = sectionRef.current;
+      if (!el) return;
+      const step = el.offsetHeight / total;
+      const target = el.offsetTop + step * i + step / 2;
+      window.scrollTo({ top: target, behavior: "smooth" });
+    },
+    [total],
+  );
+
+  const pillar = PILLARS[active];
+
+  // Altura total da seção: um "andar" de 100vh por pilar (um pouco mais em
+  // mobile, onde o texto é mais alto que a tela e 100vh apertaria demais).
+  const sectionHeight = useMemo(() => `calc(var(--pillar-step, 100vh) * ${total})`, [total]);
 
   return (
     <section
       id="pilares"
       ref={sectionRef}
-      className="relative isolate overflow-hidden py-14 md:py-20"
-      style={{ background: "var(--deep-blue)" }}
+      className="relative isolate [--pillar-step:100vh] max-md:[--pillar-step:145vh]"
+      style={{ height: sectionHeight, background: "var(--deep-blue)" }}
     >
-      {/* Fundo: imagem do pilar ativo, com crossfade suave a cada troca — sem vídeo, leve e confiável */}
-      <AnimatePresence>
-        <motion.div
-          key={bgPoster}
-          aria-hidden
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0 : 1.1, ease: "easeInOut" }}
-          className="absolute inset-0 -z-10"
-          style={{
-            backgroundImage: `url(${bgPoster})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "saturate(0.85) contrast(1.05) blur(1px)",
-          }}
-        />
-      </AnimatePresence>
-      {/* Vinheta cinematográfica: escuro nas bordas e no topo/rodapé, mais claro no centro para deixar a imagem respirar */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.68) 55%, rgba(0,0,0,0.9) 100%)",
-        }}
-      />
-      {/* Reforço no topo e no rodapé para transicionar suavemente com as seções vizinhas */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.8) 100%)",
-        }}
-      />
-      {/* Grain analógico */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
-        style={{
-          opacity: 0.09,
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-        }}
-      />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Controle de som — silenciado por padrão */}
-        <div className="flex justify-end mb-6">
-          <button
-            type="button"
-            onClick={() => setSoundOn((v) => !v)}
-            aria-pressed={soundOn}
-            aria-label={soundOn ? "Desativar som ambiente" : "Ativar som ambiente"}
-            className="inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full border font-mono text-[11px] uppercase tracking-[0.24em] transition-colors"
-            style={{
-              color: "var(--ivory)",
-              borderColor: "color-mix(in oklab, var(--ivory) 32%, transparent)",
-              background: "color-mix(in oklab, black 30%, transparent)",
-            }}
-          >
-            {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            {soundOn ? "Som ligado" : "Ativar som"}
-          </button>
-        </div>
-
-        <div className="sticky top-16 md:top-20 z-10 max-w-2xl mb-10 md:mb-14 pb-4 pt-2">
-          <div
+      <div className="sticky top-0 h-[100vh] overflow-hidden flex flex-col">
+        {/* Fundo: imagem do pilar ativo, com crossfade suave a cada troca */}
+        <AnimatePresence>
+          <motion.div
+            key={pillar?.poster}
             aria-hidden
-            className="absolute inset-x-[-1rem] inset-y-[-1rem] -z-10 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 1.1, ease: "easeInOut" }}
+            className="absolute inset-0 -z-10"
             style={{
-              background:
-                "linear-gradient(180deg, color-mix(in oklab, var(--deep-blue) 78%, transparent) 55%, transparent 100%)",
+              backgroundImage: `url(${pillar?.poster})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "saturate(0.85) contrast(1.05) blur(1px)",
             }}
           />
-          <div
-            className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
-            style={{ color: "var(--sage)" }}
-          >
-            <span
-              className="inline-block h-px w-8 align-middle mr-3"
-              style={{ background: "var(--sage)" }}
-            />
-            Pilares · 06
-          </div>
-          <h2
-            className="text-4xl sm:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
-            style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
-          >
-            <WordReveal as="div" text="Seis pilares." />
-            <WordReveal
-              as="div"
-              text="Uma estratégia."
-              delay={0.12}
-              className="italic"
-              style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
-            />
-          </h2>
-        </div>
+        </AnimatePresence>
+        {/* Vinheta cinematográfica */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.68) 55%, rgba(0,0,0,0.9) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.8) 100%)",
+          }}
+        />
+        {/* Grain analógico */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
+          style={{
+            opacity: 0.09,
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+          }}
+        />
 
-        <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {PILLARS.map((p, i) => (
-            <PillarCard key={p.n} p={p} i={i} onFocus={setActive} />
-          ))}
-        </div>
-
-        {/* Fechamento / loop da experiência */}
-        <div className="mt-12 md:mt-16 flex justify-center">
-          <button
-            type="button"
-            onClick={backToTop}
-            className="group inline-flex items-center gap-3 min-h-[48px] px-6 rounded-full border transition-colors"
-            style={{
-              color: "var(--ivory)",
-              borderColor: "color-mix(in oklab, var(--ivory) 30%, transparent)",
-              background: "color-mix(in oklab, black 25%, transparent)",
-            }}
-          >
-            <ArrowUp size={18} />
-            <span
-              className="italic text-lg sm:text-xl"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
-              Sentir tudo de novo
-            </span>
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PillarCard({
-  p,
-  i,
-  onFocus,
-}: {
-  p: Pillar;
-  i: number;
-  onFocus: (i: number) => void;
-}) {
-  const { ref, inView } = useInView<HTMLElement>("-40px");
-
-  // Foco sonoro: card ocupando mais de 50% de visibilidade
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && e.intersectionRatio >= 0.5) onFocus(i);
-        });
-      },
-      { threshold: [0.5, 0.75] },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [i, onFocus, ref]);
-
-  return (
-            <article
-              ref={ref}
-              className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-6 sm:p-7 border backdrop-blur-md`}
-              style={{
-                background: "color-mix(in oklab, black 38%, transparent)",
-                borderColor: "color-mix(in oklab, var(--ivory) 14%, transparent)",
-                boxShadow: "0 18px 50px -24px rgba(0,0,0,0.75)",
-                transitionDelay: `${(i % 3) * 80}ms`,
-              }}
-            >
+        <div className="relative flex-1 flex flex-col max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 md:py-10">
+          {/* Cabeçalho: título fixo no topo + controle de som */}
+          <div className="flex items-start justify-between gap-4">
+            <div className="max-w-xl">
               <div
-                className="font-mono text-xs tracking-[0.3em]"
+                className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-4"
                 style={{ color: "var(--sage)" }}
               >
-                {p.n}
+                <span
+                  className="inline-block h-px w-8 align-middle mr-3"
+                  style={{ background: "var(--sage)" }}
+                />
+                Pilares · 06
               </div>
-              <h3
-                className="mt-2 text-2xl sm:text-3xl leading-tight"
+              <h2
+                className="text-3xl sm:text-4xl md:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
                 style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
               >
-                {p.t}
-              </h3>
-              <p
-                className="mt-3 text-[15px] sm:text-base leading-[1.65] font-medium"
-                style={{ color: "color-mix(in oklab, var(--ivory) 78%, transparent)" }}
+                <WordReveal as="div" text="Seis pilares." />
+                <WordReveal
+                  as="div"
+                  text="Uma estratégia."
+                  delay={0.12}
+                  className="italic"
+                  style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
+                />
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSoundOn((v) => !v)}
+              aria-pressed={soundOn}
+              aria-label={soundOn ? "Desativar som ambiente" : "Ativar som ambiente"}
+              className="shrink-0 inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full border font-mono text-[11px] uppercase tracking-[0.24em] transition-colors"
+              style={{
+                color: "var(--ivory)",
+                borderColor: "color-mix(in oklab, var(--ivory) 32%, transparent)",
+                background: "color-mix(in oklab, black 30%, transparent)",
+              }}
+            >
+              {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              {soundOn ? "Som ligado" : "Ativar som"}
+            </button>
+          </div>
+
+          {/* Card do pilar ativo — um de cada vez, crossfade suave */}
+          <div className="relative flex-1 flex items-center">
+            <AnimatePresence mode="wait">
+              <motion.article
+                key={pillar?.n}
+                initial={{ opacity: 0, y: reduce ? 0 : 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: reduce ? 0 : -18 }}
+                transition={{ duration: reduce ? 0 : 0.5, ease: [0.23, 1, 0.32, 1] }}
+                className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border backdrop-blur-md"
+                style={{
+                  background: "color-mix(in oklab, black 38%, transparent)",
+                  borderColor: "color-mix(in oklab, var(--ivory) 14%, transparent)",
+                  boxShadow: "0 18px 50px -24px rgba(0,0,0,0.75)",
+                }}
               >
-                {p.d}
-              </p>
-            </article>
+                <div className="font-mono text-xs tracking-[0.3em]" style={{ color: "var(--sage)" }}>
+                  {pillar?.n}
+                </div>
+                <h3
+                  className="mt-2 text-2xl sm:text-3xl leading-tight"
+                  style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
+                >
+                  {pillar?.t}
+                </h3>
+                <p
+                  className="mt-3 text-[15px] sm:text-base leading-[1.65] font-medium"
+                  style={{ color: "color-mix(in oklab, var(--ivory) 78%, transparent)" }}
+                >
+                  {pillar?.d}
+                </p>
+              </motion.article>
+            </AnimatePresence>
+          </div>
+
+          {/* Indicador: os 6 pilares, destaca o ativo, clicável */}
+          <div className="flex items-center justify-center gap-2.5 pb-2">
+            {PILLARS.map((p, i) => (
+              <button
+                key={p.n}
+                type="button"
+                onClick={() => goToPillar(i)}
+                aria-label={`Ir para ${p.t}`}
+                aria-current={active === i}
+                className="min-h-[28px] min-w-[28px] flex items-center justify-center"
+              >
+                <span
+                  className="h-1.5 rounded-full transition-all duration-300"
+                  style={{
+                    width: active === i ? 28 : 8,
+                    background:
+                      active === i
+                        ? "var(--sage)"
+                        : "color-mix(in oklab, var(--ivory) 30%, transparent)",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Fechamento / loop da experiência — fica no fim do scroll da seção */}
+      <div className="absolute bottom-6 inset-x-0 flex justify-center z-10">
+        <button
+          type="button"
+          onClick={backToTop}
+          className="group inline-flex items-center gap-3 min-h-[48px] px-6 rounded-full border transition-colors"
+          style={{
+            color: "var(--ivory)",
+            borderColor: "color-mix(in oklab, var(--ivory) 30%, transparent)",
+            background: "color-mix(in oklab, black 35%, transparent)",
+          }}
+        >
+          <ArrowUp size={18} />
+          <span className="italic text-lg sm:text-xl" style={{ fontFamily: "var(--font-serif)" }}>
+            Sentir tudo de novo
+          </span>
+        </button>
+      </div>
+    </section>
   );
 }
