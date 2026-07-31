@@ -333,43 +333,95 @@ export function PillarsVideo() {
         <div className="max-w-2xl mb-10 md:mb-14">
           <div
             className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
-            style={{ color: "var(--sage-deep)" }}
+            style={{ color: "var(--sage)" }}
           >
             <span
               className="inline-block h-px w-8 align-middle mr-3"
-              style={{ background: "var(--sage-deep)" }}
+              style={{ background: "var(--sage)" }}
             />
             Pilares · 06
           </div>
           <h2
             className="text-4xl sm:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
-            style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
+            style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
           >
             Seis pilares.
-            <span className="block italic text-muted-foreground">Uma estratégia.</span>
+            <span
+              className="block italic"
+              style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
+            >
+              Uma estratégia.
+            </span>
           </h2>
         </div>
 
         <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {PILLARS.map((p, i) => (
-            <PillarCard key={p.n} p={p} i={i} />
+            <PillarCard key={p.n} p={p} i={i} onFocus={setActive} />
           ))}
+        </div>
+
+        {/* Fechamento / loop da experiência */}
+        <div className="mt-12 md:mt-16 flex justify-center">
+          <button
+            type="button"
+            onClick={backToTop}
+            className="group inline-flex items-center gap-3 min-h-[48px] px-6 rounded-full border transition-colors"
+            style={{
+              color: "var(--ivory)",
+              borderColor: "color-mix(in oklab, var(--ivory) 30%, transparent)",
+              background: "color-mix(in oklab, black 25%, transparent)",
+            }}
+          >
+            <ArrowUp size={18} />
+            <span
+              className="italic text-lg sm:text-xl"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              Sentir tudo de novo
+            </span>
+          </button>
         </div>
       </div>
     </section>
   );
 }
 
-function PillarCard({ p, i }: { p: Pillar; i: number }) {
+function PillarCard({
+  p,
+  i,
+  onFocus,
+}: {
+  p: Pillar;
+  i: number;
+  onFocus: (i: number) => void;
+}) {
   const { ref, inView } = useInView<HTMLElement>("-40px");
+
+  // Foco sonoro: card ocupando mais de 50% de visibilidade
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.intersectionRatio >= 0.5) onFocus(i);
+        });
+      },
+      { threshold: [0.5, 0.75] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [i, onFocus, ref]);
+
   return (
             <article
               ref={ref}
               className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-4 sm:p-5 border`}
               style={{
-                background: "color-mix(in oklab, var(--card) 96%, transparent)",
+                background: "color-mix(in oklab, var(--card) 97%, transparent)",
                 borderColor: "var(--border)",
-                boxShadow: "var(--shadow-soft)",
+                boxShadow: "0 18px 50px -24px rgba(0,0,0,0.65)",
                 transitionDelay: `${(i % 3) * 80}ms`,
               }}
             >
@@ -387,6 +439,7 @@ function PillarCard({ p, i }: { p: Pillar; i: number }) {
                 {p.t}
               </h3>
               <p className="mt-2 text-[15px] sm:text-base leading-[1.65] text-muted-foreground">
+              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] font-medium text-muted-foreground">
                 {p.d}
               </p>
 
