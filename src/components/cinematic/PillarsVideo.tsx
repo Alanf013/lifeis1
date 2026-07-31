@@ -71,7 +71,17 @@ const PILLARS: Pillar[] = [
   },
 ];
 
-/** Crossfade de áudio ambiente entre pilares. Toca por padrão; usuário pode desligar. */
+/** Ganho relativo por pilar (volume geral baixo, sem sobreposição). */
+const AUDIO_GAIN: Record<number, number> = {
+  0: 0.16, // Sono — bem sutil
+  1: 0.18, // Alimentação
+  2: 0.22, // Exercício
+  3: 0.16, // Estresse
+  4: 0.18, // Ansiedade
+  5: 0.2, // Dor
+};
+
+/** Troca instantânea de áudio ambiente entre pilares (sem sobreposição). */
 function useAmbientAudio(enabled: boolean, activeIndex: number) {
   const elsRef = useRef<Record<number, HTMLAudioElement>>({});
   const fadeRef = useRef<number | null>(null);
@@ -92,6 +102,15 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
     const target = PILLARS[activeIndex]?.audio;
     if (!target) return;
 
+    // Para imediatamente qualquer outro pilar: nunca dois sons juntos.
+    Object.entries(elsRef.current).forEach(([k, a]) => {
+      if (Number(k) !== activeIndex) {
+        a.pause();
+        a.currentTime = 0;
+        a.volume = 0;
+      }
+    });
+
     let el = elsRef.current[activeIndex];
     if (!el) {
       el = new Audio(target);
@@ -100,30 +119,8 @@ function useAmbientAudio(enabled: boolean, activeIndex: number) {
       el.volume = 0;
       elsRef.current[activeIndex] = el;
     }
+    el.volume = AUDIO_GAIN[activeIndex] ?? 0.18;
     el.play().catch(() => {});
-
-    const MAX = 0.55;
-    const STEP = 1000 / 60 / 500; // 0.5s
-    if (fadeRef.current) window.clearInterval(fadeRef.current);
-    fadeRef.current = window.setInterval(() => {
-      let done = true;
-      Object.entries(elsRef.current).forEach(([k, a]) => {
-        const isActive = Number(k) === activeIndex;
-        const goal = isActive ? MAX : 0;
-        const delta = STEP * MAX;
-        if (Math.abs(a.volume - goal) <= delta) {
-          a.volume = goal;
-          if (!isActive && a.volume === 0 && !a.paused) a.pause();
-        } else {
-          a.volume = Math.min(1, Math.max(0, a.volume + (a.volume < goal ? delta : -delta)));
-          done = false;
-        }
-      });
-      if (done && fadeRef.current) {
-        window.clearInterval(fadeRef.current);
-        fadeRef.current = null;
-      }
-    }, 1000 / 60);
 
     return () => {
       if (fadeRef.current) {
