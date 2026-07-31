@@ -269,6 +269,29 @@ export function PillarsVideo() {
         </div>
       </div>
 
+      {/* Controle de som fixo no topo — sempre disponível, bem pequeno */}
+      <button
+        type="button"
+        onClick={() => setSoundOn((v) => !v)}
+        aria-pressed={soundOn}
+        aria-label={soundOn ? "Desligar som ambiente" : "Ligar som ambiente"}
+        title={soundOn ? "Desligar som ambiente" : "Ligar som ambiente"}
+        className="fixed z-50 inline-flex items-center justify-center rounded-full border transition-opacity duration-300 hover:opacity-100"
+        style={{
+          right: "calc(0.9rem + env(safe-area-inset-right))",
+          top: "calc(4.6rem + env(safe-area-inset-top))",
+          height: 30,
+          width: 30,
+          color: "var(--ivory)",
+          borderColor: "color-mix(in oklab, var(--ivory) 26%, transparent)",
+          background: "color-mix(in oklab, black 55%, transparent)",
+          backdropFilter: "blur(6px)",
+          opacity: 0.7,
+        }}
+      >
+        {soundOn ? <Volume2 size={13} /> : <VolumeX size={13} />}
+      </button>
+
       {/* Controle de som discreto — só no fim da página */}
       <button
         type="button"
