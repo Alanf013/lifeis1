@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Volume2, VolumeX, ArrowUp } from "lucide-react";
 
 type Pillar = {
   n: string;
@@ -6,9 +7,15 @@ type Pillar = {
   d: string;
   f: string;
   poster: string;
+  /** arquivo de áudio ambiente do pilar (loop, volume baixo) */
+  audio?: string;
   /** Coloque aqui os arquivos quando estiverem prontos: { mp4: "/videos/vo2.mp4", webm: "/videos/vo2.webm" } */
   video?: { mp4?: string; webm?: string };
 };
+
+/** Vídeo de textura de fundo da seção (10s, loop, sem áudio). */
+const BG_VIDEO_MP4 = "/videos/pilares-fundo.mp4";
+const BG_VIDEO_WEBM = "/videos/pilares-fundo.webm";
 
 const PILLARS: Pillar[] = [
   {
