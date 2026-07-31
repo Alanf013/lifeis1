@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
+import bgVideoAsset from "@/assets/pilares-fundo.mp4.asset.json";
 
 type Pillar = {
   n: string;
@@ -14,8 +15,7 @@ type Pillar = {
 };
 
 /** Vídeo de textura de fundo da seção (10s, loop, sem áudio). */
-const BG_VIDEO_MP4 = "/videos/pilares-fundo.mp4";
-const BG_VIDEO_WEBM = "/videos/pilares-fundo.webm";
+const BG_VIDEO_MP4 = bgVideoAsset.url;
 
 const PILLARS: Pillar[] = [
   {
@@ -289,7 +289,6 @@ export function PillarsVideo() {
           className="absolute inset-0 -z-10 h-full w-full object-cover"
           style={{ opacity: 0.3 }}
         >
-          <source src={BG_VIDEO_WEBM} type="video/webm" />
           <source src={BG_VIDEO_MP4} type="video/mp4" />
         </video>
       ) : null}
