@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Volume2, VolumeX, ArrowUp } from "lucide-react";
 
 type Pillar = {
   n: string;
@@ -6,9 +7,15 @@ type Pillar = {
   d: string;
   f: string;
   poster: string;
+  /** arquivo de áudio ambiente do pilar (loop, volume baixo) */
+  audio?: string;
   /** Coloque aqui os arquivos quando estiverem prontos: { mp4: "/videos/vo2.mp4", webm: "/videos/vo2.webm" } */
   video?: { mp4?: string; webm?: string };
 };
+
+/** Vídeo de textura de fundo da seção (10s, loop, sem áudio). */
+const BG_VIDEO_MP4 = "/videos/pilares-fundo.mp4";
+const BG_VIDEO_WEBM = "/videos/pilares-fundo.webm";
 
 const PILLARS: Pillar[] = [
   {
@@ -18,6 +25,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1520206183501-b80df61043c2?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/sono.mp3",
   },
   {
     n: "02",
@@ -26,6 +34,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/alimentacao.mp3",
   },
   {
     n: "03",
@@ -34,6 +43,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/exercicio.mp3",
   },
   {
     n: "04",
@@ -42,6 +52,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/estresse.mp3",
   },
   {
     n: "05",
@@ -50,6 +61,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1476611317561-60117649dd94?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/ansiedade.mp3",
   },
   {
     n: "06",
@@ -58,6 +70,7 @@ const PILLARS: Pillar[] = [
     f: "",
     poster:
       "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=70",
+    audio: "/audio/dor.mp3",
   },
 ];
 
@@ -159,50 +172,256 @@ function PillarMedia({ p }: { p: Pillar }) {
   );
 }
 
+/** Crossfade de áudio ambiente entre pilares, só depois de o usuário ativar o som. */
+function useAmbientAudio(enabled: boolean, activeIndex: number) {
+  const elsRef = useRef<Record<number, HTMLAudioElement>>({});
+  const fadeRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!enabled) {
+      Object.values(elsRef.current).forEach((a) => {
+        a.pause();
+        a.currentTime = 0;
+      });
+      return;
+    }
+    const target = PILLARS[activeIndex]?.audio;
+    if (!target) return;
+
+    let el = elsRef.current[activeIndex];
+    if (!el) {
+      el = new Audio(target);
+      el.loop = true;
+      el.preload = "none";
+      el.volume = 0;
+      elsRef.current[activeIndex] = el;
+    }
+    el.play().catch(() => {});
+
+    const MAX = 0.25;
+    const STEP = 1000 / 60 / 500; // 0.5s
+    if (fadeRef.current) window.clearInterval(fadeRef.current);
+    fadeRef.current = window.setInterval(() => {
+      let done = true;
+      Object.entries(elsRef.current).forEach(([k, a]) => {
+        const isActive = Number(k) === activeIndex;
+        const goal = isActive ? MAX : 0;
+        const delta = STEP * MAX;
+        if (Math.abs(a.volume - goal) <= delta) {
+          a.volume = goal;
+          if (!isActive && a.volume === 0 && !a.paused) a.pause();
+        } else {
+          a.volume = Math.min(1, Math.max(0, a.volume + (a.volume < goal ? delta : -delta)));
+          done = false;
+        }
+      });
+      if (done && fadeRef.current) {
+        window.clearInterval(fadeRef.current);
+        fadeRef.current = null;
+      }
+    }, 1000 / 60);
+
+    return () => {
+      if (fadeRef.current) {
+        window.clearInterval(fadeRef.current);
+        fadeRef.current = null;
+      }
+    };
+  }, [enabled, activeIndex]);
+
+  useEffect(
+    () => () => {
+      Object.values(elsRef.current).forEach((a) => a.pause());
+      elsRef.current = {};
+    },
+    [],
+  );
+}
+
 export function PillarsVideo() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [bgReady, setBgReady] = useState(false);
+  const [bgFailed, setBgFailed] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+  const [active, setActive] = useState(0);
+
+  useAmbientAudio(soundOn, active);
+
+  // Lazy: só baixa o vídeo de fundo quando a seção se aproxima do viewport.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setBgReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const backToTop = useCallback(() => {
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   return (
-    <section id="pilares" className="relative py-14 md:py-20">
+    <section
+      id="pilares"
+      ref={sectionRef}
+      className="relative isolate overflow-hidden py-14 md:py-20"
+      style={{ background: "var(--deep-blue)" }}
+    >
+      {/* Vídeo de textura (silencioso, loop, lazy) */}
+      {bgReady && !bgFailed ? (
+        <video
+          aria-hidden
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          onError={() => setBgFailed(true)}
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          style={{ opacity: 0.3 }}
+        >
+          <source src={BG_VIDEO_WEBM} type="video/webm" />
+          <source src={BG_VIDEO_MP4} type="video/mp4" />
+        </video>
+      ) : null}
+      {/* Overlay escuro */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none"
+        style={{ background: "rgba(0,0,0,0.55)" }}
+      />
+      {/* Grain analógico */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 pointer-events-none mix-blend-overlay"
+        style={{
+          opacity: 0.07,
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Controle de som — silenciado por padrão */}
+        <div className="flex justify-end mb-6">
+          <button
+            type="button"
+            onClick={() => setSoundOn((v) => !v)}
+            aria-pressed={soundOn}
+            aria-label={soundOn ? "Desativar som ambiente" : "Ativar som ambiente"}
+            className="inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full border font-mono text-[11px] uppercase tracking-[0.24em] transition-colors"
+            style={{
+              color: "var(--ivory)",
+              borderColor: "color-mix(in oklab, var(--ivory) 32%, transparent)",
+              background: "color-mix(in oklab, black 30%, transparent)",
+            }}
+          >
+            {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {soundOn ? "Som ligado" : "Ativar som"}
+          </button>
+        </div>
+
         <div className="max-w-2xl mb-10 md:mb-14">
           <div
             className="text-[12px] uppercase tracking-[0.3em] font-mono font-medium mb-5"
-            style={{ color: "var(--sage-deep)" }}
+            style={{ color: "var(--sage)" }}
           >
             <span
               className="inline-block h-px w-8 align-middle mr-3"
-              style={{ background: "var(--sage-deep)" }}
+              style={{ background: "var(--sage)" }}
             />
             Pilares · 06
           </div>
           <h2
             className="text-4xl sm:text-5xl leading-[1.05] tracking-[-0.02em] font-normal"
-            style={{ fontFamily: "var(--font-serif)", color: "var(--deep-blue)" }}
+            style={{ fontFamily: "var(--font-serif)", color: "var(--ivory)" }}
           >
             Seis pilares.
-            <span className="block italic text-muted-foreground">Uma estratégia.</span>
+            <span
+              className="block italic"
+              style={{ color: "color-mix(in oklab, var(--ivory) 72%, transparent)" }}
+            >
+              Uma estratégia.
+            </span>
           </h2>
         </div>
 
         <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {PILLARS.map((p, i) => (
-            <PillarCard key={p.n} p={p} i={i} />
+            <PillarCard key={p.n} p={p} i={i} onFocus={setActive} />
           ))}
+        </div>
+
+        {/* Fechamento / loop da experiência */}
+        <div className="mt-12 md:mt-16 flex justify-center">
+          <button
+            type="button"
+            onClick={backToTop}
+            className="group inline-flex items-center gap-3 min-h-[48px] px-6 rounded-full border transition-colors"
+            style={{
+              color: "var(--ivory)",
+              borderColor: "color-mix(in oklab, var(--ivory) 30%, transparent)",
+              background: "color-mix(in oklab, black 25%, transparent)",
+            }}
+          >
+            <ArrowUp size={18} />
+            <span
+              className="italic text-lg sm:text-xl"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              Sentir tudo de novo
+            </span>
+          </button>
         </div>
       </div>
     </section>
   );
 }
 
-function PillarCard({ p, i }: { p: Pillar; i: number }) {
+function PillarCard({
+  p,
+  i,
+  onFocus,
+}: {
+  p: Pillar;
+  i: number;
+  onFocus: (i: number) => void;
+}) {
   const { ref, inView } = useInView<HTMLElement>("-40px");
+
+  // Foco sonoro: card ocupando mais de 50% de visibilidade
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.intersectionRatio >= 0.5) onFocus(i);
+        });
+      },
+      { threshold: [0.5, 0.75] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [i, onFocus, ref]);
+
   return (
             <article
               ref={ref}
               className={`reveal${inView ? " reveal-in" : ""} card-lift rounded-2xl p-4 sm:p-5 border`}
               style={{
-                background: "color-mix(in oklab, var(--card) 96%, transparent)",
+                background: "color-mix(in oklab, var(--card) 97%, transparent)",
                 borderColor: "var(--border)",
-                boxShadow: "var(--shadow-soft)",
+                boxShadow: "0 18px 50px -24px rgba(0,0,0,0.65)",
                 transitionDelay: `${(i % 3) * 80}ms`,
               }}
             >
@@ -219,7 +438,7 @@ function PillarCard({ p, i }: { p: Pillar; i: number }) {
               >
                 {p.t}
               </h3>
-              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] text-muted-foreground">
+              <p className="mt-2 text-[15px] sm:text-base leading-[1.65] font-medium text-muted-foreground">
                 {p.d}
               </p>
 
