@@ -213,6 +213,24 @@ export function PillarsVideo() {
     blockRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, []);
 
+  // Botão de som só aparece quando a pessoa já rolou até o fim da página,
+  // para não interromper a experiência sensorial dos 6 pilares.
+  const [showSound, setShowSound] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY + window.innerHeight;
+      const h = document.documentElement.scrollHeight;
+      setShowSound(y >= h - 120);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
   return (
     <section
       id="pilares"
@@ -248,23 +266,31 @@ export function PillarsVideo() {
                 />
               </h2>
             </div>
-            <button
-              type="button"
-              onClick={() => setSoundOn((v) => !v)}
-              aria-pressed={soundOn}
-              aria-label={soundOn ? "Desativar som ambiente" : "Ativar som ambiente"}
-              className="shrink-0 inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full border font-mono text-[11px] uppercase tracking-[0.24em] transition-colors"
-              style={{
-                color: "var(--ivory)",
-                borderColor: "color-mix(in oklab, var(--ivory) 32%, transparent)",
-                background: "color-mix(in oklab, black 30%, transparent)",
-              }}
-            >
-              {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              {soundOn ? "Som ligado" : "Ativar som"}
-            </button>
         </div>
       </div>
+
+      {/* Controle de som discreto — só no fim da página */}
+      <button
+        type="button"
+        onClick={() => setSoundOn((v) => !v)}
+        aria-pressed={soundOn}
+        aria-hidden={!showSound}
+        tabIndex={showSound ? 0 : -1}
+        aria-label={soundOn ? "Desligar som ambiente" : "Ligar som ambiente"}
+        className="fixed left-3 z-40 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] transition-opacity duration-500"
+        style={{
+          bottom: "calc(0.75rem + env(safe-area-inset-bottom))",
+          color: "var(--ivory)",
+          borderColor: "color-mix(in oklab, var(--ivory) 26%, transparent)",
+          background: "color-mix(in oklab, black 55%, transparent)",
+          backdropFilter: "blur(6px)",
+          opacity: showSound ? 0.75 : 0,
+          pointerEvents: showSound ? "auto" : "none",
+        }}
+      >
+        {soundOn ? <VolumeX size={12} /> : <Volume2 size={12} />}
+        {soundOn ? "Desligar som" : "Ligar som"}
+      </button>
 
       {/* Blocos: um pilar após o outro, na ordem, com a imagem visível */}
       <div className="flex flex-col">
