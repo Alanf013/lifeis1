@@ -10,7 +10,7 @@ import { ArrowRight, Download, Instagram, MessageCircle } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { trackEvent } from "@/lib/analytics";
-import { ReadingProgress, NeonClock, PillarIndicator } from "@/components/cinematic/ReadingProgress";
+import { ReadingProgress, PillarIndicator } from "@/components/cinematic/ReadingProgress";
 import { WordReveal } from "@/components/cinematic/TextReveal";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
 import { ExitIntentModal } from "@/components/ExitIntentModal";
@@ -192,7 +192,6 @@ function Index() {
       />
       <ReadingProgress />
       <PillarIndicator />
-      <NeonClock />
       {/* Header */}
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
@@ -273,13 +272,6 @@ function Index() {
               >
                 Faça uma avaliação no WhatsApp
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </a>
-              <a
-                href="#pilares"
-                className="inline-flex items-center justify-center gap-2 rounded-full border px-8 py-4 text-lg font-medium min-h-[56px]"
-                style={{ borderColor: "color-mix(in oklab, var(--sage-deep) 45%, transparent)", color: "var(--sage-deep)" }}
-              >
-                Como funciona
               </a>
             </div>
           </motion.div>
@@ -457,14 +449,8 @@ function Index() {
             que podem mudar a sua próxima década.
           </p>
           <div className="mt-8">
-            {/*
-              TODO: subir o e-book real em public/assets/guia-longevidade-aplicada.pdf
-              (nome exato) antes de publicar. Enquanto o arquivo não existir,
-              este download não vai funcionar.
-            */}
             <a
-              href="/assets/guia-longevidade-aplicada.pdf"
-              download
+              href="/api/public/guia"
               onClick={() => trackEvent("guia_pdf_clicado", { local: "cta_final" })}
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
             >
@@ -473,6 +459,19 @@ function Index() {
             </a>
             <p className="mt-3 text-sm text-muted-foreground">
               Download imediato · sem cadastro · 100% gratuito
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Não conseguiu baixar?{" "}
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("whatsapp_clicado", { local: "fallback_guia" })}
+                className="underline underline-offset-4"
+                style={{ color: "var(--sage-deep)" }}
+              >
+                fale com o especialista no WhatsApp
+              </a>
             </p>
           </div>
         </Reveal>
