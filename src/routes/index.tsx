@@ -233,10 +233,6 @@ function Index() {
             >
               <Instagram className="h-5 w-5" />
             </a>
-            <a href="#cta" className="btn-neon inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-medium">
-              Protocolo
-              <ArrowUpRight className="h-4 w-4 hidden sm:inline" />
-            </a>
           </div>
         </div>
       </header>
@@ -268,8 +264,14 @@ function Index() {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <a href="#cta" className="btn-neon group inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold min-h-[56px]">
-                Começar avaliação
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("whatsapp_clicado", { local: "hero" })}
+                className="btn-neon group inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold min-h-[56px]"
+              >
+                Faça uma avaliação no WhatsApp
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
