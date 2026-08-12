@@ -10,7 +10,7 @@ import { ArrowRight, Download, Instagram, MessageCircle } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { trackEvent } from "@/lib/analytics";
-import { ReadingProgress, NeonClock, PillarIndicator } from "@/components/cinematic/ReadingProgress";
+import { ReadingProgress, PillarIndicator } from "@/components/cinematic/ReadingProgress";
 import { WordReveal } from "@/components/cinematic/TextReveal";
 import { PillarsVideo } from "@/components/cinematic/PillarsVideo";
 import { ExitIntentModal } from "@/components/ExitIntentModal";
@@ -192,7 +192,6 @@ function Index() {
       />
       <ReadingProgress />
       <PillarIndicator />
-      <NeonClock />
       {/* Header */}
       <header
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
