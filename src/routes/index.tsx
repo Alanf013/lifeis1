@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowUpRight, ArrowRight, Instagram, MessageCircle } from "lucide-react";
+import { ArrowRight, Download, Instagram, MessageCircle } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Scene3D } from "@/components/cinematic/Scene3D";
 import { trackEvent } from "@/lib/analytics";
@@ -450,8 +450,11 @@ function Index() {
             <WordReveal as="div" text="Os próximos 10 anos vão passar." />
             <WordReveal as="div" delay={0.15} text="Como você quer chegar até lá?" className="italic text-muted-foreground" />
           </h2>
-          <p className="mt-5 text-sm font-mono uppercase tracking-[0.3em]" style={{ color: "var(--sage-deep)" }}>
-            Sua próxima década começa agora
+          <p className="mt-6 text-xl sm:text-2xl leading-[1.6] text-muted-foreground">
+            Baixe agora, de graça, o guia que reúne os 6 pilares da longevidade
+            aplicada em passos simples — o que fazer no sono, na alimentação, no
+            treino, no estresse, na ansiedade e na dor. São 2 minutos de leitura
+            que podem mudar a sua próxima década.
           </p>
           <div className="mt-8">
             {/*
@@ -465,9 +468,12 @@ function Index() {
               onClick={() => trackEvent("guia_pdf_clicado", { local: "cta_final" })}
               className="btn-neon inline-flex items-center gap-2 px-10 py-5 text-lg font-bold"
             >
-              Quero meu guia gratuito
-              <ArrowRight className="h-5 w-5" />
+              <Download className="h-5 w-5" />
+              Baixe aqui o guia gratuito (PDF)
             </a>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Download imediato · sem cadastro · 100% gratuito
+            </p>
           </div>
         </Reveal>
       </section>
@@ -499,14 +505,16 @@ function Index() {
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Falar no WhatsApp"
-        className="wa-pulse fixed z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))]"
+        aria-label="Fale com um especialista no WhatsApp"
+        onClick={() => trackEvent("whatsapp_clicado", { local: "flutuante" })}
+        className="wa-pulse fixed z-50 inline-flex items-center justify-center gap-2 rounded-full px-5 py-4 text-base font-semibold min-h-[60px] bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] left-[calc(1.25rem+env(safe-area-inset-left))] sm:left-auto"
         style={{
           background: "#25D366",
           color: "#FFFFFF",
         }}
       >
         <MessageCircle className="h-6 w-6" />
+        Fale com um especialista
       </a>
     </div>
   );
