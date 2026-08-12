@@ -354,7 +354,7 @@ export function PillarsVideo() {
         className="fixed z-50 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] transition-opacity duration-500"
         style={{
           right: "calc(1.25rem + env(safe-area-inset-right))",
-          bottom: "calc(1.25rem + env(safe-area-inset-bottom) + 3.5rem + 0.6rem)",
+          bottom: "calc(1.25rem + env(safe-area-inset-bottom) + 3.75rem + 0.7rem)",
           color: "var(--ivory)",
           borderColor: "color-mix(in oklab, var(--ivory) 26%, transparent)",
           background: "color-mix(in oklab, black 55%, transparent)",
