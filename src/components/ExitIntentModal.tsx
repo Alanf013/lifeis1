@@ -112,7 +112,7 @@ export function ExitIntentModal() {
 
     const nomeLimpo = nome.trim();
     const faixaSel = faixa!;
-    const msg = `Olá! Meu nome é ${nomeLimpo} e tenho ${faixaSel} anos. Vim pelo site e gostaria de agendar minha análise gratuita.`;
+    const msg = `Vim pelo Site, quero saber mais sobre o prejeto!`;
     waUrl.current = `https://wa.me/5531994570976?text=${encodeURIComponent(msg)}`;
     setStatus("sending");
     try {
