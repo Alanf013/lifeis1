@@ -45,7 +45,7 @@ export const Route = createFileRoute("/")({
 
 const INSTAGRAM_URL = "https://www.instagram.com/ale.saudebemestar_/";
 const WHATSAPP_URL =
-  "https://wa.me/5531994570976?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20os%20planos%20de%20longevidade.";
+  "https://wa.me/5531994570976?text=Vim%20pelo%20Site%2C%20quero%20saber%20mais%20sobre%20o%20prejeto!";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
